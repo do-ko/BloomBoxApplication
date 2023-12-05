@@ -42,6 +42,15 @@ public class UserRestController {
         return user;
     }
 
+    @GetMapping("/{userLogin}/{userPassword}")
+    public User findByCredentials(@PathVariable String userLogin, @PathVariable String userPassword){
+        User user = userService.findByCredentials(userLogin, userPassword);
+        if (user == null){
+            throw new LocationNotFoundException("User with given credentials doesn't exist - " + userLogin + " " + userPassword);
+        }
+        return user;
+    }
+
     @PostMapping("")
     public User addUser(@RequestBody User user){
         user.setUserId(0);

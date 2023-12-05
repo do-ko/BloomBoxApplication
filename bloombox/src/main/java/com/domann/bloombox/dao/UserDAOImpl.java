@@ -40,6 +40,14 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
+    public User findByCredentials(String login, String password) {
+        TypedQuery<User> query = entityManager.createQuery("From User WHERE userLogin=:login AND userPassword=:password", User.class);
+        query.setParameter("login", login);
+        query.setParameter("password", password);
+        return query.getSingleResult();
+    }
+
+    @Override
     public User save(User user) {
         return entityManager.merge(user);
     }

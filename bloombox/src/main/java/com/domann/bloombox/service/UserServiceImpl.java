@@ -46,6 +46,11 @@ public class UserServiceImpl implements UserService{
         return userDAO.findByLogin(login);
     }
 
+    @Override
+    public User findByCredentials(String login, String password) {
+        return userDAO.findByCredentials(login, password);
+    }
+
     @Transactional
     @Override
     public User save(User user) {
