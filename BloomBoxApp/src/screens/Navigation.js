@@ -5,21 +5,26 @@ import {NavigationContainer} from "@react-navigation/native";
 import HomeScreen from "./HomeScreen";
 import LoginScreen from "./LoginScreen";
 import RegisterScreen from "./RegisterScreen";
+import {SplashScreen} from "./SplashScreen";
 
 const Stack = createNativeStackNavigator();
 export const Navigation = () => {
-    const {userInfo} = useContext(AuthContext);
+    const {userInfo, splashLoading} = useContext(AuthContext);
 
     return(
         <NavigationContainer>
             <Stack.Navigator>
-                {userInfo.userId ? (
-                    <Stack.Screen name={"Home"} component={HomeScreen} options={{headerShown:false}}/>
+                {splashLoading ? (
+                    <Stack.Screen name={"Splash Screen"} component={SplashScreen} options={{headerShown:false}}/>
                 ) : (
-                    <>
-                        <Stack.Screen name={"Login"} component={LoginScreen} options={{headerShown:false}}/>
-                        <Stack.Screen name={"Register"} component={RegisterScreen} options={{headerShown:false}}/>
-                    </>
+                    userInfo.userId ? (
+                        <Stack.Screen name={"Home"} component={HomeScreen} options={{headerShown:false}}/>
+                    ) : (
+                        <>
+                            <Stack.Screen name={"Login"} component={LoginScreen} options={{headerShown:false}}/>
+                            <Stack.Screen name={"Register"} component={RegisterScreen} options={{headerShown:false}}/>
+                        </>
+                    )
                 )}
             </Stack.Navigator>
         </NavigationContainer>
