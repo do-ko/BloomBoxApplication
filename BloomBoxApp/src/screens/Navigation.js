@@ -22,13 +22,7 @@ export const Navigation = () => {
                     <Stack.Screen name={"Splash Screen"} component={SplashScreen} options={{headerShown:false}}/>
                 ) : (
                     userInfo.userId ? (
-                        <>
-                            <Stack.Screen name={"Drawer"} component={DrawerNavigation} options={{headerShown:false}}/>
-
-                            <Stack.Screen name={"Home"} component={HomeScreen} options={{headerShown:false}}/>
-                        </>
-
-                        // <Stack.Screen name={"Home"} component={HomeScreen} options={{headerShown:false}}/>
+                        <Stack.Screen name={"Drawer"} component={DrawerNavigation} options={{headerShown:false}}/>
                     ) : (
                         <>
                             <Stack.Screen name={"Login"} component={LoginScreen} options={{headerShown:false}}/>

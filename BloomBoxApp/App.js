@@ -3,9 +3,21 @@ import { StyleSheet } from 'react-native';
 import {AuthProvider} from "./src/context/AuthContext";
 import {Navigation} from "./src/screens/Navigation";
 
+import { setCustomText } from 'react-native-global-props';
+
 
 
 export default function App() {
+    const customTextProps = {
+        style: {
+            fontFamily: "Inter",
+            color: "black"
+        }
+    };
+
+    setCustomText(customTextProps);
+
+
   return (
       <AuthProvider>
           {/*<Drawer.Navigator>*/}
