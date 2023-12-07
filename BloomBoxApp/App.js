@@ -8,14 +8,14 @@ import { setCustomText } from 'react-native-global-props';
 
 
 export default function App() {
-    const customTextProps = {
-        style: {
-            fontFamily: "Inter",
-            color: "black"
-        }
-    };
-
-    setCustomText(customTextProps);
+    // const customTextProps = {
+    //     style: {
+    //         fontFamily: "Inter",
+    //         color: "black"
+    //     }
+    // };
+    //
+    // setCustomText(customTextProps);
 
 
   return (

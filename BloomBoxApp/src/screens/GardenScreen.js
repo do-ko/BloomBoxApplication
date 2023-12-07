@@ -1,12 +1,26 @@
-import React from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Button, Pressable, Text, TextInput, View, StyleSheet, Image} from "react-native";
 // import SVGImg from '../images/Maceta.svg';
 
 import MacetaSvg from "../images/Maceta";
 import BarsSvg from "../images/Bars";
 import AddSvg from "../images/Add";
+import SearchSvg from "../images/Search";
+import {AuthContext} from "../context/AuthContext";
+import {PlantContext} from "../context/PlantContext";
 
 const GardenScreen = ({navigation}) => {
+    const {getAllPlants, plants, isLoading} = useContext(PlantContext);
+
+    const [isFocused, setIsFocused] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+
+    useEffect(() => {
+        getAllPlants();
+    }, [])
+
+    // getAllPlants();
+
     return(
         // <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
         //     <Button title={"DRAWER"} onPress={() => navigation.openDrawer()} />
@@ -30,9 +44,14 @@ const GardenScreen = ({navigation}) => {
             </View>
 
             <View style={styles.searchContainer}>
-                {/*<Text>x</Text>*/}
-                <View style={styles.searchBar}></View>
-                <Pressable style={styles.searchButton}>
+                <View style={styles.searchBar}>
+                    {/*{isFocused ? <></> : <SearchSvg />}*/}
+                    <SearchSvg />
+                    <TextInput style={styles.searchInput} onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)} value={searchQuery} onChangeText={(query) => {setSearchQuery(query)}}/>
+                </View>
+
+
+                <Pressable style={styles.searchButton} onPress={() => {getAllPlants()}}>
                     <View></View>
                 </Pressable>
                 <Pressable style={styles.searchButton} onPress={() => navigation.navigate("AddPlant")}>
@@ -178,7 +197,16 @@ const styles = StyleSheet.create({
       height: "50%",
         backgroundColor: "white",
         borderRadius: 23,
-        width: "65%"
+        width: "65%",
+        justifyContent: "flex-start",
+        paddingHorizontal: 10,
+        flexDirection: "row",
+        // alignItems
+        alignItems: "center"
+    },
+
+    searchInput: {
+        flex:1
     },
 
     searchButton: {

@@ -6,15 +6,18 @@ import {createNativeStackNavigator} from "react-native-screens/native-stack";
 import GardenScreen from "./GardenScreen";
 import PlantScreen from "./PlantScreen";
 import AddPlantScreen from "./AddPlantScreen";
+import {PlantProvider} from "../context/PlantContext";
 
 const Stack = createNativeStackNavigator();
 const GardenStack = () => {
     return(
-        <Stack.Navigator>
-            <Stack.Screen name={"Garden"} component={GardenScreen} options={{headerShown:false}}/>
-            <Stack.Screen name={"Plant"} component={PlantScreen} options={{headerShown:false}}/>
-            <Stack.Screen name={"AddPlant"} component={AddPlantScreen} options={{headerShown:false}}/>
-        </Stack.Navigator>
+        <PlantProvider>
+            <Stack.Navigator>
+                <Stack.Screen name={"GardenScreen"} component={GardenScreen} options={{headerShown:false}}/>
+                <Stack.Screen name={"PlantScreen"} component={PlantScreen} options={{headerShown:false}}/>
+                <Stack.Screen name={"AddPlant"} component={AddPlantScreen} options={{headerShown:false}}/>
+            </Stack.Navigator>
+        </PlantProvider>
     );
 }
 
