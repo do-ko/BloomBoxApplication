@@ -43,6 +43,7 @@ export const PlantProvider = ({children}) => {
         }).then(res => {
             let newPlant = res.data;
             console.log(newPlant);
+            setPlants([...plants, newPlant]);
             setIsLoading(false);
         }).catch(e => {
             console.log(`plant adding error ${e}`);
