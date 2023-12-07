@@ -1,10 +1,13 @@
 import React from "react";
-import {Text, View} from "react-native";
+import {Button, Text, View} from "react-native";
 
-const PlantScreen = () => {
+const PlantScreen = ({route, navigation}) => {
+    const {plant} = route.params;
     return(
         <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-            <Text>PlantScreen</Text>
+            <Button title={"GO BACK"} onPress={() => {navigation.goBack()}}/>
+            <Text>{plant.plantName}</Text>
+            <Text>{plant.plantId}</Text>
         </View>
     );
 }

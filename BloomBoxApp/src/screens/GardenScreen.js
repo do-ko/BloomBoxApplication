@@ -93,7 +93,7 @@ const GardenScreen = ({navigation}) => {
                         return <View style={styles.itemInvisible}/>
                     }
                     return(
-                        <PlantComponent plantName={item.plantName}/>
+                        <PlantComponent navigation={navigation} plant={item}/>
                     );
                 }}
                 />

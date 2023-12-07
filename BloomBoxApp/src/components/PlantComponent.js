@@ -1,9 +1,9 @@
 import React from "react";
-import {Dimensions, Image, StyleSheet, Text, View} from "react-native";
+import {Dimensions, Image, Pressable, StyleSheet, Text, View} from "react-native";
 
-const PlantComponent = ({plantName}) => {
+const PlantComponent = ({plant, navigation}) => {
     return(
-        <View style={styles.plantItem}>
+        <Pressable style={styles.plantItem} onPress={() => {navigation.navigate("PlantScreen", {plant})}}>
             {/*<Text>*/}
             {/*    {plantName}*/}
             {/*</Text>*/}
@@ -12,9 +12,9 @@ const PlantComponent = ({plantName}) => {
             </View>
 
             <View style={styles.plantTextContainer}>
-                <Text style={styles.plantText}>{plantName}</Text>
+                <Text style={styles.plantText}>{plant.plantName}</Text>
             </View>
-        </View>
+        </Pressable>
     );
 }
 
