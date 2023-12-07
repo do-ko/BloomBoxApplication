@@ -1,14 +1,26 @@
 import React, {useContext, useEffect, useState} from "react";
-import {Button, Pressable, Text, TextInput, View, StyleSheet, Image} from "react-native";
+import {Dimensions, FlatList, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 // import SVGImg from '../images/Maceta.svg';
-
 import MacetaSvg from "../images/Maceta";
 import BarsSvg from "../images/Bars";
 import AddSvg from "../images/Add";
 import SearchSvg from "../images/Search";
-import {AuthContext} from "../context/AuthContext";
 import {PlantContext} from "../context/PlantContext";
+import Spinner from "react-native-loading-spinner-overlay";
+import PlantComponent from "../components/PlantComponent";
+import Gradient from "../images/Gradient";
 
+const formatData = (data, numColumns) => {
+    const numberOfFullRows = Math.floor(data.length / numColumns);
+
+    let numberOfElementsInLastRow = data.length - (numberOfFullRows * numColumns);
+    while (numberOfElementsInLastRow !== numColumns && numberOfElementsInLastRow !== 0) {
+        data.push({key: `blank-${numberOfElementsInLastRow}`, empty: true});
+        numberOfElementsInLastRow = numberOfElementsInLastRow + 1;
+    }
+
+    return data;
+}
 const GardenScreen = ({navigation}) => {
     const {getAllPlants, plants, isLoading} = useContext(PlantContext);
 
@@ -20,14 +32,23 @@ const GardenScreen = ({navigation}) => {
     }, [])
 
     // getAllPlants();
+    // console.log("Before plants")
+    // console.log(plants);
 
-    return(
+    return (
         // <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
         //     <Button title={"DRAWER"} onPress={() => navigation.openDrawer()} />
         //     <Button title={"PLANT"} onPress={() => navigation.navigate("Plant")} />
         //     <Text>Garden Screen</Text>
         // </View>
         <View style={styles.appContainer}>
+            <Gradient style={{
+                position: 'absolute',
+                // top: 0,
+                // left: 0,
+                // right: 16,
+                bottom: 0,
+            }} />
             <View style={styles.barsContainer}>
                 <Pressable onPress={() => navigation.openDrawer()}>
                     <BarsSvg/>
@@ -46,22 +67,36 @@ const GardenScreen = ({navigation}) => {
             <View style={styles.searchContainer}>
                 <View style={styles.searchBar}>
                     {/*{isFocused ? <></> : <SearchSvg />}*/}
-                    <SearchSvg />
-                    <TextInput style={styles.searchInput} onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)} value={searchQuery} onChangeText={(query) => {setSearchQuery(query)}}/>
+                    <SearchSvg/>
+                    <TextInput style={styles.searchInput} onFocus={() => setIsFocused(true)}
+                               onBlur={() => setIsFocused(false)} value={searchQuery} onChangeText={(query) => {
+                        setSearchQuery(query)
+                    }}/>
                 </View>
 
 
-                <Pressable style={styles.searchButton} onPress={() => {getAllPlants()}}>
+                <Pressable style={styles.searchButton} onPress={() => {
+                    getAllPlants()
+                }}>
                     <View></View>
                 </Pressable>
                 <Pressable style={styles.searchButton} onPress={() => navigation.navigate("AddPlant")}>
-                    <AddSvg />
+                    <AddSvg/>
                 </Pressable>
 
             </View>
 
             <View style={styles.plantsContainer}>
-                <Text>Plants here</Text>
+                <Spinner visible={isLoading}/>
+                <FlatList data={formatData(plants, 2)} style={{flex:1}} numColumns={2} keyExtractor={(item) => item.plantId} renderItem={({item}) => {
+                    if (item.empty === true) {
+                        return <View style={styles.itemInvisible}/>
+                    }
+                    return(
+                        <PlantComponent plantName={item.plantName}/>
+                    );
+                }}
+                />
             </View>
 
             {/*<View style={styles.headerContainer}>*/}
@@ -140,7 +175,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         alignItems: "center",
-        padding: 15
+        padding: 15,
+        backgroundColor: "#fff"
     },
 
     barsContainer: {
@@ -194,7 +230,7 @@ const styles = StyleSheet.create({
     },
 
     searchBar: {
-      height: "50%",
+        height: "50%",
         backgroundColor: "white",
         borderRadius: 23,
         width: "65%",
@@ -206,11 +242,11 @@ const styles = StyleSheet.create({
     },
 
     searchInput: {
-        flex:1
+        flex: 1
     },
 
     searchButton: {
-      backgroundColor: "#5B6E4E",
+        backgroundColor: "#5B6E4E",
         height: 40,
         width: 40,
         borderRadius: 15,
@@ -219,10 +255,18 @@ const styles = StyleSheet.create({
     },
 
     plantsContainer: {
-        backgroundColor: "blue",
+        // backgroundColor: "blue",
         height: "100%",
         width: "100%",
-        flex: 6
+        flex: 6,
+        marginTop: 20
+    },
+
+    itemInvisible: {
+        backgroundColor: "transparent",
+        height: (Dimensions.get('window').width / 2) - 30,
+        margin: 10,
+        flex: 1,
     }
 
     // // container for header texts and icons
