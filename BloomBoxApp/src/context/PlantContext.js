@@ -29,8 +29,30 @@ export const PlantProvider = ({children}) => {
             })
     }
 
+    const addPlant = (locationId, plantName, plantDescription, light, water, imageUrl) => {
+        // console.log(`${BASE_URL}/plants`);
+        setIsLoading(true);
+        axios.post(`${BASE_URL}/plants`, {
+            locationId: locationId,
+            userId: userInfo.userId,
+            plantName: plantName,
+            description: plantDescription,
+            light: light,
+            water: water,
+            imageUrl: imageUrl
+        }).then(res => {
+            let newPlant = res.data;
+            console.log(newPlant);
+            setIsLoading(false);
+        }).catch(e => {
+            console.log(`plant adding error ${e}`);
+            setIsLoading(false);
+
+        })
+    }
+
     return(
-        <PlantContext.Provider value={{isLoading, plants, getAllPlants}}>
+        <PlantContext.Provider value={{isLoading, plants, getAllPlants, addPlant}}>
             {children}
         </PlantContext.Provider>
     );
