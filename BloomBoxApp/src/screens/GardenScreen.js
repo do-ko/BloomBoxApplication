@@ -9,6 +9,7 @@ import {PlantContext} from "../context/PlantContext";
 import Spinner from "react-native-loading-spinner-overlay";
 import PlantComponent from "../components/PlantComponent";
 import Gradient from "../images/Gradient";
+import filter from "lodash.filter"
 
 const formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
@@ -88,7 +89,7 @@ const GardenScreen = ({navigation}) => {
 
             <View style={styles.plantsContainer}>
                 <Spinner visible={isLoading}/>
-                <FlatList data={formatData(plants, 2)} style={{flex:1}} numColumns={2} keyExtractor={(item) => item.plantId} renderItem={({item}) => {
+                <FlatList data={formatData(plants.filter((plant) => plant.plantName.includes(searchQuery)), 2)} style={{flex:1}} numColumns={2} keyExtractor={(item) => item.plantId} renderItem={({item}) => {
                     if (item.empty === true) {
                         return <View style={styles.itemInvisible}/>
                     }
