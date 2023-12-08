@@ -81,6 +81,7 @@ const GardenScreen = ({navigation}) => {
                 }}>
                     <View></View>
                 </Pressable>
+
                 <Pressable style={styles.searchButton} onPress={() => navigation.navigate("AddPlant")}>
                     <AddSvg/>
                 </Pressable>
