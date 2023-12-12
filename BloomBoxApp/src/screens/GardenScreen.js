@@ -77,7 +77,7 @@ const GardenScreen = ({navigation}) => {
 
 
                 <Pressable style={styles.searchButton} onPress={() => {
-                    getAllPlants()
+                    console.log(Dimensions.get('window').width);
                 }}>
                     <View></View>
                 </Pressable>
