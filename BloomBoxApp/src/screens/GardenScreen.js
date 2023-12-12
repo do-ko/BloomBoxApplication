@@ -47,7 +47,7 @@ const GardenScreen = ({navigation}) => {
                 position: 'absolute',
                 // top: 0,
                 // left: 0,
-                // right: 16,
+                // right: 0,
                 bottom: 0,
             }} />
             <View style={styles.barsContainer}>
@@ -90,7 +90,7 @@ const GardenScreen = ({navigation}) => {
 
             <View style={styles.plantsContainer}>
                 <Spinner visible={isLoading}/>
-                <FlatList data={formatData(plants.filter((plant) => plant.plantName.includes(searchQuery)), 2)} refreshing={false} onRefresh={() => getAllPlants()} style={{flex:1}} numColumns={2} keyExtractor={(item) => item.plantId} renderItem={({item}) => {
+                <FlatList data={formatData(plants.filter((plant) => plant.plantName.toLocaleString().toLowerCase().includes(searchQuery.toLowerCase())), 2)} refreshing={false} onRefresh={() => getAllPlants()} style={{flex:1}} numColumns={2} keyExtractor={(item) => item.plantId} renderItem={({item}) => {
                     if (item.empty === true) {
                         return <View style={styles.itemInvisible}/>
                     }

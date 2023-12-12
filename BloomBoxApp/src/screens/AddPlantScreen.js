@@ -28,6 +28,8 @@ const AddPlantScreen = () => {
                 data={locations.map(location => location.locationName)}
                 onSelect={(selectedItem, index) => {
                     console.log(selectedItem, index)
+                    setSelectedLocation(locations.filter(location => location.locationName === selectedItem).locationId)
+                    console.log(selectedLocation)
                 }}
                 buttonTextAfterSelection={(selectedItem, index) => {
                     // text represented after item is selected

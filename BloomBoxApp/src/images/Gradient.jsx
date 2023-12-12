@@ -1,5 +1,6 @@
 import * as React from "react"
 import Svg, { Path, Defs, LinearGradient, Stop } from "react-native-svg"
+import {Dimensions} from "react-native";
 const GradientSvg = (props) => (
     <Svg
         xmlns="http://www.w3.org/2000/svg"
