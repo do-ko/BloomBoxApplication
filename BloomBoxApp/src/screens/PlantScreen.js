@@ -8,6 +8,7 @@ const PlantScreen = ({route, navigation}) => {
             <Button title={"GO BACK"} onPress={() => {navigation.goBack()}}/>
             <Text>{plant.plantName}</Text>
             <Text>{plant.plantId}</Text>
+            <Text>{plant.locationId}</Text>
         </View>
     );
 }
