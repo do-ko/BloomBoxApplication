@@ -4,22 +4,19 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { AuthContext } from "../context/AuthContext";
 import BarsSvg from "../images/Bars";
 import HangingLampSvg from "../images/HangingLamp";
+import Plant2 from "../images/Plant2";
 
 const HomeScreen = ({ navigation }) => {
   const { isLoading, logout, userInfo } = useContext(AuthContext);
   return (
     <View style={styles.container}>
-      <View styles={styles.topBar}>
+      <View style={styles.topBar}>
         {/* <Text style={styles.userInfo}>{userInfo.userLogin}</Text> */}
-
         <View style={styles.barsContainer}>
           <Pressable onPress={() => navigation.openDrawer()}>
             <BarsSvg />
           </Pressable>
         </View>
-
-        <HangingLampSvg style={styles.hangingLamp1} />
-        <HangingLampSvg style={styles.hangingLamp2} />
       </View>
 
       <Spinner visible={isLoading} />
@@ -28,6 +25,9 @@ const HomeScreen = ({ navigation }) => {
         <Text style={styles.headerText}>Welcome</Text>
         <Text style={styles.headerText}>back</Text>
         <Text style={styles.subheaderText}>here are your reminders</Text>
+        <HangingLampSvg style={styles.hangingLamp1} />
+        <HangingLampSvg style={styles.hangingLamp2} />
+        <Plant2 style={styles.plant2} />
       </View>
 
       <View style={styles.reminderListContainer}>
@@ -54,22 +54,14 @@ const styles = StyleSheet.create({
   },
 
   topBar: {
-    //flexDirection: "row",
-    flex: 1,
-    width: "100%",
-    //height: 1000,
-    alignItems: "left",
-    justifyContent: "left",
-    backgroundColor: "yellow",
-  },
-
-  barsContainer: {
-    //backgroundColor: "blue",
     flex: 0,
-    padding: 15,
     alignItems: "flex-start",
     width: "100%",
     justifyContent: "flex-start",
+  },
+
+  barsContainer: {
+    padding: 15,
   },
 
   headerTextContainer: {
@@ -77,7 +69,7 @@ const styles = StyleSheet.create({
     //backgroundColor: "yellow",
     width: "70%",
     marginTop: "20%",
-    marginBottom: "15%",
+    marginBottom: "20%",
   },
 
   headerText: {
@@ -114,22 +106,24 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
 
-  lampImages: {
-    position: "absolute",
-    width: 5,
-    height: 5,
-    backgroundColor: "pink",
-  },
-
   hangingLamp1: {
     position: "absolute",
-    marginLeft: "20%",
+    alignItems: "flex-start",
+    marginLeft: "70%",
+    marginTop: " -45%",
   },
 
   hangingLamp2: {
     position: "absolute",
-    marginLeft: "8%",
-    marginTop: "-5%",
+    alignItems: "flex-start",
+    marginLeft: "45%",
+    marginTop: "-48%",
+  },
+
+  plant2: {
+    position: "absolute",
+    marginLeft: "70%",
+    marginTop: "18%",
   },
 });
 
