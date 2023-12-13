@@ -1,24 +1,27 @@
 import React, {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {Button, Dimensions, StyleSheet, Text, View} from "react-native";
+import {Button, Dimensions, Pressable, StyleSheet, Text, View} from "react-native";
 import {PlantContext} from "../context/PlantContext";
 import {LocationContext} from "../context/LocationContext";
 import {SelectList} from "react-native-dropdown-select-list/index";
 import SelectDropdown from 'react-native-select-dropdown'
 import Gradient from "../images/Gradient";
 import GradientSvg from "../images/Gradient";
+import BarsSvg from "../images/Bars";
+import BackSvg from "../images/BackButton";
 
-const AddPlantScreen = () => {
+const AddPlantScreen = ({navigation}) => {
     const {addPlant} = useContext(PlantContext);
     const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
     const [selectedLocation, setSelectedLocation] = useState("");
 
     const [height, setHeight] = useState(0);
-    const nameElementRef = useRef(null);
+    // const nameElementRef = useRef(null);
 
-    useLayoutEffect(() => {
-        setHeight(nameElementRef.current.offsetHeight);
-        console.log(nameElementRef.current.offsetHeight);
-    }, [height]);
+    // useLayoutEffect(() => {
+    //     setHeight(nameElementRef.current.offsetHeight);
+    //     console.log('TEST');
+    //     console.log(nameElementRef.current.offsetHeight);
+    // }, [height]);
 
     useEffect(() => {
         getAllLocationForUser();
@@ -29,8 +32,12 @@ const AddPlantScreen = () => {
             <View style={styles.imageNameContainer}>
             {/*    image and name/species*/}
                 <View style={styles.imageContainer}>
+                    {/*menu*/}
+                    <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+                        <BackSvg/>
+                    </Pressable>
                 {/*    image*/}
-                    <View ref={nameElementRef} style={{backgroundColor:"yellow", position: "absolute", bottom: 0 , alignSelf: 'center', justifyContent: 'center', alignItems: 'center'}}>
+                    <View style={{height: 86, backgroundColor:"yellow", position: "absolute", bottom: -43 , alignSelf: 'center'}}>
                         <Text>Name</Text>
                         <Text>Species</Text>
                     {/*    name*/}
@@ -81,13 +88,15 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         alignItems: "center",
         // padding: 15,
-        backgroundColor: "#fff"
+        // backgroundColor: "#fff"
+        backgroundColor: "pink"
     },
 
     imageNameContainer: {
         flex: 2,
         backgroundColor: "blue",
-        width: "100%"
+        width: "100%",
+        paddingBottom: 50
     },
 
     locationWaterLightContainer: {
@@ -105,13 +114,16 @@ const styles = StyleSheet.create({
 
 
 
-    barsContainer: {
-        // backgroundColor: "blue",
-        flex: 0,
-        alignItems: "flex-start",
-        width: "100%",
-        justifyContent: "flex-start"
+    backButton: {
+        position: "absolute",
+        top: 15,
+        left: 15,
+        backgroundColor: "yellow"
     },
+
+
+
+
 
     header: {
         // backgroundColor: "red",
