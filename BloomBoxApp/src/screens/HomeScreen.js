@@ -4,6 +4,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { AuthContext } from "../context/AuthContext";
 import BarsSvg from "../images/Bars";
 import HangingLampSvg from "../images/HangingLamp";
+import Plant2 from "../images/Plant2";
 
 const HomeScreen = ({ navigation }) => {
   const { isLoading, logout, userInfo } = useContext(AuthContext);
@@ -26,6 +27,7 @@ const HomeScreen = ({ navigation }) => {
         <Text style={styles.subheaderText}>here are your reminders</Text>
         <HangingLampSvg style={styles.hangingLamp1} />
         <HangingLampSvg style={styles.hangingLamp2} />
+        <Plant2 style={styles.plant2} />
       </View>
 
       <View style={styles.reminderListContainer}>
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
     //backgroundColor: "yellow",
     width: "70%",
     marginTop: "20%",
-    marginBottom: "15%",
+    marginBottom: "20%",
   },
 
   headerText: {
@@ -115,7 +117,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     alignItems: "flex-start",
     marginLeft: "45%",
-    marginTop: "-45%",
+    marginTop: "-48%",
+  },
+
+  plant2: {
+    position: "absolute",
+    marginLeft: "70%",
+    marginTop: "18%",
   },
 });
 
