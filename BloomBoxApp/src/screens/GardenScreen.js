@@ -55,6 +55,7 @@ const GardenScreen = ({navigation}) => {
                     <BarsSvg/>
                 </Pressable>
             </View>
+
             <View style={styles.header}>
                 <View style={styles.headerTextContainer}>
                     <Text style={styles.headerText}>Your</Text>

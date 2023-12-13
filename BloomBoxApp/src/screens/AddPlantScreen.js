@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {Button, Dimensions, Pressable, StyleSheet, Text, View} from "react-native";
+import {Button, Dimensions, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 import {PlantContext} from "../context/PlantContext";
 import {LocationContext} from "../context/LocationContext";
 import {SelectList} from "react-native-dropdown-select-list/index";
@@ -8,13 +8,16 @@ import Gradient from "../images/Gradient";
 import GradientSvg from "../images/Gradient";
 import BarsSvg from "../images/Bars";
 import BackSvg from "../images/BackButton";
+import SaveSvg from "../images/SaveButton";
 
 const AddPlantScreen = ({navigation}) => {
     const {addPlant} = useContext(PlantContext);
     const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
     const [selectedLocation, setSelectedLocation] = useState("");
 
-    const [height, setHeight] = useState(0);
+    const [plantName, setPlantName] = useState("");
+
+    // const [height, setHeight] = useState(0);
     // const nameElementRef = useRef(null);
 
     // useLayoutEffect(() => {
@@ -36,9 +39,14 @@ const AddPlantScreen = ({navigation}) => {
                     <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
                         <BackSvg/>
                     </Pressable>
+
+                    <Pressable style={styles.saveButton} onPress={() => console.log("Save Plant Button Pressed!")}>
+                        <SaveSvg/>
+                    </Pressable>
                 {/*    image*/}
-                    <View style={{height: 86, backgroundColor:"yellow", position: "absolute", bottom: -43 , alignSelf: 'center'}}>
-                        <Text>Name</Text>
+                    <View style={styles.nameInputContainer}>
+                        {/*<Text>Name</Text>*/}
+                        <TextInput placeholder={"Enter Name"} value={plantName} onChangeText={(text) => setPlantName(text)}/>
                         <Text>Species</Text>
                     {/*    name*/}
                     </View>
@@ -119,6 +127,21 @@ const styles = StyleSheet.create({
         top: 15,
         left: 15,
         backgroundColor: "yellow"
+    },
+
+    saveButton: {
+        position: "absolute",
+        top: 15,
+        right: 15,
+        backgroundColor: "yellow"
+    },
+
+    nameInputContainer: {
+        height: 86,
+        backgroundColor:"yellow",
+        position: "absolute",
+        bottom: -43 ,
+        alignSelf: 'center'
     },
 
 
