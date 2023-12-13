@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Button, Dimensions, StyleSheet, Text, View} from "react-native";
 import {PlantContext} from "../context/PlantContext";
 import {LocationContext} from "../context/LocationContext";
@@ -12,89 +12,98 @@ const AddPlantScreen = () => {
     const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
     const [selectedLocation, setSelectedLocation] = useState("");
 
+    const [height, setHeight] = useState(0);
+    const nameElementRef = useRef(null);
+
+    useLayoutEffect(() => {
+        setHeight(nameElementRef.current.offsetHeight);
+        console.log(nameElementRef.current.offsetHeight);
+    }, [height]);
+
     useEffect(() => {
         getAllLocationForUser();
     }, [])
 
     return(
-        // <>
-        //     <Gradient style={{
-        //         position: 'absolute',
-        //         // top: 0,
-        //         // left: 0,
-        //         // right: 0,
-        //         bottom: 0,
-        //     }} />
-        // </>
-        // )
-
-        <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-            {/*{console.log(locations)}*/}
-            {/*{isLoading ? <Text>Wait</Text> : <SelectList boxStyles={{width:200}} dropdownStyles={{width:"100%", backgroundColor:"red"}}*/}
-            {/*    setSelected={(val) => setSelectedLocation(val)}*/}
-            {/*    data={locations.map(location => location.locationName)}*/}
-            {/*    save="value"*/}
-            {/*/>}*/}
-
-            <SelectDropdown
-                buttonStyle={{backgroundColor:"red"}}
-                data={locations.map(location => location.locationName)}
-                onSelect={(selectedItem, index) => {
-                    console.log(selectedItem, index)
-                    setSelectedLocation(locations.filter(location => location.locationName === selectedItem).locationId)
-                    console.log(selectedLocation)
-                }}
-                buttonTextAfterSelection={(selectedItem, index) => {
-                    // text represented after item is selected
-                    // if data array is an array of objects then return selectedItem.property to render after item is selected
-                    return selectedItem
-                }}
-                rowTextForSelection={(item, index) => {
-                    // text represented for each item in dropdown
-                    // if data array is an array of objects then return item.property to represent item in dropdown
-                    return item
-                }}
-
-            />
-
-            <Button title={"ADD TEST"} onPress={()=>addPlant(1, "Name", "description", 3, 3, "url")}/>
-
+        <View style={styles.appContainer}>
+            <View style={styles.imageNameContainer}>
+            {/*    image and name/species*/}
+                <View style={styles.imageContainer}>
+                {/*    image*/}
+                    <View ref={nameElementRef} style={{backgroundColor:"yellow", position: "absolute", bottom: 0 , alignSelf: 'center', justifyContent: 'center', alignItems: 'center'}}>
+                        <Text>Name</Text>
+                        <Text>Species</Text>
+                    {/*    name*/}
+                    </View>
+                </View>
+            </View>
+            <View style={styles.locationWaterLightContainer}>
+            {/*    location light water*/}
+            </View>
         </View>
+
+
+        // <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+        //
+        //
+        //     {/*/!*Location Select*!/*/}
+        //     {/*<SelectDropdown*/}
+        //     {/*    buttonStyle={{backgroundColor:"red"}}*/}
+        //     {/*    data={locations.map(location => location.locationName)}*/}
+        //     {/*    onSelect={(selectedItem, index) => {*/}
+        //     {/*        console.log(selectedItem, index)*/}
+        //     {/*        let location = locations.filter(location =>location.locationName === selectedItem)*/}
+        //     {/*        setSelectedLocation(location[0].locationId)*/}
+        //     {/*    }}*/}
+        //     {/*    buttonTextAfterSelection={(selectedItem, index) => {*/}
+        //     {/*        // text represented after item is selected*/}
+        //     {/*        // if data array is an array of objects then return selectedItem.property to render after item is selected*/}
+        //     {/*        return selectedItem*/}
+        //     {/*    }}*/}
+        //     {/*    rowTextForSelection={(item, index) => {*/}
+        //     {/*        // text represented for each item in dropdown*/}
+        //     {/*        // if data array is an array of objects then return item.property to represent item in dropdown*/}
+        //     {/*        return item*/}
+        //     {/*    }}*/}
+        //
+        //     />
+        //
+        //     <Button title={"ADD TEST"} onPress={()=>addPlant(1, "Name", "description", 3, 3, "url")}/>
+        //
+        // </View>
     );
 }
 
 const styles = StyleSheet.create({
-    // container: {
-    //     flex: 1,
-    //     alignItems: "center",
-    //     justifyContent: "center"
-    //     // backgroundColor: '#20201D'
-    // },
-    //
-    // wrapper: {
-    //     width: "80%"
-    // },
-    //
-    // input: {
-    //     marginBottom: 12,
-    //     borderWidth: 1,
-    //     borderColor: '#20201D',
-    //     borderRadius: 5,
-    //     paddingHorizontal: 14
-    // },
-    //
-    // link: {
-    //     color: '#5B6E4E'
-    // },
-
     // the whole app screen
     appContainer: {
         flex: 1,
         flexDirection: "column",
         alignItems: "center",
-        padding: 15,
+        // padding: 15,
         backgroundColor: "#fff"
     },
+
+    imageNameContainer: {
+        flex: 2,
+        backgroundColor: "blue",
+        width: "100%"
+    },
+
+    locationWaterLightContainer: {
+        flex: 2,
+        backgroundColor: "green",
+        width: "100%"
+    },
+
+    imageContainer: {
+        backgroundColor: "red",
+        height: 318,
+        borderBottomRightRadius: 80,
+        borderBottomLeftRadius: 80,
+    },
+
+
 
     barsContainer: {
         // backgroundColor: "blue",
