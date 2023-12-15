@@ -90,16 +90,17 @@ const AddPlantScreen = ({navigation}) => {
             createAlert("Select a light value")
         } else if (waterValue === 0){
             createAlert("Select a water value")
+        } else {
+            addPlant(selectedLocation, plantName, species, "description", lightValue, waterValue, image,  image.split("/").pop());
+            navigation.goBack();
         }
 
-        console.log("Name: " + plantName)
-        console.log("Species: " + species)
-        console.log("Location id: " + selectedLocation)
-        console.log("Light: " + lightValue)
-        console.log("Water: " + waterValue)
-        console.log("Image: " + image)
-
-        addPlant(selectedLocation, plantName, species, "description", lightValue, waterValue, image,  image.split("/").pop())
+        // console.log("Name: " + plantName)
+        // console.log("Species: " + species)
+        // console.log("Location id: " + selectedLocation)
+        // console.log("Light: " + lightValue)
+        // console.log("Water: " + waterValue)
+        // console.log("Image: " + image)
     }
 
     const createAlert = (msg) =>
@@ -116,39 +117,44 @@ const AddPlantScreen = ({navigation}) => {
         <View style={styles.appContainer}>
             <View style={styles.imageNameContainer}>
             {/*    image and name/species*/}
-                <View style={styles.imageContainer}>
-                    {image === "" ? <></> : <Image source={{uri: image}} style={styles.imageStyle} />}
-                    {/*menu*/}
-                    <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-                        <BackSvg/>
-                    </Pressable>
 
-                    <View style={styles.addButton}>
-                        <Pressable  onPress={() => selectImage(true)}>
-                            <BigAdd/>
+                    <View style={styles.imageContainer}>
+                        <View style={{overflow: "hidden"}}>
+                            {image === "" ? <View style={styles.image}></View> : <View style={styles.image}><Image source={{uri: image}} style={styles.imageStyle} /></View>}
+                        </View>
+                        {/*menu*/}
+                        <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+                            <BackSvg/>
                         </Pressable>
-                        <Pressable  onPress={() => selectImage(false)}>
-                            <BigAdd/>
-                        </Pressable>
-                    </View>
 
-
-                    <Pressable style={styles.saveButton} onPress={() => addNewPlant()}>
-                        <SaveSvg/>
-                    </Pressable>
-
-                    <View style={styles.nameInputContainer}>
-                        {/*<Text>Name</Text>*/}
-                        <View  style={styles.nameSpeciesContainer} >
-                            <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} placeholderTextColor={"black"} value={plantName} onChangeText={(text) => setPlantName(text)}/>
+                        <View style={styles.addButton}>
+                            <Pressable  onPress={() => selectImage(true)}>
+                                <BigAdd/>
+                            </Pressable>
+                            <Pressable  onPress={() => selectImage(false)}>
+                                <BigAdd/>
+                            </Pressable>
                         </View>
 
-                        <View  style={styles.nameSpeciesContainer} >
-                            <TextInput style={styles.speciesInput} underlineColorAndroid={"transparent"} placeholder={"enter species"} placeholderTextColor={"black"} value={species} onChangeText={(text) => setSpecies(text)}/>
+
+                        <Pressable style={styles.saveButton} onPress={() => addNewPlant()}>
+                            <SaveSvg/>
+                        </Pressable>
+
+                        <View style={styles.nameInputContainer}>
+                            {/*<Text>Name</Text>*/}
+                            <View  style={styles.nameSpeciesContainer} >
+                                <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} placeholderTextColor={"black"} value={plantName} onChangeText={(text) => setPlantName(text)}/>
+                            </View>
+
+                            <View  style={styles.nameSpeciesContainer} >
+                                <TextInput style={styles.speciesInput} underlineColorAndroid={"transparent"} placeholder={"enter species"} placeholderTextColor={"black"} value={species} onChangeText={(text) => setSpecies(text)}/>
+                            </View>
                         </View>
-                    </View>
+
 
                 </View>
+
             </View>
 
 
@@ -160,7 +166,7 @@ const AddPlantScreen = ({navigation}) => {
                 {/*    location*/}
 
                     <SelectDropdown
-                        buttonStyle={{backgroundColor:"red", width: "100%"}}
+                        buttonStyle={{width: "100%"}}
                         data={locations.map(location => location.locationName)}
                         onSelect={(selectedItem, index) => {
                             console.log(selectedItem, index)
@@ -217,38 +223,44 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         alignItems: "center",
-        // padding: 15,
-        // backgroundColor: "#fff"
-        backgroundColor: "pink"
+        backgroundColor: "#fff"
     },
 
     imageNameContainer: {
         flex: 2,
-        backgroundColor: "blue",
+        backgroundColor: "#fff",
         width: "100%",
-        paddingBottom: 50
+        paddingBottom: 90,
     },
 
     locationWaterLightContainer: {
         flex: 2,
-        backgroundColor: "green",
+        backgroundColor: "#DFDFD9",
         width: "100%",
         padding: 15,
         alignItems: "center"
     },
 
     imageContainer: {
-        backgroundColor: "red",
         height: 318,
         borderBottomRightRadius: 80,
         borderBottomLeftRadius: 80,
+    },
+
+    image: {
+        width: "100%",
+        height: "100%",
+        borderBottomRightRadius: 80,
+        borderBottomLeftRadius: 80,
+        backgroundColor: "#fff",
+        elevation: 10
     },
 
     imageStyle: {
         width: "100%",
         height: "100%",
         borderBottomRightRadius: 80,
-        borderBottomLeftRadius: 80
+        borderBottomLeftRadius: 80,
     },
 
 
@@ -257,22 +269,21 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 15,
         left: 15,
-        backgroundColor: "yellow"
     },
 
     saveButton: {
         position: "absolute",
         top: 15,
         right: 15,
-        backgroundColor: "yellow",
-        padding: 20
+        // backgroundColor: "yellow",
+        // padding: 20
     },
 
     addButton: {
         position: "absolute",
         top: 318 / 2 - 20,
         left: Dimensions.get('window').width / 2 - 45,
-        backgroundColor: "yellow",
+        // backgroundColor: "yellow",
         flexDirection: "row",
         gap: 10
     },
@@ -283,20 +294,22 @@ const styles = StyleSheet.create({
         borderRadius: 23,
 
         height: 86,
-        backgroundColor:"yellow",
+        backgroundColor:"#fff",
         position: "absolute",
         bottom: -43 ,
 
         alignSelf: 'center',
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+
+        elevation: 10
     },
 
     nameSpeciesContainer: {
         width: "80%",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "green"
+        // backgroundColor: "green"
     },
 
 
@@ -313,7 +326,7 @@ const styles = StyleSheet.create({
 
     dataContainer: {
         width: "80%",
-        backgroundColor: "blue",
+        // backgroundColor: "blue",
         marginBottom: 32
     },
 
