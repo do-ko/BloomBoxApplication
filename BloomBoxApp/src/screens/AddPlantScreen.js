@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {Button, Dimensions, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {Button, Dimensions, Image, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 import {PlantContext} from "../context/PlantContext";
 import {LocationContext} from "../context/LocationContext";
 import {SelectList} from "react-native-dropdown-select-list/index";
@@ -9,22 +9,85 @@ import GradientSvg from "../images/Gradient";
 import BarsSvg from "../images/Bars";
 import BackSvg from "../images/BackButton";
 import SaveSvg from "../images/SaveButton";
+import AddSvg from "../images/Add";
+import BigAdd from "../images/BigAdd";
+
+// IMAGE IMPORTS
+import * as FileSystem from 'expo-file-system';
+import * as ImagePicker from 'expo-image-picker';
+import {BASE_URL} from "../config";
+import {AuthContext} from "../context/AuthContext";
+
+const imgDir = FileSystem.documentDirectory + "images/"
+
+const ensureDirExists = async () => {
+    const dirInfo = await FileSystem.getInfoAsync(imgDir);
+    if (!dirInfo.exists){
+        await FileSystem.makeDirectoryAsync(imgDir, {intermediates: true});
+    }
+}
 
 const AddPlantScreen = ({navigation}) => {
+    const {userInfo} = useContext(AuthContext);
     const {addPlant} = useContext(PlantContext);
+
     const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
     const [selectedLocation, setSelectedLocation] = useState("");
 
     const [plantName, setPlantName] = useState("");
 
-    // const [height, setHeight] = useState(0);
-    // const nameElementRef = useRef(null);
+    const [image, setImage] = useState("")
 
-    // useLayoutEffect(() => {
-    //     setHeight(nameElementRef.current.offsetHeight);
-    //     console.log('TEST');
-    //     console.log(nameElementRef.current.offsetHeight);
-    // }, [height]);
+    const selectImage = async (useLibrary) => {
+        let result;
+        if (useLibrary){
+            result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1,1],
+                quality: 0.75
+            });
+        } else {
+            await ImagePicker.requestCameraPermissionsAsync();
+
+            result = await ImagePicker.launchCameraAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1,1],
+                quality: 0.75
+            });
+        }
+
+        // do something with the image here
+        if (!result.canceled){
+            console.log(result.assets[0].uri)
+            saveImage(result.assets[0].uri);
+            // setImage(result.assets[0].uri);
+        }
+    };
+
+    const saveImage = async (imageUri) => {
+        await ensureDirExists();
+        const filename = new Date().getTime() + ".jpg";
+        const dest = imgDir + filename;
+        await FileSystem.copyAsync({from: imageUri, to: dest});
+        setImage(dest);
+        console.log("dest coming:")
+        console.log(dest);
+    }
+
+    const addNewPlant = async () => {
+        // if (image !== ""){
+        //     await FileSystem.uploadAsync(BASE_URL + '/images/upload/' + userInfo.userId + "/plant", image, {
+        //         httpMethod: "POST",
+        //         uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+        //         fieldName: 'file'
+        //     })
+        // }
+
+        addPlant(1, plantName, "description", 3, 3, image,  image.split("/").pop())
+    }
+
 
     useEffect(() => {
         getAllLocationForUser();
@@ -35,21 +98,35 @@ const AddPlantScreen = ({navigation}) => {
             <View style={styles.imageNameContainer}>
             {/*    image and name/species*/}
                 <View style={styles.imageContainer}>
+                    {image === "" ? <></> : <Image source={{uri: image}} style={styles.imageStyle} />}
                     {/*menu*/}
                     <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
                         <BackSvg/>
                     </Pressable>
 
-                    <Pressable style={styles.saveButton} onPress={() => console.log("Save Plant Button Pressed!")}>
+                    <View style={styles.addButton}>
+                        <Pressable  onPress={() => selectImage(true)}>
+                            <BigAdd/>
+                        </Pressable>
+                        <Pressable  onPress={() => selectImage(false)}>
+                            <BigAdd/>
+                        </Pressable>
+                    </View>
+
+
+                    <Pressable style={styles.saveButton} onPress={() => addNewPlant()}>
                         <SaveSvg/>
                     </Pressable>
-                {/*    image*/}
+
                     <View style={styles.nameInputContainer}>
                         {/*<Text>Name</Text>*/}
-                        <TextInput placeholder={"Enter Name"} value={plantName} onChangeText={(text) => setPlantName(text)}/>
+                        <View  style={styles.nameContainer} >
+                            <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} placeholderTextColor={"black"} value={plantName} onChangeText={(text) => setPlantName(text)}/>
+                        </View>
+
                         <Text>Species</Text>
-                    {/*    name*/}
                     </View>
+
                 </View>
             </View>
             <View style={styles.locationWaterLightContainer}>
@@ -120,6 +197,13 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 80,
     },
 
+    imageStyle: {
+        width: "100%",
+        height: "100%",
+        borderBottomRightRadius: 80,
+        borderBottomLeftRadius: 80
+    },
+
 
 
     backButton: {
@@ -133,15 +217,45 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 15,
         right: 15,
-        backgroundColor: "yellow"
+        backgroundColor: "yellow",
+        padding: 20
+    },
+
+    addButton: {
+        position: "absolute",
+        top: 318 / 2 - 20,
+        left: Dimensions.get('window').width / 2 - 45,
+        backgroundColor: "yellow",
+        flexDirection: "row",
+        gap: 10
     },
 
     nameInputContainer: {
+        width: "80%",
+        paddingHorizontal: "5%",
+        borderRadius: 23,
+
         height: 86,
         backgroundColor:"yellow",
         position: "absolute",
         bottom: -43 ,
-        alignSelf: 'center'
+
+        alignSelf: 'center',
+        justifyContent: "center",
+        alignItems: "center"
+    },
+
+    nameContainer: {
+        width: "80%",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "green"
+    },
+
+    nameInput: {
+        textAlign: "center",
+        fontSize: 36,
+        // fontWeight: "bold"
     },
 
 

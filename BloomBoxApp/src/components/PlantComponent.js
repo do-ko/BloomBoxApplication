@@ -1,14 +1,20 @@
-import React from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Dimensions, Image, Pressable, StyleSheet, Text, View} from "react-native";
+import {ImageContext} from "../context/ImageContext";
+import {BASE_URL} from "../config";
+import {AuthContext} from "../context/AuthContext";
+
+
+
 
 const PlantComponent = ({plant, navigation}) => {
+    const {userInfo} = useContext(AuthContext);
+
     return(
         <Pressable style={styles.plantItem} onPress={() => {navigation.navigate("PlantScreen", {plant})}}>
-            {/*<Text>*/}
-            {/*    {plantName}*/}
-            {/*</Text>*/}
+
             <View style={styles.plantImageContainer}>
-                <Image style={styles.plantImage} source={require('../images/PlantImages/aloe1.jpg')} />
+                <Image style={styles.plantImage} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.imageUrl}} />
             </View>
 
             <View style={styles.plantTextContainer}>

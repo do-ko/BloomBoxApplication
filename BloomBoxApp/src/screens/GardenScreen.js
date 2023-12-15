@@ -80,7 +80,6 @@ const GardenScreen = ({navigation}) => {
                 <Pressable style={styles.searchButton} onPress={() => {
                     console.log(Dimensions.get('window').width);
                 }}>
-                    <View></View>
                 </Pressable>
 
                 <Pressable style={styles.searchButton} onPress={() => navigation.navigate("AddPlant")}>
