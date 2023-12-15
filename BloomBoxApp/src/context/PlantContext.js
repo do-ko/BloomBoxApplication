@@ -3,6 +3,7 @@ import axios from "axios";
 import {BASE_URL} from "../config";
 import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
 import {AuthContext} from "./AuthContext";
+import {ImageContext} from "./ImageContext";
 
 export const PlantContext = createContext();
 
@@ -11,6 +12,8 @@ export const PlantProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const {userInfo} = useContext(AuthContext);
+    const {uploadImage} = useContext(ImageContext);
+
     // console.log(userInfo.userId);
     const getAllPlants = () => {
         // console.log(`${BASE_URL}/plants/user/${userInfo.userId}`);
@@ -29,9 +32,12 @@ export const PlantProvider = ({children}) => {
             })
     }
 
-    const addPlant = (locationId, plantName, plantDescription, light, water, imageUrl) => {
+    const addPlant = (locationId, plantName, plantDescription, light, water, image, imageUrl) => {
         // console.log(`${BASE_URL}/plants`);
         setIsLoading(true);
+
+        uploadImage(image, userInfo.userId);
+
         axios.post(`${BASE_URL}/plants`, {
             locationId: locationId,
             userId: userInfo.userId,

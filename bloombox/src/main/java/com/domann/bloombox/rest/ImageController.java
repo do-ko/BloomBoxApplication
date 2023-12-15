@@ -1,5 +1,8 @@
 package com.domann.bloombox.rest;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -7,10 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.Objects;
+
+import static java.nio.file.Paths.get;
 
 @RestController
 @RequestMapping("api/images")
@@ -21,16 +24,16 @@ public class ImageController {
         String dir;
         if (Objects.equals(type, "plant")){
             dir = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\plants";
-            Files.createDirectories(Paths.get(dir));
+            Files.createDirectories(get(dir));
         } else if (Objects.equals(type, "location")) {
             dir = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\locations";
-            Files.createDirectories(Paths.get(dir));
+            Files.createDirectories(get(dir));
         } else if (Objects.equals(type, "diary")) {
             dir = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\diaries";
-            Files.createDirectories(Paths.get(dir));
+            Files.createDirectories(get(dir));
         } else return "not supported type of image";
 
-        Files.copy(file.getInputStream(), Paths.get(dir + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(file.getInputStream(), get(dir + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
 
         return "success";
     }
@@ -44,11 +47,27 @@ public class ImageController {
             pathToImg = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\locations\\" + fileName;
         } else if (Objects.equals(type, "diary")) {
             pathToImg = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\diaries\\" + fileName;
-        } else return null;
+        } else {
+            System.out.println("Failed");
+            return null;
+        }
 
         byte[] image = Files.readAllBytes(new File(pathToImg).toPath());
+        System.out.println("Passed");
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(image);
+
+//        String path = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\plants\\";
+//        Path pathToImg = get(path).toAbsolutePath().normalize().resolve(fileName);
+//        if (Files.exists(pathToImg)){
+//            throw new FileAlreadyExistsException(fileName + " was not found");
+//        }
+//        Resource resource = new UrlResource(pathToImg.toUri());
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.add("File-Name", fileName);
+//        httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;File-Name=" + fileName);
+//        return ResponseEntity.ok().contentType(MediaType.parseMediaType(Files.probeContentType(pathToImg)))
+//                        .headers(httpHeaders).body(resource);
     }
 }

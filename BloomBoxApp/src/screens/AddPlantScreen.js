@@ -16,6 +16,7 @@ import BigAdd from "../images/BigAdd";
 import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import {BASE_URL} from "../config";
+import {AuthContext} from "../context/AuthContext";
 
 const imgDir = FileSystem.documentDirectory + "images/"
 
@@ -27,7 +28,9 @@ const ensureDirExists = async () => {
 }
 
 const AddPlantScreen = ({navigation}) => {
+    const {userInfo} = useContext(AuthContext);
     const {addPlant} = useContext(PlantContext);
+
     const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
     const [selectedLocation, setSelectedLocation] = useState("");
 
@@ -69,21 +72,20 @@ const AddPlantScreen = ({navigation}) => {
         const dest = imgDir + filename;
         await FileSystem.copyAsync({from: imageUri, to: dest});
         setImage(dest);
+        console.log("dest coming:")
         console.log(dest);
     }
 
     const addNewPlant = async () => {
-        if (image !== ""){
-            await FileSystem.uploadAsync(BASE_URL + '/uploadImage', image, {
-                httpMethod: "POST",
-                uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-                fieldName: 'file'
-            })
-        }
+        // if (image !== ""){
+        //     await FileSystem.uploadAsync(BASE_URL + '/images/upload/' + userInfo.userId + "/plant", image, {
+        //         httpMethod: "POST",
+        //         uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+        //         fieldName: 'file'
+        //     })
+        // }
 
-
-        addPlant(1, plantName, "description", 3, 3, "url")
-
+        addPlant(1, plantName, "description", 3, 3, image,  image.split("/").pop())
     }
 
 
