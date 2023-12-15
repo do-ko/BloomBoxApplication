@@ -14,25 +14,28 @@ public class Location {
     private Integer userId;
     @Column(name = "location_name")
     private String locationName;
-
     @Column(name = "description")
     private String locationDescription;
 
     @Column(name = "light")
     private int light;
 
-    @Column(name = "image_url")
-    private String locationImageUrl;
+    @Column(name = "water")
+    private int water;
+
+    @Column(name = "image")
+    private String locationImage;
 
     public Location() {
     }
 
-    public Location(Integer userId, String locationName, String locationDescription, int light, String locationImageUrl) {
+    public Location(Integer userId, String locationName, String locationDescription, int water, int light, String locationImage) {
         this.userId = userId;
         this.locationName = locationName;
         this.locationDescription = locationDescription;
         this.light = light;
-        this.locationImageUrl = locationImageUrl;
+        this.water = water;
+        this.locationImage = locationImage;
     }
 
     public int getLocationId() {
@@ -75,23 +78,32 @@ public class Location {
         this.light = light;
     }
 
-    public String getLocationImageUrl() {
-        return locationImageUrl;
+    public int getWater() {
+        return water;
     }
 
-    public void setLocationImageUrl(String locationImageUrl) {
-        this.locationImageUrl = locationImageUrl;
+    public void setWater(int water) {
+        this.water = water;
+    }
+    public String getLocationImage() {
+        return locationImage;
+    }
+
+    public void setLocationImage(String locationImage) {
+        this.locationImage = locationImage;
     }
 
     @Override
     public String toString() {
         return "Location{" +
                 "locationId=" + locationId +
-                ", userId='" + userId + '\'' +
+                ", userId=" + userId +
                 ", locationName='" + locationName + '\'' +
                 ", locationDescription='" + locationDescription + '\'' +
                 ", light=" + light +
-                ", locationImageUrl='" + locationImageUrl + '\'' +
+                ", water=" + water +
+                ", locationImage='" + locationImage + '\'' +
                 '}';
     }
+
 }

@@ -1,22 +1,26 @@
 import React, {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {Button, Dimensions, Image, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {Alert, Button, Dimensions, Image, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 import {PlantContext} from "../context/PlantContext";
 import {LocationContext} from "../context/LocationContext";
 import {SelectList} from "react-native-dropdown-select-list/index";
 import SelectDropdown from 'react-native-select-dropdown'
-import Gradient from "../images/Gradient";
-import GradientSvg from "../images/Gradient";
-import BarsSvg from "../images/Bars";
-import BackSvg from "../images/BackButton";
-import SaveSvg from "../images/SaveButton";
-import AddSvg from "../images/Add";
-import BigAdd from "../images/BigAdd";
+import Gradient from "../images/SVGs/Gradient";
+import GradientSvg from "../images/SVGs/Gradient";
+import BarsSvg from "../images/SVGs/Bars";
+import BackSvg from "../images/SVGs/BackButton";
+import SaveSvg from "../images/SVGs/SaveButton";
+import AddSvg from "../images/SVGs/Add";
+import BigAdd from "../images/SVGs/BigAdd";
 
 // IMAGE IMPORTS
 import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import {BASE_URL} from "../config";
 import {AuthContext} from "../context/AuthContext";
+import SunFilledSvg from "../images/SVGs/SunFilled";
+import SunEmptySvg from "../images/SVGs/SunEmpty";
+import DropletFilledSvg from "../images/SVGs/DropletFilled";
+import DropletEmptySvg from "../images/SVGs/DropletEmpty";
 
 const imgDir = FileSystem.documentDirectory + "images/"
 
@@ -28,15 +32,16 @@ const ensureDirExists = async () => {
 }
 
 const AddPlantScreen = ({navigation}) => {
-    const {userInfo} = useContext(AuthContext);
     const {addPlant} = useContext(PlantContext);
 
-    const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
+    const {getAllLocationForUser, locations} = useContext(LocationContext);
     const [selectedLocation, setSelectedLocation] = useState("");
 
     const [plantName, setPlantName] = useState("");
-
+    const [species, setSpecies] = useState("")
     const [image, setImage] = useState("")
+    const [lightValue, setLightValue] = useState(0)
+    const [waterValue, setWaterValue] = useState(0)
 
     const selectImage = async (useLibrary) => {
         let result;
@@ -77,16 +82,31 @@ const AddPlantScreen = ({navigation}) => {
     }
 
     const addNewPlant = async () => {
-        // if (image !== ""){
-        //     await FileSystem.uploadAsync(BASE_URL + '/images/upload/' + userInfo.userId + "/plant", image, {
-        //         httpMethod: "POST",
-        //         uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-        //         fieldName: 'file'
-        //     })
-        // }
+        if (plantName === ""){
+            createAlert("Add Name");
+        } else if (selectedLocation === ""){
+            createAlert("Select a location")
+        } else if (lightValue === 0){
+            createAlert("Select a light value")
+        } else if (waterValue === 0){
+            createAlert("Select a water value")
+        } else {
+            addPlant(selectedLocation, plantName, species, "description", lightValue, waterValue, image,  image.split("/").pop());
+            navigation.goBack();
+        }
 
-        addPlant(1, plantName, "description", 3, 3, image,  image.split("/").pop())
+        // console.log("Name: " + plantName)
+        // console.log("Species: " + species)
+        // console.log("Location id: " + selectedLocation)
+        // console.log("Light: " + lightValue)
+        // console.log("Water: " + waterValue)
+        // console.log("Image: " + image)
     }
+
+    const createAlert = (msg) =>
+        Alert.alert('Incomplete input', msg, [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ]);
 
 
     useEffect(() => {
@@ -97,73 +117,104 @@ const AddPlantScreen = ({navigation}) => {
         <View style={styles.appContainer}>
             <View style={styles.imageNameContainer}>
             {/*    image and name/species*/}
-                <View style={styles.imageContainer}>
-                    {image === "" ? <></> : <Image source={{uri: image}} style={styles.imageStyle} />}
-                    {/*menu*/}
-                    <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-                        <BackSvg/>
-                    </Pressable>
 
-                    <View style={styles.addButton}>
-                        <Pressable  onPress={() => selectImage(true)}>
-                            <BigAdd/>
+                    <View style={styles.imageContainer}>
+                        <View style={{overflow: "hidden"}}>
+                            {image === "" ? <View style={styles.image}></View> : <View style={styles.image}><Image source={{uri: image}} style={styles.imageStyle} /></View>}
+                        </View>
+                        {/*menu*/}
+                        <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+                            <BackSvg/>
                         </Pressable>
-                        <Pressable  onPress={() => selectImage(false)}>
-                            <BigAdd/>
-                        </Pressable>
-                    </View>
 
-
-                    <Pressable style={styles.saveButton} onPress={() => addNewPlant()}>
-                        <SaveSvg/>
-                    </Pressable>
-
-                    <View style={styles.nameInputContainer}>
-                        {/*<Text>Name</Text>*/}
-                        <View  style={styles.nameContainer} >
-                            <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} placeholderTextColor={"black"} value={plantName} onChangeText={(text) => setPlantName(text)}/>
+                        <View style={styles.addButton}>
+                            <Pressable  onPress={() => selectImage(true)}>
+                                <BigAdd/>
+                            </Pressable>
+                            <Pressable  onPress={() => selectImage(false)}>
+                                <BigAdd/>
+                            </Pressable>
                         </View>
 
-                        <Text>Species</Text>
-                    </View>
+
+                        <Pressable style={styles.saveButton} onPress={() => addNewPlant()}>
+                            <SaveSvg/>
+                        </Pressable>
+
+                        <View style={styles.nameInputContainer}>
+                            {/*<Text>Name</Text>*/}
+                            <View  style={styles.nameSpeciesContainer} >
+                                <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} placeholderTextColor={"black"} value={plantName} onChangeText={(text) => setPlantName(text)}/>
+                            </View>
+
+                            <View  style={styles.nameSpeciesContainer} >
+                                <TextInput style={styles.speciesInput} underlineColorAndroid={"transparent"} placeholder={"enter species"} placeholderTextColor={"black"} value={species} onChangeText={(text) => setSpecies(text)}/>
+                            </View>
+                        </View>
+
 
                 </View>
+
             </View>
+
+
+            {/*    DATA SECTION*/}
             <View style={styles.locationWaterLightContainer}>
             {/*    location light water*/}
+
+                <View style={styles.dataContainer}>
+                {/*    location*/}
+
+                    <SelectDropdown
+                        buttonStyle={{width: "100%"}}
+                        data={locations.map(location => location.locationName)}
+                        onSelect={(selectedItem, index) => {
+                            console.log(selectedItem, index)
+                            let location = locations.filter(location =>location.locationName === selectedItem)
+                            setSelectedLocation(location[0].locationId)
+                            setLightValue(location[0].light)
+                            setWaterValue(location[0].water)
+                        }}
+                        buttonTextAfterSelection={(selectedItem, index) => {
+                            // text represented after item is selected
+                            // if data array is an array of objects then return selectedItem.property to render after item is selected
+                            return selectedItem
+                        }}
+                        rowTextForSelection={(item, index) => {
+                            // text represented for each item in dropdown
+                            // if data array is an array of objects then return item.property to represent item in dropdown
+                            return item
+                        }} />
+                </View>
+
+            {/*    light*/}
+                <View style={styles.dataContainer}>
+                    <Text style={styles.dataText}>Light</Text>
+                    <View style={styles.lightWaterIconContainer}>
+                        {
+                            [...Array(5).keys()].map( i =><Pressable onPress={() => setLightValue(i+1)}>
+                                {i < lightValue ? <SunFilledSvg/> : <SunEmptySvg/>}
+                            </Pressable>)
+                        }
+                    </View>
+                </View>
+
+                {/*    water*/}
+                <View style={styles.dataContainer}>
+                    <Text style={styles.dataText}>Water</Text>
+                    <View style={styles.lightWaterIconContainer}>
+                        {
+                            [...Array(5).keys()].map( i =><Pressable onPress={() => setWaterValue(i+1)}>
+                                {i < waterValue ? <DropletFilledSvg/> : <DropletEmptySvg/>}
+                            </Pressable>)
+                        }
+                    </View>
+                </View>
+
+
             </View>
         </View>
-
-
-        // <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-        //
-        //
-        //     {/*/!*Location Select*!/*/}
-        //     {/*<SelectDropdown*/}
-        //     {/*    buttonStyle={{backgroundColor:"red"}}*/}
-        //     {/*    data={locations.map(location => location.locationName)}*/}
-        //     {/*    onSelect={(selectedItem, index) => {*/}
-        //     {/*        console.log(selectedItem, index)*/}
-        //     {/*        let location = locations.filter(location =>location.locationName === selectedItem)*/}
-        //     {/*        setSelectedLocation(location[0].locationId)*/}
-        //     {/*    }}*/}
-        //     {/*    buttonTextAfterSelection={(selectedItem, index) => {*/}
-        //     {/*        // text represented after item is selected*/}
-        //     {/*        // if data array is an array of objects then return selectedItem.property to render after item is selected*/}
-        //     {/*        return selectedItem*/}
-        //     {/*    }}*/}
-        //     {/*    rowTextForSelection={(item, index) => {*/}
-        //     {/*        // text represented for each item in dropdown*/}
-        //     {/*        // if data array is an array of objects then return item.property to represent item in dropdown*/}
-        //     {/*        return item*/}
-        //     {/*    }}*/}
-        //
-        //     />
-        //
-        //     <Button title={"ADD TEST"} onPress={()=>addPlant(1, "Name", "description", 3, 3, "url")}/>
-        //
-        // </View>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -172,36 +223,44 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         alignItems: "center",
-        // padding: 15,
-        // backgroundColor: "#fff"
-        backgroundColor: "pink"
+        backgroundColor: "#fff"
     },
 
     imageNameContainer: {
         flex: 2,
-        backgroundColor: "blue",
+        backgroundColor: "#fff",
         width: "100%",
-        paddingBottom: 50
+        paddingBottom: 90,
     },
 
     locationWaterLightContainer: {
         flex: 2,
-        backgroundColor: "green",
-        width: "100%"
+        backgroundColor: "#DFDFD9",
+        width: "100%",
+        padding: 15,
+        alignItems: "center"
     },
 
     imageContainer: {
-        backgroundColor: "red",
         height: 318,
         borderBottomRightRadius: 80,
         borderBottomLeftRadius: 80,
+    },
+
+    image: {
+        width: "100%",
+        height: "100%",
+        borderBottomRightRadius: 80,
+        borderBottomLeftRadius: 80,
+        backgroundColor: "#fff",
+        elevation: 10
     },
 
     imageStyle: {
         width: "100%",
         height: "100%",
         borderBottomRightRadius: 80,
-        borderBottomLeftRadius: 80
+        borderBottomLeftRadius: 80,
     },
 
 
@@ -210,22 +269,21 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 15,
         left: 15,
-        backgroundColor: "yellow"
     },
 
     saveButton: {
         position: "absolute",
         top: 15,
         right: 15,
-        backgroundColor: "yellow",
-        padding: 20
+        // backgroundColor: "yellow",
+        // padding: 20
     },
 
     addButton: {
         position: "absolute",
         top: 318 / 2 - 20,
         left: Dimensions.get('window').width / 2 - 45,
-        backgroundColor: "yellow",
+        // backgroundColor: "yellow",
         flexDirection: "row",
         gap: 10
     },
@@ -236,21 +294,24 @@ const styles = StyleSheet.create({
         borderRadius: 23,
 
         height: 86,
-        backgroundColor:"yellow",
+        backgroundColor:"#fff",
         position: "absolute",
         bottom: -43 ,
 
         alignSelf: 'center',
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+
+        elevation: 10
     },
 
-    nameContainer: {
+    nameSpeciesContainer: {
         width: "80%",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "green"
+        // backgroundColor: "green"
     },
+
 
     nameInput: {
         textAlign: "center",
@@ -258,182 +319,28 @@ const styles = StyleSheet.create({
         // fontWeight: "bold"
     },
 
-
-
-
-
-    header: {
-        // backgroundColor: "red",
-        // height: "20%",
-        width: "100%",
-        flex: 0,
-        flexDirection: "row",
-        justifyContent: "space-evenly",
-        alignItems: "flex-end",
-        paddingHorizontal: 20
-        // gap: 20
+    speciesInput: {
+        textAlign: "center",
+        fontSize: 14
     },
 
-    headerTextContainer: {
-        // backgroundColor: "yellow",
-        // width: "100%"
-    },
-
-    headerText: {
-        fontSize: 40,
-        fontWeight: "bold",
-        textTransform: "uppercase",
-    },
-
-    plantImage: {
+    dataContainer: {
+        width: "80%",
         // backgroundColor: "blue",
-        // marginRight: "10%",
-        // height: 87
+        marginBottom: 32
     },
 
-    searchContainer: {
-        backgroundColor: "#20201D",
-        height: 81,
-        width: "100%",
-        borderRadius: 23,
-        flex: 1,
-        justifyContent: "space-between",
-        paddingHorizontal: 20,
-        flexDirection: "row",
+    dataText: {
+        fontSize: 32,
+        fontWeight: "bold"
+    },
+
+
+    lightWaterIconContainer: {
+      flexDirection: "row",
         alignItems: "center",
-        flexWrap: "nowrap"
-    },
-
-    searchBar: {
-        height: "50%",
-        backgroundColor: "white",
-        borderRadius: 23,
-        width: "65%",
-        justifyContent: "flex-start",
-        paddingHorizontal: 10,
-        flexDirection: "row",
-        // alignItems
-        alignItems: "center"
-    },
-
-    searchInput: {
-        flex: 1
-    },
-
-    searchButton: {
-        backgroundColor: "#5B6E4E",
-        height: 40,
-        width: 40,
-        borderRadius: 15,
-        alignItems: "center",
-        justifyContent: "center"
-    },
-
-    plantsContainer: {
-        // backgroundColor: "blue",
-        height: "100%",
-        width: "100%",
-        flex: 6,
-        marginTop: 20
-    },
-
-    itemInvisible: {
-        backgroundColor: "transparent",
-        height: (Dimensions.get('window').width / 2) - 30,
-        margin: 10,
-        flex: 1,
+        justifyContent: "space-between"
     }
-
-    // // container for header texts and icons
-    // headerContainer: {
-    //     width: "60%",
-    //     //height: "30%",
-    //     textAlign: "left",
-    //     //fontFamily: "calibri",
-    // },
-    //
-    // headerText1: {
-    //     marginTop: 50,
-    //     fontSize: 32,
-    //     fontWeight: "700",
-    //     letterSpacing: 1,
-    // },
-    //
-    // headerText2: {
-    //     marginTop: -15,
-    //     fontSize: 32,
-    //     fontWeight: "700",
-    //     letterSpacing: 1,
-    // },
-    //
-    // barContainer: {
-    //     flexDirection: "row",
-    //     alignItems: "center",
-    //     width: "80%",
-    //     height: "7%",
-    //     backgroundColor: "#20201D",
-    //     borderRadius: 20,
-    //     gap: 5
-    // },
-    //
-    // searchBarContainer: {
-    //     flexDirection: "row",
-    //     flex: 1,
-    //     alignItems: "center",
-    // },
-    //
-    // searchBarInput: {
-    //     marginHorizontal: "5%",
-    //     padding: 5,
-    //     paddingLeft: 40,
-    //     width: "85%",
-    //     height: 32,
-    //     backgroundColor: "#ffffff",
-    //     borderRadius: 25,
-    //     fontSize: 16,
-    // },
-    //
-    // magnifyingGlassIcon: {
-    //     width: 20,
-    //     height: 20,
-    //     //position: "absolute",
-    //     left: -250,
-    // },
-    //
-    // pressableAddPlantButton: {},
-    //
-    // addPlantButton: {
-    //     left: -20,
-    // },
-    //
-    // leftLine: {
-    //     backgroundColor: "#DFDFD9",
-    //     width: 10,
-    //     height: "16.5%",
-    //     position: "absolute",
-    //     left: "15%",
-    // },
-    //
-    // rightLine: {
-    //     backgroundColor: "#DFDFD9",
-    //     width: 10,
-    //     height: "16.5%",
-    //     position: "absolute",
-    //     right: "15%",
-    // },
-    //
-    // plant1Image: {
-    //     position: "absolute",
-    //     width: 65,
-    //     top: "6%",
-    //     left: "64%",
-    // },
-    //
-    // drawerIcon: {
-    //     position: "absolute",
-    //     left: "3%",
-    //     top: "5%",
-    // },
 })
 
 

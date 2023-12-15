@@ -42,7 +42,11 @@ public class ImageController {
     public ResponseEntity<?> downloadImage(@PathVariable String fileName, @PathVariable int userId, @PathVariable String type) throws Exception {
         String pathToImg;
         if (Objects.equals(type, "plant")){
-            pathToImg = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\plants\\" + fileName;
+            if (fileName.equals("defaultPlant.jpg")){
+                pathToImg = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\" + fileName;
+            } else {
+                pathToImg = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\plants\\" + fileName;
+            }
         } else if (Objects.equals(type, "location")) {
             pathToImg = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\locations\\" + fileName;
         } else if (Objects.equals(type, "diary")) {
@@ -58,16 +62,5 @@ public class ImageController {
                 .contentType(MediaType.valueOf("image/png"))
                 .body(image);
 
-//        String path = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\plants\\";
-//        Path pathToImg = get(path).toAbsolutePath().normalize().resolve(fileName);
-//        if (Files.exists(pathToImg)){
-//            throw new FileAlreadyExistsException(fileName + " was not found");
-//        }
-//        Resource resource = new UrlResource(pathToImg.toUri());
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.add("File-Name", fileName);
-//        httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;File-Name=" + fileName);
-//        return ResponseEntity.ok().contentType(MediaType.parseMediaType(Files.probeContentType(pathToImg)))
-//                        .headers(httpHeaders).body(resource);
     }
 }
