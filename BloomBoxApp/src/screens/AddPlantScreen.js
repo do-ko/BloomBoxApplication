@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {Button, Dimensions, Image, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {Alert, Button, Dimensions, Image, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 import {PlantContext} from "../context/PlantContext";
 import {LocationContext} from "../context/LocationContext";
 import {SelectList} from "react-native-dropdown-select-list/index";
@@ -82,14 +82,30 @@ const AddPlantScreen = ({navigation}) => {
     }
 
     const addNewPlant = async () => {
+        if (plantName === ""){
+            createAlert("Add Name");
+        } else if (selectedLocation === ""){
+            createAlert("Select a location")
+        } else if (lightValue === 0){
+            createAlert("Select a light value")
+        } else if (waterValue === 0){
+            createAlert("Select a water value")
+        }
+
         console.log("Name: " + plantName)
         console.log("Species: " + species)
         console.log("Location id: " + selectedLocation)
         console.log("Light: " + lightValue)
         console.log("Water: " + waterValue)
         console.log("Image: " + image)
+
         addPlant(selectedLocation, plantName, species, "description", lightValue, waterValue, image,  image.split("/").pop())
     }
+
+    const createAlert = (msg) =>
+        Alert.alert('Incomplete input', msg, [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ]);
 
 
     useEffect(() => {

@@ -16,14 +16,11 @@ export const PlantProvider = ({children}) => {
 
     // console.log(userInfo.userId);
     const getAllPlants = () => {
-        // console.log(`${BASE_URL}/plants/user/${userInfo.userId}`);
         setIsLoading(true);
         axios.get(`${BASE_URL}/plants/user/${userInfo.userId}`)
             .then(res => {
-                // console.log(res.data);
                 let data = res.data;
                 setPlants(data);
-                // console.log(plants);
                 setIsLoading(false);
             })
             .catch(e => {
@@ -33,30 +30,54 @@ export const PlantProvider = ({children}) => {
     }
 
     const addPlant = (locationId, plantName, species, plantDescription, light, water, image, imageUrl) => {
-        // console.log(`${BASE_URL}/plants`);
         setIsLoading(true);
 
-        uploadImage(image, userInfo.userId);
+        if (image !== ""){
+            uploadImage(image, userInfo.userId);
+            axios.post(`${BASE_URL}/plants`, {
+                locationId: locationId,
+                userId: userInfo.userId,
+                plantName: plantName,
+                species: species,
+                description: plantDescription,
+                light: light,
+                water: water,
+                imageUrl: imageUrl
+            }).then(res => {
+                let newPlant = res.data;
+                console.log(newPlant);
+                setPlants([...plants, newPlant]);
+                setIsLoading(false);
+            }).catch(e => {
+                console.log(`plant adding error ${e}`);
+                setIsLoading(false);
 
-        axios.post(`${BASE_URL}/plants`, {
-            locationId: locationId,
-            userId: userInfo.userId,
-            plantName: plantName,
-            species: species,
-            description: plantDescription,
-            light: light,
-            water: water,
-            imageUrl: imageUrl
-        }).then(res => {
-            let newPlant = res.data;
-            console.log(newPlant);
-            setPlants([...plants, newPlant]);
-            setIsLoading(false);
-        }).catch(e => {
-            console.log(`plant adding error ${e}`);
-            setIsLoading(false);
+            })
 
-        })
+        } else {
+            axios.post(`${BASE_URL}/plants`, {
+                locationId: locationId,
+                userId: userInfo.userId,
+                plantName: plantName,
+                species: species,
+                description: plantDescription,
+                light: light,
+                water: water,
+                imageUrl: "defaultPlant.jpg"
+            }).then(res => {
+                let newPlant = res.data;
+                console.log(newPlant);
+                setPlants([...plants, newPlant]);
+                setIsLoading(false);
+            }).catch(e => {
+                console.log(`plant adding error ${e}`);
+                setIsLoading(false);
+
+            })
+        }
+
+
+
     }
 
     return(
