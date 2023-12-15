@@ -32,7 +32,7 @@ export const PlantProvider = ({children}) => {
             })
     }
 
-    const addPlant = (locationId, plantName, plantDescription, light, water, image, imageUrl) => {
+    const addPlant = (locationId, plantName, species, plantDescription, light, water, image, imageUrl) => {
         // console.log(`${BASE_URL}/plants`);
         setIsLoading(true);
 
@@ -42,6 +42,7 @@ export const PlantProvider = ({children}) => {
             locationId: locationId,
             userId: userInfo.userId,
             plantName: plantName,
+            species: species,
             description: plantDescription,
             light: light,
             water: water,
