@@ -19,6 +19,9 @@ public class Plant {
     @Column(name = "plant_name")
     private String plantName;
 
+    @Column(name = "species")
+    private String species;
+
     @Column(name = "description")
     private String description;
 
@@ -28,20 +31,21 @@ public class Plant {
     @Column(name = "water")
     private Integer water;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Column(name = "image")
+    private String image;
 
     public Plant() {
     }
 
-    public Plant(Integer locationId, Integer userId, String plantName, String description, Integer light, Integer water, String imageUrl) {
+    public Plant(Integer locationId, Integer userId, String plantName, String species, String description, Integer light, Integer water, String image) {
         this.locationId = locationId;
         this.userId = userId;
         this.plantName = plantName;
+        this.species = species;
         this.description = description;
         this.light = light;
         this.water = water;
-        this.imageUrl = imageUrl;
+        this.image = image;
     }
 
     public Integer getPlantId() {
@@ -76,6 +80,13 @@ public class Plant {
         this.plantName = plantName;
     }
 
+    public String getSpecies() {
+        return species;
+    }
+    public void setSpecies(String species) {
+        this.species = species;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -101,11 +112,11 @@ public class Plant {
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageUrl(String image) {
+        this.image = image;
     }
 
     @Override
@@ -115,10 +126,11 @@ public class Plant {
                 ", locationId=" + locationId +
                 ", userId=" + userId +
                 ", plantName='" + plantName + '\'' +
+                ", species='" + species + '\'' +
                 ", description='" + description + '\'' +
                 ", light=" + light +
                 ", water=" + water +
-                ", imageUrl='" + imageUrl + '\'' +
+                ", image='" + image + '\'' +
                 '}';
     }
 }

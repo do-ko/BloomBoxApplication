@@ -1,14 +1,14 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Dimensions, FlatList, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 // import SVGImg from '../images/Maceta.svg';
-import MacetaSvg from "../images/Maceta";
-import BarsSvg from "../images/Bars";
-import AddSvg from "../images/Add";
-import SearchSvg from "../images/Search";
+import MacetaSvg from "../images/SVGs/Maceta";
+import BarsSvg from "../images/SVGs/Bars";
+import AddSvg from "../images/SVGs/Add";
+import SearchSvg from "../images/SVGs/Search";
 import {PlantContext} from "../context/PlantContext";
 import Spinner from "react-native-loading-spinner-overlay";
 import PlantComponent from "../components/PlantComponent";
-import Gradient from "../images/Gradient";
+import Gradient from "../images/SVGs/Gradient";
 import filter from "lodash.filter"
 
 const formatData = (data, numColumns) => {
@@ -80,7 +80,6 @@ const GardenScreen = ({navigation}) => {
                 <Pressable style={styles.searchButton} onPress={() => {
                     console.log(Dimensions.get('window').width);
                 }}>
-                    <View></View>
                 </Pressable>
 
                 <Pressable style={styles.searchButton} onPress={() => navigation.navigate("AddPlant")}>
