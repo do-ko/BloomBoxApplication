@@ -1,13 +1,32 @@
-import React, { useContext } from "react";
-import { Button, Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useContext, useState } from "react";
+import {
+  Button,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 import { AuthContext } from "../context/AuthContext";
 import BarsSvg from "../images/Bars";
 import HangingLampSvg from "../images/HangingLamp";
 import Plant2 from "../images/Plant2";
+import ReminderComponent from "../components/ReminderComponent";
 
 const HomeScreen = ({ navigation }) => {
   const { isLoading, logout, userInfo } = useContext(AuthContext);
+  const [enteredReminder, setEnteredReminder] = useState(1);
+  const [reminder, setReminder] = useState([]);
+
+  function reminderInputHandler() {
+    setEnteredReminder(enteredReminder + 1);
+  }
+
+  function addReminder() {
+    setReminder((currentReminders) => [...currentReminders, enteredReminder]);
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
@@ -21,6 +40,13 @@ const HomeScreen = ({ navigation }) => {
 
       <Spinner visible={isLoading} />
 
+      <Button
+        title="Add reminder"
+        onPress={(reminderInputHandler, addReminder)}
+        //color={reminder ? "blue" : "green"}
+        style={styles.addReminderBtn}
+      />
+
       <View style={styles.headerTextContainer}>
         <Text style={styles.headerText}>Welcome</Text>
         <Text style={styles.headerText}>back</Text>
@@ -31,7 +57,17 @@ const HomeScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.reminderListContainer}>
-        <View style={styles.reminderListBackground}></View>
+        <View style={styles.reminderListBackground}>
+          <View style={styles.reminderList}>
+            <ScrollView>
+              {reminder.map((r) => (
+                <View style={styles.reminderItem}>
+                  <Text style={styles.reminderItemText}>Hello</Text>
+                </View>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -94,7 +130,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingLeft: 20,
     paddingRight: 20,
-    backgroundColor: "black",
+    backgroundColor: "#20201D",
   },
 
   reminderListBackground: {
@@ -124,6 +160,25 @@ const styles = StyleSheet.create({
     position: "absolute",
     marginLeft: "70%",
     marginTop: "18%",
+  },
+
+  addReminderBtn: {},
+
+  reminderItem: {
+    width: "100%",
+    height: 100,
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#20201D",
+  },
+
+  reminderItemText: {
+    color: "#F4F7F8",
+    fontSize: 28,
+    //fontWeight: "bold",
   },
 });
 
