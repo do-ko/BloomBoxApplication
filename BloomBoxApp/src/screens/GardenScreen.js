@@ -32,16 +32,7 @@ const GardenScreen = ({navigation}) => {
         getAllPlants();
     }, [])
 
-    // getAllPlants();
-    // console.log("Before plants")
-    // console.log(plants);
-
     return (
-        // <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-        //     <Button title={"DRAWER"} onPress={() => navigation.openDrawer()} />
-        //     <Button title={"PLANT"} onPress={() => navigation.navigate("Plant")} />
-        //     <Text>Garden Screen</Text>
-        // </View>
         <View style={styles.appContainer}>
             <Gradient style={{
                 position: 'absolute',
