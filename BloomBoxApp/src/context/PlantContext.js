@@ -14,7 +14,6 @@ export const PlantProvider = ({children}) => {
     const {userInfo} = useContext(AuthContext);
     const {uploadImage} = useContext(ImageContext);
 
-    // console.log(userInfo.userId);
     const getAllPlants = () => {
         setIsLoading(true);
         axios.get(`${BASE_URL}/plants/user/${userInfo.userId}`)
