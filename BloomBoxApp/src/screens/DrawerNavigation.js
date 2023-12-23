@@ -7,6 +7,7 @@ import {Button, Image, StyleSheet} from "react-native";
 import {red} from "react-native-reanimated/src";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {AuthContext} from "../context/AuthContext";
+import LocationsStack from "./LocationsStack";
 const Drawer = createDrawerNavigator();
 
 
@@ -31,6 +32,9 @@ const DrawerNavigation = () => {
                     <Icon name={"home"} size={size} color={focused ? "#fff" : "#fff"}/>
                 ) ,drawerActiveBackgroundColor:"#5B6E4E", drawerLabelStyle:{color:"white"}}}/>
             {/*<Drawer.Screen name={"Logout"} component={<Button title={"Logout"} color={"red"} onPress={() => logout()}/>}/>*/}
+            <Drawer.Screen name={"Locations"} component={LocationsStack} options={{drawerIcon: ({focused, size}) => (
+                    <Icon name={"home"} size={size} color={focused ? "#fff" : "#fff"}/>
+                ) ,drawerActiveBackgroundColor:"#5B6E4E", drawerLabelStyle:{color:"white"}}}/>
         </Drawer.Navigator>
     );
 }
