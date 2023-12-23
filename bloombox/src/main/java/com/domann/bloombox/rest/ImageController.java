@@ -61,6 +61,28 @@ public class ImageController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(image);
+    }
 
+    @DeleteMapping("/delete/{userId}/{type}/{fileName}")
+    public String deleteImage(@PathVariable String fileName, @PathVariable int userId, @PathVariable String type){
+        String pathToImg;
+        if (Objects.equals(type, "plant")){
+            if (fileName.equals("defaultPlant.jpg")){
+                pathToImg = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\" + fileName;
+            } else {
+                pathToImg = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\plants\\" + fileName;
+            }
+        } else if (Objects.equals(type, "location")) {
+            pathToImg = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\locations\\" + fileName;
+        } else if (Objects.equals(type, "diary")) {
+            pathToImg = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\diaries\\" + fileName;
+        } else {
+            return "Failed to delete image - path cant be found";
+        }
+
+        File file = new File(pathToImg);
+        if (file.delete()){
+            return "Image was deleted";
+        } else return "Failed to delete image";
     }
 }
