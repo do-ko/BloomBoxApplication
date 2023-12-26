@@ -31,17 +31,22 @@ const ensureDirExists = async () => {
     }
 }
 
-const EditPlantScreen = ({navigation}) => {
+const EditPlantScreen = ({route, navigation}) => {
+    const {plant} = route.params;
     const {addPlant} = useContext(PlantContext);
+    const {userInfo} = useContext(AuthContext);
 
-    const {getAllLocationForUser, locations} = useContext(LocationContext);
+    const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
+
     const [selectedLocation, setSelectedLocation] = useState("");
 
-    const [plantName, setPlantName] = useState("");
-    const [species, setSpecies] = useState("")
-    const [image, setImage] = useState("")
-    const [lightValue, setLightValue] = useState(0)
-    const [waterValue, setWaterValue] = useState(0)
+    const [plantName, setPlantName] = useState(plant.plantName);
+    const [species, setSpecies] = useState(plant.species)
+    const [image, setImage] = useState(BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.imageUrl)
+    const [lightValue, setLightValue] = useState(plant.light)
+    const [waterValue, setWaterValue] = useState(plant.water)
+
+    const [initLocation, setInitLocation] = useState("")
 
     const selectImage = async (useLibrary) => {
         let result;
@@ -113,6 +118,10 @@ const EditPlantScreen = ({navigation}) => {
         getAllLocationForUser();
     }, [])
 
+    // useEffect(() => {
+    //     setInitLocation(locations.filter(location => location.locationId === plant.locationId)[0].locationName);
+    // }, [locations])
+
     return(
         <View style={styles.appContainer}>
             <View style={styles.imageNameContainer}>
@@ -132,6 +141,9 @@ const EditPlantScreen = ({navigation}) => {
                             <BigAdd/>
                         </Pressable>
                         <Pressable  onPress={() => selectImage(false)}>
+                            <BigAdd/>
+                        </Pressable>
+                        <Pressable  onPress={() => console.log(locations.filter(location => location.locationId === plant.locationId)[0].locationName)}>
                             <BigAdd/>
                         </Pressable>
                     </View>
@@ -168,6 +180,7 @@ const EditPlantScreen = ({navigation}) => {
                     <SelectDropdown
                         buttonStyle={{width: "100%"}}
                         data={locations.map(location => location.locationName)}
+                        defaultButtonText={isLoading ? "loading..." : locations.filter(location => location.locationId === plant.locationId)[0].locationName}
                         onSelect={(selectedItem, index) => {
                             console.log(selectedItem, index)
                             let location = locations.filter(location =>location.locationName === selectedItem)

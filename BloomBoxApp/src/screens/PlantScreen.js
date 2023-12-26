@@ -25,7 +25,7 @@ const PlantScreen = ({route, navigation}) => {
 
             {diaries.map(diary => <Text>{diary.title}</Text>)}
             <Button title={"ADD DIARY TEST"} onPress={() => addDiary(plant.plantId, "test", Date.now(), null)}/>
-            <Button title={"EDIT PLANT"} onPress={() => ""}/>
+            <Button title={"EDIT PLANT"} onPress={() => navigation.navigate("EditPlant", {plant})}/>
         </View>
     );
 }
