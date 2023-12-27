@@ -32,7 +32,7 @@ const ensureDirExists = async () => {
 }
 
 const EditPlantScreen = ({route, navigation}) => {
-    const {plant} = route.params;
+    const {plant,plantChanged} = route.params;
     const {editPlant} = useContext(PlantContext);
     const {userInfo} = useContext(AuthContext);
     const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
@@ -40,12 +40,17 @@ const EditPlantScreen = ({route, navigation}) => {
     // setting initial data
     const [plantName, setPlantName] = useState(plant.plantName);
     const [species, setSpecies] = useState(plant.species)
-    const [selectedLocation, setSelectedLocation] = useState(plant.locationId);
+    //const [selectedLocationId, setSelectedLocationId] = useState(plant.locationId);
+
+    const [selectedLocation, setSelectedLocation] = useState();
+
+
     const [image, setImage] = useState(BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.imageUrl)
     const [lightValue, setLightValue] = useState(plant.light)
     const [waterValue, setWaterValue] = useState(plant.water)
 
     const initImageName = plant.imageUrl
+    // const initLocationName = locations.filter(location =>location.locationId === plant.locationId)[0]
 
     const selectImage = async (useLibrary) => {
         let result;
@@ -99,7 +104,7 @@ const EditPlantScreen = ({route, navigation}) => {
         } else {
             console.log("Name: " + plantName)
             console.log("Species: " + species)
-            console.log("Location id: " + selectedLocation)
+            console.log("Location id: " + selectedLocation.locationId)
             console.log("Light: " + lightValue)
             console.log("Water: " + waterValue)
             console.log("Image: " + image)
@@ -108,7 +113,21 @@ const EditPlantScreen = ({route, navigation}) => {
             console.log("OldImage: " + initImageName)
 
 
-            editPlant(plant.plantId, selectedLocation, plantName, species, "description", lightValue, waterValue, image,  image.split("/").pop(), initImageName);
+            plant.locationId = selectedLocation.locationId;
+            plant.plantName = plantName;
+            plant.light = lightValue;
+            plant.water = waterValue;
+            plant.species = species;
+            plant.imageUrl = image.split("/").pop();
+
+
+            editPlant(plant.plantId, selectedLocation.locationId, plantName, species, "description", lightValue, waterValue, image,  image.split("/").pop(), initImageName);
+
+            //editPlant(plant);
+
+
+            plantChanged(plant)
+
             navigation.goBack();
         }
 
@@ -125,9 +144,14 @@ const EditPlantScreen = ({route, navigation}) => {
         getAllLocationForUser();
     }, [])
 
-    // useEffect(() => {
-    //     setInitLocation(locations.filter(location => location.locationId === plant.locationId)[0].locationName);
-    // }, [locations])
+    useEffect(() => {
+        // setInitLocation(locations.filter(location => location.locationId === plant.locationId)[0].locationName);
+
+        if (plant.locationId) {
+            setSelectedLocation(locations.filter(location => location.locationId === plant.locationId)[0]);
+        }
+
+    }, [locations])
 
     return(
         <View style={styles.appContainer}>
@@ -186,25 +210,25 @@ const EditPlantScreen = ({route, navigation}) => {
 
                     <SelectDropdown
                         buttonStyle={{width: "100%"}}
-                        data={locations.map(location => location.locationName)}
-
-                        // defaultButtonText={isLoading ? "loading..." : locations.filter(location => location.locationId === plant.locationId)[0].locationName}
+                        data={locations}
+                        defaultButtonText={"select location..."}
+                        defaultValue={selectedLocation}
                         onSelect={(selectedItem, index) => {
                             console.log(selectedItem, index)
-                            let location = locations.filter(location =>location.locationName === selectedItem)
-                            setSelectedLocation(location[0].locationId)
-                            setLightValue(location[0].light)
-                            setWaterValue(location[0].water)
+                            // let location = locations.filter(location =>location.locationName === selectedItem)
+                            setSelectedLocation(selectedItem)
+                            setLightValue(selectedItem.light)
+                            setWaterValue(selectedItem.water)
                         }}
                         buttonTextAfterSelection={(selectedItem, index) => {
                             // text represented after item is selected
                             // if data array is an array of objects then return selectedItem.property to render after item is selected
-                            return selectedItem
+                            return selectedItem.locationName
                         }}
                         rowTextForSelection={(item, index) => {
                             // text represented for each item in dropdown
                             // if data array is an array of objects then return item.property to represent item in dropdown
-                            return item
+                            return item.locationName
                         }} />
                 </View>
 

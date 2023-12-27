@@ -16,6 +16,15 @@ const PlantScreen = ({route, navigation}) => {
     }, [])
 
 
+    // useEffect(() => {
+    //     console.log("plant changed1: ",plant)
+    // }, [plant])
+
+
+    const plantChanged = (plant)=>{
+     //   console.log("plant changed2: ",plant)
+    }
+
     return(
         <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
             <Button title={"GO BACK"} onPress={() => {navigation.goBack()}}/>
@@ -25,7 +34,7 @@ const PlantScreen = ({route, navigation}) => {
 
             {diaries.map(diary => <Text>{diary.title}</Text>)}
             <Button title={"ADD DIARY TEST"} onPress={() => addDiary(plant.plantId, "test", Date.now(), null)}/>
-            <Button title={"EDIT PLANT"} onPress={() => navigation.navigate("EditPlant", {plant})}/>
+            <Button title={"EDIT PLANT"} onPress={() => navigation.navigate("EditPlant", {plant,plantChanged})}/>
         </View>
     );
 }
