@@ -66,9 +66,10 @@ public class ImageController {
     @DeleteMapping("/delete/{userId}/{type}/{fileName}")
     public String deleteImage(@PathVariable String fileName, @PathVariable int userId, @PathVariable String type){
         String pathToImg;
+
         if (Objects.equals(type, "plant")){
             if (fileName.equals("defaultPlant.jpg")){
-                pathToImg = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\" + fileName;
+                return "Default file is not supposed to be deleted.";
             } else {
                 pathToImg = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\plants\\" + fileName;
             }

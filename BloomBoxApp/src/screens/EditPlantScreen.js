@@ -33,20 +33,19 @@ const ensureDirExists = async () => {
 
 const EditPlantScreen = ({route, navigation}) => {
     const {plant} = route.params;
-    const {addPlant} = useContext(PlantContext);
+    const {editPlant} = useContext(PlantContext);
     const {userInfo} = useContext(AuthContext);
-
     const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
 
-    const [selectedLocation, setSelectedLocation] = useState("");
-
+    // setting initial data
     const [plantName, setPlantName] = useState(plant.plantName);
     const [species, setSpecies] = useState(plant.species)
+    const [selectedLocation, setSelectedLocation] = useState(plant.locationId);
     const [image, setImage] = useState(BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.imageUrl)
     const [lightValue, setLightValue] = useState(plant.light)
     const [waterValue, setWaterValue] = useState(plant.water)
 
-    const [initLocation, setInitLocation] = useState("")
+    const initImageName = plant.imageUrl
 
     const selectImage = async (useLibrary) => {
         let result;
@@ -81,12 +80,14 @@ const EditPlantScreen = ({route, navigation}) => {
         const filename = new Date().getTime() + ".jpg";
         const dest = imgDir + filename;
         await FileSystem.copyAsync({from: imageUri, to: dest});
+
         setImage(dest);
+
         console.log("dest coming:")
         console.log(dest);
     }
 
-    const addNewPlant = async () => {
+    const edit = async () => {
         if (plantName === ""){
             createAlert("Add Name");
         } else if (selectedLocation === ""){
@@ -96,16 +97,22 @@ const EditPlantScreen = ({route, navigation}) => {
         } else if (waterValue === 0){
             createAlert("Select a water value")
         } else {
-            addPlant(selectedLocation, plantName, species, "description", lightValue, waterValue, image,  image.split("/").pop());
+            console.log("Name: " + plantName)
+            console.log("Species: " + species)
+            console.log("Location id: " + selectedLocation)
+            console.log("Light: " + lightValue)
+            console.log("Water: " + waterValue)
+            console.log("Image: " + image)
+
+            // to delete from server
+            console.log("OldImage: " + initImageName)
+
+
+            editPlant(plant.plantId, selectedLocation, plantName, species, "description", lightValue, waterValue, image,  image.split("/").pop(), initImageName);
             navigation.goBack();
         }
 
-        // console.log("Name: " + plantName)
-        // console.log("Species: " + species)
-        // console.log("Location id: " + selectedLocation)
-        // console.log("Light: " + lightValue)
-        // console.log("Water: " + waterValue)
-        // console.log("Image: " + image)
+
     }
 
     const createAlert = (msg) =>
@@ -143,13 +150,13 @@ const EditPlantScreen = ({route, navigation}) => {
                         <Pressable  onPress={() => selectImage(false)}>
                             <BigAdd/>
                         </Pressable>
-                        <Pressable  onPress={() => console.log(locations.filter(location => location.locationId === plant.locationId)[0].locationName)}>
+                        <Pressable  onPress={() => setImage(BASE_URL + "/images/download/" + userInfo.userId + "/plant/defaultPlant.jpg")}>
                             <BigAdd/>
                         </Pressable>
                     </View>
 
 
-                    <Pressable style={styles.saveButton} onPress={() => addNewPlant()}>
+                    <Pressable style={styles.saveButton} onPress={() => edit()}>
                         <SaveSvg/>
                     </Pressable>
 
@@ -180,7 +187,8 @@ const EditPlantScreen = ({route, navigation}) => {
                     <SelectDropdown
                         buttonStyle={{width: "100%"}}
                         data={locations.map(location => location.locationName)}
-                        defaultButtonText={isLoading ? "loading..." : locations.filter(location => location.locationId === plant.locationId)[0].locationName}
+
+                        // defaultButtonText={isLoading ? "loading..." : locations.filter(location => location.locationId === plant.locationId)[0].locationName}
                         onSelect={(selectedItem, index) => {
                             console.log(selectedItem, index)
                             let location = locations.filter(location =>location.locationName === selectedItem)
