@@ -19,7 +19,6 @@ export const LocationProvider = ({children}) => {
             .then(res => {
                 let data = res.data;
                 setLocations(data);
-                console.log(locations);
                 setIsLoading(false);
             }).catch(e => {
                 console.log(`location fetch error ${e}`);

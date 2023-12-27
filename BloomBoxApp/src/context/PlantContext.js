@@ -12,7 +12,7 @@ export const PlantProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const {userInfo} = useContext(AuthContext);
-    const {uploadImage} = useContext(ImageContext);
+    const {uploadImage, deleteImage} = useContext(ImageContext);
 
     const getAllPlants = () => {
         setIsLoading(true);
@@ -31,7 +31,7 @@ export const PlantProvider = ({children}) => {
     const addPlant = (locationId, plantName, species, plantDescription, light, water, image, imageUrl) => {
         setIsLoading(true);
 
-        if (image !== ""){
+        if (image !== "") {
             uploadImage(image, userInfo.userId);
             axios.post(`${BASE_URL}/plants`, {
                 locationId: locationId,
@@ -74,13 +74,86 @@ export const PlantProvider = ({children}) => {
 
             })
         }
+    }
 
 
 
+        const editPlant = (plant, image, oldImageName) => {
+            setIsLoading(true);
+
+            if (plant.imageUrl !== "defaultPlant.jpg"){
+                // if new image is not default
+
+                // delete old image from server
+                if (oldImageName !== "defaultPlant.jpg" && plant.imageUrl !== oldImageName){
+                    deleteImage(oldImageName, userInfo.userId);
+                }
+
+                // upload new image to server if different
+                if (plant.imageUrl !== oldImageName){
+                    uploadImage(image, userInfo.userId);
+                }
+
+                axios.put(`${BASE_URL}/plants`, {
+                    plantId : plant.plantId,
+                    locationId: plant.locationId,
+                    userId: userInfo.userId,
+                    plantName: plant.plantName,
+                    species: plant.species,
+                    description: "description",
+                    light: plant.light,
+                    water: plant.water,
+                    imageUrl: plant.imageUrl
+                }).then(res => {
+                    let newPlant = res.data;
+                    console.log(newPlant);
+
+                    const editArray = plants.map(plant => plant.plantId === newPlant.plantId ? newPlant : plant)
+                    setPlants(editArray)
+
+                    setIsLoading(false);
+                }).catch(e => {
+                    console.log(`plant adding error ${e}`);
+                    setIsLoading(false);
+
+                })
+
+            } else {
+
+                // delete old image from server
+                if (oldImageName !== "defaultPlant.jpg"){
+                    deleteImage(oldImageName, userInfo.userId);
+                }
+
+
+                axios.put(`${BASE_URL}/plants`, {
+                    plantId : plant.plantId,
+                    locationId: plant.locationId,
+                    userId: userInfo.userId,
+                    plantName: plant.plantName,
+                    species: plant.species,
+                    description: "description",
+                    light: plant.light,
+                    water: plant.water,
+                    imageUrl: "defaultPlant.jpg"
+                }).then(res => {
+                    let newPlant = res.data;
+                    console.log(newPlant);
+
+                    const editArray = plants.map(plant => plant.plantId === newPlant.plantId ? newPlant : plant)
+                    setPlants(editArray)
+
+                    setIsLoading(false);
+                }).catch(e => {
+                    console.log(`plant adding error ${e}`);
+                    setIsLoading(false);
+
+                })
+            }
     }
 
     return(
-        <PlantContext.Provider value={{isLoading, plants, getAllPlants, addPlant}}>
+        <PlantContext.Provider value={{isLoading, plants, getAllPlants, addPlant, editPlant}}>
             {children}
         </PlantContext.Provider>
     );

@@ -16,8 +16,17 @@ export const ImageProvider = ({children}) => {
         })
     }
 
+    const deleteImage = (imageName, userId) => {
+        axios.delete(BASE_URL + '/images/delete/' + userId + "/plant/" + imageName)
+            .then(res => {
+                console.log(res.data)
+            }).catch(e => {
+                console.log(`img delete error - ${e}`)
+        })
+    }
+
     return(
-        <ImageContext.Provider value={{uploadImage}}>
+        <ImageContext.Provider value={{uploadImage, deleteImage}}>
             {children}
         </ImageContext.Provider>
     );
