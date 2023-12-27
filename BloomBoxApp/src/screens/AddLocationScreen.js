@@ -116,7 +116,7 @@ const AddLocationScreen = ({ navigation }) => {
                     </Pressable>
 
                     <View style={styles.nameInputContainer}>
-                        <View  style={styles.nameContainer} >
+                        <View style={styles.nameContainer} >
                             <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} placeholderTextColor={"black"} value={locationName} onChangeText={(text) => setLocationName(text)}/>
                         </View>
                     </View>

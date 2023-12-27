@@ -3,6 +3,8 @@ import {Dimensions, Image, Pressable, StyleSheet, Text, View} from "react-native
 import {ImageContext} from "../context/ImageContext";
 import {BASE_URL} from "../config";
 import {AuthContext} from "../context/AuthContext";
+import EditSvg from "../images/SVGs/Edit";
+import WhiteEditSvg from "../images/SVGs/EditWhite";
 
 const LocationComponent = ({location, navigation}) => {
     const {userInfo} = useContext(AuthContext);
@@ -16,6 +18,9 @@ const LocationComponent = ({location, navigation}) => {
 
             <View style={styles.locationTextContainer}>
                 <Text style={styles.locationText}>{location.locationName}</Text>
+                <Pressable style={styles.editButton} onPress={() => navigation.navigate("EditLocation", {location})}>
+                    <WhiteEditSvg/>
+                </Pressable>
             </View>
         </View>
     );
@@ -51,7 +56,8 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 23,
         borderBottomLeftRadius: 23,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        flexDirection: "row"
     },
 
     locationText: {
@@ -66,6 +72,11 @@ const styles = StyleSheet.create({
         height: "80%",
         borderTopRightRadius: 23,
         borderTopLeftRadius: 23
+    },
+
+    editButton: {
+        position: "absolute",
+        right: 20
     }
 
 })
