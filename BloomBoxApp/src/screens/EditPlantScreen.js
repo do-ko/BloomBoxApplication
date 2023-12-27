@@ -112,7 +112,7 @@ const EditPlantScreen = ({route, navigation}) => {
             // to delete from server
             console.log("OldImage: " + initImageName)
 
-
+            // only change here in case of canceling
             plant.locationId = selectedLocation.locationId;
             plant.plantName = plantName;
             plant.light = lightValue;
@@ -121,7 +121,7 @@ const EditPlantScreen = ({route, navigation}) => {
             plant.imageUrl = image.split("/").pop();
 
 
-            editPlant(plant.plantId, selectedLocation.locationId, plantName, species, "description", lightValue, waterValue, image,  image.split("/").pop(), initImageName);
+            editPlant(plant, image, initImageName);
 
             //editPlant(plant);
 

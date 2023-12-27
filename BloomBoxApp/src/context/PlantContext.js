@@ -78,34 +78,32 @@ export const PlantProvider = ({children}) => {
 
 
 
-        const editPlant = (plantId, locationId, plantName, species, plantDescription, light, water, image, imageName, oldImageName) => {
+        const editPlant = (plant, image, oldImageName) => {
             setIsLoading(true);
 
-            console.log("Image name: ", imageName)
-
-            if (imageName !== "defaultPlant.jpg"){
+            if (plant.imageUrl !== "defaultPlant.jpg"){
                 // if new image is not default
 
                 // delete old image from server
-                if (oldImageName !== "defaultPlant.jpg" && imageName !== oldImageName){
+                if (oldImageName !== "defaultPlant.jpg" && plant.imageUrl !== oldImageName){
                     deleteImage(oldImageName, userInfo.userId);
                 }
 
                 // upload new image to server if different
-                if (imageName !== oldImageName){
+                if (plant.imageUrl !== oldImageName){
                     uploadImage(image, userInfo.userId);
                 }
 
                 axios.put(`${BASE_URL}/plants`, {
-                    plantId : plantId,
-                    locationId: locationId,
+                    plantId : plant.plantId,
+                    locationId: plant.locationId,
                     userId: userInfo.userId,
-                    plantName: plantName,
-                    species: species,
-                    description: plantDescription,
-                    light: light,
-                    water: water,
-                    imageUrl: imageName
+                    plantName: plant.plantName,
+                    species: plant.species,
+                    description: "description",
+                    light: plant.light,
+                    water: plant.water,
+                    imageUrl: plant.imageUrl
                 }).then(res => {
                     let newPlant = res.data;
                     console.log(newPlant);
@@ -129,14 +127,14 @@ export const PlantProvider = ({children}) => {
 
 
                 axios.put(`${BASE_URL}/plants`, {
-                    plantId : plantId,
-                    locationId: locationId,
+                    plantId : plant.plantId,
+                    locationId: plant.locationId,
                     userId: userInfo.userId,
-                    plantName: plantName,
-                    species: species,
-                    description: plantDescription,
-                    light: light,
-                    water: water,
+                    plantName: plant.plantName,
+                    species: plant.species,
+                    description: "description",
+                    light: plant.light,
+                    water: plant.water,
                     imageUrl: "defaultPlant.jpg"
                 }).then(res => {
                     let newPlant = res.data;
