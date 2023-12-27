@@ -13,6 +13,7 @@ import {BASE_URL} from "../config";
 import {AuthContext} from "../context/AuthContext";
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
+import {LocationContext} from "../context/LocationContext";
 
 const imgDir = FileSystem.documentDirectory + "images/"
 const ensureDirExists = async () => {
@@ -26,11 +27,14 @@ const EditLocationScreen = ({ navigation, route }) => {
     const {location} = route.params
 
     const {userInfo} = useContext(AuthContext);
+    const {editLocation} = useContext(LocationContext);
 
     const [image, setImage] = useState(BASE_URL + "/images/download/" + userInfo.userId + "/location/" + location.locationImage)
     const [locationName, setLocationName] = useState(location.locationName)
     const [lightValue, setLightValue] = useState(location.light)
     const [waterValue, setWaterValue] = useState(location.water)
+
+    const initImageName = location.locationImage
 
 
     const selectImage = async (useLibrary) => {
@@ -82,8 +86,13 @@ const EditLocationScreen = ({ navigation, route }) => {
             console.log("Water: " + waterValue)
             console.log("Image: " + image)
 
-            // addLocation(locationName, lightValue, waterValue, image.split("/").pop(), image)
-            // navigation.goBack();
+            location.locationName = locationName
+            location.light = lightValue
+            location.water = waterValue
+            location.locationImage = image.split("/").pop()
+
+            editLocation(location, image, initImageName)
+            navigation.goBack();
         }
     }
 
@@ -111,6 +120,9 @@ const EditLocationScreen = ({ navigation, route }) => {
                             <BigAdd/>
                         </Pressable>
                         <Pressable  onPress={() => selectImage(false)}>
+                            <BigAdd/>
+                        </Pressable>
+                        <Pressable  onPress={() => setImage(BASE_URL + "/images/download/" + userInfo.userId + "/location/defaultLocation.jpg")}>
                             <BigAdd/>
                         </Pressable>
                     </View>

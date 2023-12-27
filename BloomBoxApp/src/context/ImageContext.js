@@ -17,8 +17,9 @@ export const ImageProvider = ({children}) => {
         })
     }
 
-    const deleteImage = (imageName, userId) => {
-        axios.delete(BASE_URL + '/images/delete/' + userId + "/plant/" + imageName)
+    const deleteImage = (imageName, userId, type) => {
+        const url = BASE_URL + '/images/delete/' + userId + "/" + type + "/" + imageName
+        axios.delete(url)
             .then(res => {
                 console.log(res.data)
             }).catch(e => {

@@ -86,7 +86,7 @@ export const PlantProvider = ({children}) => {
 
                 // delete old image from server
                 if (oldImageName !== "defaultPlant.jpg" && plant.imageUrl !== oldImageName){
-                    deleteImage(oldImageName, userInfo.userId);
+                    deleteImage(oldImageName, userInfo.userId, "plant");
                 }
 
                 // upload new image to server if different
@@ -122,7 +122,7 @@ export const PlantProvider = ({children}) => {
 
                 // delete old image from server
                 if (oldImageName !== "defaultPlant.jpg"){
-                    deleteImage(oldImageName, userInfo.userId);
+                    deleteImage(oldImageName, userInfo.userId, "plant");
                 }
 
 
