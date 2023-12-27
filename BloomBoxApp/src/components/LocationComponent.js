@@ -4,25 +4,25 @@ import {ImageContext} from "../context/ImageContext";
 import {BASE_URL} from "../config";
 import {AuthContext} from "../context/AuthContext";
 
-const PlantComponent = ({plant, navigation}) => {
+const LocationComponent = ({location, navigation}) => {
     const {userInfo} = useContext(AuthContext);
 
     return(
-        <Pressable style={styles.plantItem} onPress={() => {navigation.navigate("PlantScreen", {plant})}}>
+        <Pressable style={styles.locationItem} onPress={() => {navigation.navigate("LocationScreen", {location})}}>
 
-            <View style={styles.plantImageContainer}>
-                <Image style={styles.plantImage} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.imageUrl}} />
+            <View style={styles.locationImageContainer}>
+                <Image style={styles.locationImage} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/location/" + location.locationImage}} />
             </View>
 
-            <View style={styles.plantTextContainer}>
-                <Text style={styles.plantText}>{plant.plantName}</Text>
+            <View style={styles.locationTextContainer}>
+                <Text style={styles.locationText}>{location.locationName}</Text>
             </View>
         </Pressable>
     );
 }
 
 const styles = StyleSheet.create({
-    plantItem: {
+    locationItem: {
         height: (Dimensions.get('window').width / 2) - 30,
         // marginHorizontal: 10,
         margin: 10,
@@ -36,14 +36,14 @@ const styles = StyleSheet.create({
         shadowRadius: 4
     },
 
-    plantImageContainer: {
+    locationImageContainer: {
         flex: 7,
         alignItems: "center",
         justifyContent: "flex-end"
         // backgroundColor: "red"
     },
 
-    plantTextContainer: {
+    locationTextContainer: {
         flex: 3,
         backgroundColor: "#20201D",
         // borderBottomEndRadius: 23,
@@ -54,14 +54,14 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
 
-    plantText: {
+    locationText: {
         fontSize: 20,
         fontWeight: "bold",
         letterSpacing: 1,
         color: "#fff"
     },
 
-    plantImage: {
+    locationImage: {
         width: "80%",
         height: "80%",
         borderTopRightRadius: 23,
@@ -70,4 +70,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default PlantComponent;
+export default LocationComponent;
