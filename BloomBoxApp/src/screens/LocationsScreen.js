@@ -12,19 +12,6 @@ import {LocationContext} from "../context/LocationContext";
 import plant2 from "../images/SVGs/Plant2";
 import LocationComponent from "../components/LocationComponent";
 
-
-const formatData = (data, numColumns) => {
-    const numberOfFullRows = Math.floor(data.length / numColumns);
-
-    let numberOfElementsInLastRow = data.length - (numberOfFullRows * numColumns);
-    while (numberOfElementsInLastRow !== numColumns && numberOfElementsInLastRow !== 0) {
-        data.push({key: `blank-${numberOfElementsInLastRow}`, empty: true});
-        numberOfElementsInLastRow = numberOfElementsInLastRow + 1;
-    }
-
-    return data;
-}
-
 const LocationsScreen = ({ navigation }) => {
     const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
     const [isFocused, setIsFocused] = useState(false);
@@ -180,15 +167,7 @@ const styles = StyleSheet.create({
         width: "90%",
         flex: 6,
         marginTop: 20
-    },
-
-    // tempNavTesting: {
-    //     // backgroundColor: "yellow",
-    //     height: "100%",
-    //     width: "100%",
-    //     alignItems:"center",
-    //     justifyContent:"center"
-    // }
+    }
 })
 
 export default LocationsScreen;
