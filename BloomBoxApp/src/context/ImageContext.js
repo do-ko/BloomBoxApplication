@@ -8,8 +8,9 @@ import axios from "axios";
 export const ImageContext = createContext();
 
 export const ImageProvider = ({children}) => {
-    const uploadImage = async (image, userId) => {
-        await FileSystem.uploadAsync(BASE_URL + '/images/upload/' + userId + "/plant", image, {
+    const uploadImage = async (image, userId, type) => {
+        const url = BASE_URL + '/images/upload/' + userId + "/" + type
+        await FileSystem.uploadAsync(url, image, {
             httpMethod: "POST",
             uploadType: FileSystem.FileSystemUploadType.MULTIPART,
             fieldName: 'file'

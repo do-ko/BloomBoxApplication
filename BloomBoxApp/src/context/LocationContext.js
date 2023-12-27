@@ -4,6 +4,7 @@ import {BASE_URL} from "../config";
 import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
 import {AuthContext} from "./AuthContext";
 import {PlantContext} from "./PlantContext";
+import {ImageContext} from "./ImageContext";
 
 export const LocationContext = createContext();
 
@@ -12,6 +13,7 @@ export const LocationProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const {userInfo} = useContext(AuthContext);
+    const {uploadImage} = useContext(ImageContext);
 
     const getAllLocationForUser = () => {
         setIsLoading(true);
@@ -26,8 +28,49 @@ export const LocationProvider = ({children}) => {
         })
     }
 
+    const addLocation= (locationName, light, water, imageName, image) => {
+        setIsLoading(true);
+
+        if (image !== ""){
+            uploadImage(image, userInfo.userId, "location")
+            axios.post(`${BASE_URL}/locations`, {
+                userId: userInfo.userId,
+                locationName: locationName,
+                light: light,
+                water: water,
+                locationImage: imageName,
+                locationDescription: "description"
+            }).then(res => {
+                let newLocation = res.data;
+                console.log(newLocation);
+                setLocations([...locations, newLocation]);
+                setIsLoading(false);
+            }).catch(e => {
+                console.log(`location adding error ${e}`);
+                setIsLoading(false);
+            })
+        } else {
+            axios.post(`${BASE_URL}/locations`, {
+                userId: userInfo.userId,
+                locationName: locationName,
+                light: light,
+                water: water,
+                locationImage: "defaultLocation.jpg",
+                locationDescription: "description"
+            }).then(res => {
+                let newLocation = res.data;
+                console.log(newLocation);
+                setLocations([...locations, newLocation]);
+                setIsLoading(false);
+            }).catch(e => {
+                console.log(`location adding error ${e}`);
+                setIsLoading(false);
+            })
+        }
+    }
+
     return(
-        <LocationContext.Provider value={{isLoading, locations, getAllLocationForUser}}>
+        <LocationContext.Provider value={{isLoading, locations, getAllLocationForUser, addLocation}}>
             {children}
         </LocationContext.Provider>
     );

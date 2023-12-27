@@ -1,7 +1,7 @@
-import {Dimensions, Image, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {Alert, Dimensions, Image, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 import BarsSvg from "../images/SVGs/Bars";
 import AddSvg from "../images/SVGs/Add";
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import BackSvg from "../images/SVGs/BackButton";
 import BigAdd from "../images/SVGs/BigAdd";
 import SaveSvg from "../images/SVGs/SaveButton";
@@ -9,12 +9,83 @@ import SunFilledSvg from "../images/SVGs/SunFilled";
 import SunEmptySvg from "../images/SVGs/SunEmpty";
 import DropletFilledSvg from "../images/SVGs/DropletFilled";
 import DropletEmptySvg from "../images/SVGs/DropletEmpty";
+import * as FileSystem from "expo-file-system";
+import * as ImagePicker from "expo-image-picker";
+import {LocationContext} from "../context/LocationContext";
 
+const imgDir = FileSystem.documentDirectory + "images/"
+const ensureDirExists = async () => {
+    const dirInfo = await FileSystem.getInfoAsync(imgDir);
+    if (!dirInfo.exists){
+        await FileSystem.makeDirectoryAsync(imgDir, {intermediates: true});
+    }
+}
 const AddLocationScreen = ({ navigation }) => {
     const [image, setImage] = useState("")
     const [locationName, setLocationName] = useState("")
     const [lightValue, setLightValue] = useState(0)
     const [waterValue, setWaterValue] = useState(0)
+
+    const {addLocation} = useContext(LocationContext);
+
+    const selectImage = async (useLibrary) => {
+        let result;
+        if (useLibrary){
+            result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1,1],
+                quality: 0.75
+            });
+        } else {
+            await ImagePicker.requestCameraPermissionsAsync();
+            result = await ImagePicker.launchCameraAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1,1],
+                quality: 0.75
+            });
+        }
+
+        // do something with the image here
+        if (!result.canceled){
+            console.log(result.assets[0].uri)
+            saveImage(result.assets[0].uri);
+        }
+    }
+
+    const saveImage = async (imageUri) => {
+        await ensureDirExists();
+        const filename = new Date().getTime() + ".jpg";
+        const dest = imgDir + filename;
+        await FileSystem.copyAsync({from: imageUri, to: dest});
+        setImage(dest);
+        // console.log("dest coming:")
+        // console.log(dest);
+    }
+
+    const addNewLocation = async () => {
+        if (locationName === ""){
+            createAlert("Add Name");
+        } else if (lightValue === 0){
+            createAlert("Select a light value")
+        } else if (waterValue === 0){
+            createAlert("Select a water value")
+        } else {
+            console.log("Name: " + locationName)
+            console.log("Light: " + lightValue)
+            console.log("Water: " + waterValue)
+            console.log("Image: " + image)
+
+            addLocation(locationName, lightValue, waterValue, image.split("/").pop(), image)
+            navigation.goBack();
+        }
+    }
+
+    const createAlert = (msg) =>
+        Alert.alert('Incomplete input', msg, [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ]);
 
     return (
         <View style={styles.appContainer}>
@@ -40,7 +111,7 @@ const AddLocationScreen = ({ navigation }) => {
                     </View>
 
 
-                    <Pressable style={styles.saveButton} onPress={() => console.log("add location pressed!")}>
+                    <Pressable style={styles.saveButton} onPress={() => addNewLocation()}>
                         <SaveSvg/>
                     </Pressable>
 
