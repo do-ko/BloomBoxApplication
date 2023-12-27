@@ -32,7 +32,7 @@ export const PlantProvider = ({children}) => {
         setIsLoading(true);
 
         if (image !== "") {
-            uploadImage(image, userInfo.userId);
+            uploadImage(image, userInfo.userId, "plant");
             axios.post(`${BASE_URL}/plants`, {
                 locationId: locationId,
                 userId: userInfo.userId,
@@ -91,7 +91,7 @@ export const PlantProvider = ({children}) => {
 
                 // upload new image to server if different
                 if (plant.imageUrl !== oldImageName){
-                    uploadImage(image, userInfo.userId);
+                    uploadImage(image, userInfo.userId, "plant");
                 }
 
                 axios.put(`${BASE_URL}/plants`, {

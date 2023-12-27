@@ -8,7 +8,7 @@ const LocationComponent = ({location, navigation}) => {
     const {userInfo} = useContext(AuthContext);
 
     return(
-        <Pressable style={styles.locationItem} onPress={() => {navigation.navigate("LocationScreen", {location})}}>
+        <View style={styles.locationItem}>
 
             <View style={styles.locationImageContainer}>
                 <Image style={styles.locationImage} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/location/" + location.locationImage}} />
@@ -17,7 +17,7 @@ const LocationComponent = ({location, navigation}) => {
             <View style={styles.locationTextContainer}>
                 <Text style={styles.locationText}>{location.locationName}</Text>
             </View>
-        </Pressable>
+        </View>
     );
 }
 
