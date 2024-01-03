@@ -165,6 +165,10 @@ const EditLocationScreen = ({ navigation, route }) => {
                     </View>
                 </View>
 
+                <Pressable style={styles.deleteButton} onPress={() => console.log("DELETE")}>
+                    <Text style={styles.deleteText}>DELETE</Text>
+                </Pressable>
+
             </View>
         </View>
     )
@@ -282,6 +286,24 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between"
+    },
+
+    deleteButton: {
+        backgroundColor: "#5B6E4E",
+        borderRadius: 23,
+        paddingHorizontal: 25,
+        paddingVertical: 5,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 20
+    },
+
+    deleteText: {
+        fontSize: 24,
+        fontWeight: "bold",
+        color: "#fff",
+        letterSpacing: 3,
+        textAlign: "center"
     }
 })
 
