@@ -27,7 +27,7 @@ const EditLocationScreen = ({ navigation, route }) => {
     const {location} = route.params
 
     const {userInfo} = useContext(AuthContext);
-    const {editLocation} = useContext(LocationContext);
+    const {editLocation, deleteLocation} = useContext(LocationContext);
 
     const [image, setImage] = useState(BASE_URL + "/images/download/" + userInfo.userId + "/location/" + location.locationImage)
     const [locationName, setLocationName] = useState(location.locationName)
@@ -94,6 +94,11 @@ const EditLocationScreen = ({ navigation, route }) => {
             editLocation(location, image, initImageName)
             navigation.goBack();
         }
+    }
+
+    const deleteLoc = () => {
+        deleteLocation(location.locationId, location.locationImage)
+        navigation.goBack()
     }
 
     const createAlert = (msg) =>
@@ -164,6 +169,10 @@ const EditLocationScreen = ({ navigation, route }) => {
                         }
                     </View>
                 </View>
+
+                <Pressable style={styles.deleteButton} onPress={() => deleteLoc()}>
+                    <Text style={styles.deleteText}>DELETE</Text>
+                </Pressable>
 
             </View>
         </View>
@@ -282,6 +291,24 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between"
+    },
+
+    deleteButton: {
+        backgroundColor: "#5B6E4E",
+        borderRadius: 23,
+        paddingHorizontal: 25,
+        paddingVertical: 5,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 20
+    },
+
+    deleteText: {
+        fontSize: 24,
+        fontWeight: "bold",
+        color: "#fff",
+        letterSpacing: 3,
+        textAlign: "center"
     }
 })
 

@@ -35,7 +35,7 @@ const AddPlantScreen = ({navigation}) => {
     const {addPlant} = useContext(PlantContext);
 
     const {getAllLocationForUser, locations} = useContext(LocationContext);
-    const [selectedLocation, setSelectedLocation] = useState("");
+    const [selectedLocation, setSelectedLocation] = useState(null);
 
     const [plantName, setPlantName] = useState("");
     const [species, setSpecies] = useState("")
@@ -84,8 +84,6 @@ const AddPlantScreen = ({navigation}) => {
     const addNewPlant = async () => {
         if (plantName === ""){
             createAlert("Add Name");
-        } else if (selectedLocation === ""){
-            createAlert("Select a location")
         } else if (lightValue === 0){
             createAlert("Select a light value")
         } else if (waterValue === 0){
@@ -108,6 +106,9 @@ const AddPlantScreen = ({navigation}) => {
             {text: 'OK', onPress: () => console.log('OK Pressed')},
         ]);
 
+    const getDataForLocations = () => {
+        return locations.map(location => location.locationName).concat("none")
+    }
 
     useEffect(() => {
         getAllLocationForUser();
@@ -167,13 +168,19 @@ const AddPlantScreen = ({navigation}) => {
 
                     <SelectDropdown
                         buttonStyle={{width: "100%"}}
-                        data={locations.map(location => location.locationName)}
+                        data={getDataForLocations()}
                         onSelect={(selectedItem, index) => {
                             console.log(selectedItem, index)
-                            let location = locations.filter(location =>location.locationName === selectedItem)
-                            setSelectedLocation(location[0].locationId)
-                            setLightValue(location[0].light)
-                            setWaterValue(location[0].water)
+                            if (selectedItem !== "none") {
+                                let location = locations.filter(location =>location.locationName === selectedItem)
+                                setSelectedLocation(location[0].locationId)
+                                setLightValue(location[0].light)
+                                setWaterValue(location[0].water)
+                            } else {
+                                setSelectedLocation(null)
+                                setLightValue(3)
+                                setWaterValue(3)
+                            }
                         }}
                         buttonTextAfterSelection={(selectedItem, index) => {
                             // text represented after item is selected
