@@ -38,8 +38,7 @@ export const LocationProvider = ({children}) => {
                 locationName: locationName,
                 light: light,
                 water: water,
-                locationImage: imageName,
-                locationDescription: "description"
+                locationImage: imageName
             }).then(res => {
                 let newLocation = res.data;
                 console.log(newLocation);
@@ -55,8 +54,7 @@ export const LocationProvider = ({children}) => {
                 locationName: locationName,
                 light: light,
                 water: water,
-                locationImage: "defaultLocation.jpg",
-                locationDescription: "description"
+                locationImage: "defaultLocation.jpg"
             }).then(res => {
                 let newLocation = res.data;
                 console.log(newLocation);
@@ -88,8 +86,7 @@ export const LocationProvider = ({children}) => {
                 locationName: location.locationName,
                 light: location.light,
                 water: location.water,
-                locationImage: location.locationImage,
-                locationDescription: "description"
+                locationImage: location.locationImage
             }).then(res => {
                 let newLocation = res.data;
                 console.log(newLocation);
@@ -112,8 +109,7 @@ export const LocationProvider = ({children}) => {
                 locationName: location.locationName,
                 light: location.light,
                 water: location.water,
-                locationImage: "defaultLocation.jpg",
-                locationDescription: "description"
+                locationImage: "defaultLocation.jpg"
             }).then(res => {
                 let newLocation = res.data;
                 console.log(newLocation);

@@ -123,11 +123,7 @@ const EditPlantScreen = ({route, navigation}) => {
 
             editPlant(plant, image, initImageName);
 
-            //editPlant(plant);
-
-
             plantChanged(plant)
-
             navigation.goBack();
         }
 
