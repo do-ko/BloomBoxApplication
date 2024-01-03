@@ -22,9 +22,6 @@ public class Plant {
     @Column(name = "species")
     private String species;
 
-    @Column(name = "description")
-    private String description;
-
     @Column(name = "light")
     private Integer light;
 
@@ -37,12 +34,11 @@ public class Plant {
     public Plant() {
     }
 
-    public Plant(Integer locationId, Integer userId, String plantName, String species, String description, Integer light, Integer water, String image) {
+    public Plant(Integer locationId, Integer userId, String plantName, String species, Integer light, Integer water, String image) {
         this.locationId = locationId;
         this.userId = userId;
         this.plantName = plantName;
         this.species = species;
-        this.description = description;
         this.light = light;
         this.water = water;
         this.image = image;
@@ -87,14 +83,6 @@ public class Plant {
         this.species = species;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Integer getLight() {
         return light;
     }
@@ -127,7 +115,6 @@ public class Plant {
                 ", userId=" + userId +
                 ", plantName='" + plantName + '\'' +
                 ", species='" + species + '\'' +
-                ", description='" + description + '\'' +
                 ", light=" + light +
                 ", water=" + water +
                 ", image='" + image + '\'' +

@@ -14,8 +14,6 @@ public class Location {
     private Integer userId;
     @Column(name = "location_name")
     private String locationName;
-    @Column(name = "description")
-    private String locationDescription;
 
     @Column(name = "light")
     private int light;
@@ -29,10 +27,9 @@ public class Location {
     public Location() {
     }
 
-    public Location(Integer userId, String locationName, String locationDescription, int water, int light, String locationImage) {
+    public Location(Integer userId, String locationName, int water, int light, String locationImage) {
         this.userId = userId;
         this.locationName = locationName;
-        this.locationDescription = locationDescription;
         this.light = light;
         this.water = water;
         this.locationImage = locationImage;
@@ -60,14 +57,6 @@ public class Location {
 
     public void setLocationName(String locationName) {
         this.locationName = locationName;
-    }
-
-    public String getLocationDescription() {
-        return locationDescription;
-    }
-
-    public void setLocationDescription(String locationDescription) {
-        this.locationDescription = locationDescription;
     }
 
     public int getLight() {
@@ -99,7 +88,6 @@ public class Location {
                 "locationId=" + locationId +
                 ", userId=" + userId +
                 ", locationName='" + locationName + '\'' +
-                ", locationDescription='" + locationDescription + '\'' +
                 ", light=" + light +
                 ", water=" + water +
                 ", locationImage='" + locationImage + '\'' +
