@@ -123,8 +123,22 @@ export const LocationProvider = ({children}) => {
         }
     }
 
+    const deleteLocation = (locationId, image) => {
+        setIsLoading(true)
+        deleteImage(image, userInfo.userId, "location");
+        axios.delete(`${BASE_URL}/locations/${locationId}`)
+            .then(res => {
+                console.log(res.data)
+                setLocations(locations.filter(location => location.locationId !== locationId))
+                setIsLoading(false)
+            }).catch(e => {
+                console.log(`location delete error - ${e}`)
+                setIsLoading(false)
+        })
+    }
+
     return(
-        <LocationContext.Provider value={{isLoading, locations, getAllLocationForUser, addLocation, editLocation}}>
+        <LocationContext.Provider value={{isLoading, locations, getAllLocationForUser, addLocation, editLocation, deleteLocation}}>
             {children}
         </LocationContext.Provider>
     );
