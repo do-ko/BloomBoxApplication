@@ -91,7 +91,7 @@ const AddPlantScreen = ({navigation}) => {
         } else if (waterValue === 0){
             createAlert("Select a water value")
         } else {
-            addPlant(selectedLocation, plantName, species, "description", lightValue, waterValue, image,  image.split("/").pop());
+            addPlant(selectedLocation, plantName, species, lightValue, waterValue, image,  image.split("/").pop());
             navigation.goBack();
         }
 

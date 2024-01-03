@@ -28,7 +28,7 @@ export const PlantProvider = ({children}) => {
             })
     }
 
-    const addPlant = (locationId, plantName, species, plantDescription, light, water, image, imageUrl) => {
+    const addPlant = (locationId, plantName, species, light, water, image, imageUrl) => {
         setIsLoading(true);
 
         if (image !== "") {
@@ -38,7 +38,6 @@ export const PlantProvider = ({children}) => {
                 userId: userInfo.userId,
                 plantName: plantName,
                 species: species,
-                description: plantDescription,
                 light: light,
                 water: water,
                 imageUrl: imageUrl
@@ -59,7 +58,6 @@ export const PlantProvider = ({children}) => {
                 userId: userInfo.userId,
                 plantName: plantName,
                 species: species,
-                description: plantDescription,
                 light: light,
                 water: water,
                 imageUrl: "defaultPlant.jpg"
@@ -100,7 +98,6 @@ export const PlantProvider = ({children}) => {
                     userId: userInfo.userId,
                     plantName: plant.plantName,
                     species: plant.species,
-                    description: "description",
                     light: plant.light,
                     water: plant.water,
                     imageUrl: plant.imageUrl
@@ -132,7 +129,6 @@ export const PlantProvider = ({children}) => {
                     userId: userInfo.userId,
                     plantName: plant.plantName,
                     species: plant.species,
-                    description: "description",
                     light: plant.light,
                     water: plant.water,
                     imageUrl: "defaultPlant.jpg"
