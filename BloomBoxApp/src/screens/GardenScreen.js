@@ -10,6 +10,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import PlantComponent from "../components/PlantComponent";
 import Gradient from "../images/SVGs/Gradient";
 import filter from "lodash.filter"
+import {LocationContext} from "../context/LocationContext";
 
 const formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
@@ -24,12 +25,14 @@ const formatData = (data, numColumns) => {
 }
 const GardenScreen = ({navigation}) => {
     const {getAllPlants, plants, isLoading} = useContext(PlantContext);
+    const {getAllLocationForUser} = useContext(LocationContext)
 
     const [isFocused, setIsFocused] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         getAllPlants();
+        getAllLocationForUser();
     }, [])
 
     return (
