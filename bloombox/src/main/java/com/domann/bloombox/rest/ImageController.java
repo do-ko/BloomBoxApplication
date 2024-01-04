@@ -54,7 +54,11 @@ public class ImageController {
                 pathToImg = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\locations\\" + fileName;
             }
         } else if (Objects.equals(type, "diary")) {
-            pathToImg = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\diaries\\" + fileName;
+            if (fileName.equals("defaultDiary.jpg")){
+                pathToImg = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\" + fileName;
+            } else {
+                pathToImg = "bloombox\\src\\main\\java\\com\\domann\\bloombox\\images\\user_" + userId + "\\diaries\\" + fileName;
+            }
         } else {
             System.out.println("Failed");
             return null;
