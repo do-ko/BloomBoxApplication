@@ -13,6 +13,7 @@ import LocationSvg from "../images/SVGs/Location";
 import {LocationContext} from "../context/LocationContext";
 import DropletFilledBigSvg from "../images/SVGs/DropletFilledBig";
 import SunFilledBig from "../images/SVGs/SunFilledBig";
+import BigEditSvg from "../images/SVGs/BigEdit";
 
 const PlantScreen = ({route, navigation}) => {
     // plant contains all parameters of current plant
@@ -52,8 +53,8 @@ const PlantScreen = ({route, navigation}) => {
                     </Pressable>
 
 
-                    <Pressable style={styles.saveButton} onPress={() => console.log("edit plant button")}>
-                        <SaveSvg/>
+                    <Pressable style={styles.saveButton} onPress={() => navigation.navigate("EditPlant", {plant,plantChanged})}>
+                        <BigEditSvg/>
                     </Pressable>
 
                     <View style={styles.nameDataContainer}>
