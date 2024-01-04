@@ -7,7 +7,7 @@ import {ImageContext} from "./ImageContext";
 export const DiaryContext = createContext();
 
 export const DiaryProvider = ({children}) => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingDiary, setIsLoading] = useState(false);
     const [diaries, setDiaries] = useState([]);
 
     const getAllDiariesForPlant = (plantId) => {
@@ -50,7 +50,7 @@ export const DiaryProvider = ({children}) => {
     }
 
     return(
-        <DiaryContext.Provider value={{getAllDiariesForPlant, diaries, isLoading, addDiary}}>
+        <DiaryContext.Provider value={{getAllDiariesForPlant, diaries, isLoadingDiary, addDiary}}>
             {children}
         </DiaryContext.Provider>
     );
