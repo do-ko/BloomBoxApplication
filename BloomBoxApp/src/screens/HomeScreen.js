@@ -9,7 +9,10 @@ import {
   Image,
 } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
-import {AuthContext} from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
+import BarsSvg from "../images/SVGs/Bars";
+import HangingLampSvg from "../images/SVGs/HangingLamp";
+import Plant2 from "../images/SVGs/Plant2";
 
 const HomeScreen = ({ navigation }) => {
   const { isLoading, logout, userInfo } = useContext(AuthContext);
