@@ -19,19 +19,19 @@ public class Diary {
     private String title;
 
     @Column(name = "entry_date")
-    private Date entryData;
+    private Date entryDate;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Column(name = "image")
+    private String image;
 
     public Diary() {
     }
 
-    public Diary(Integer plantId, String title, Date entryData, String imageUrl) {
+    public Diary(Integer plantId, String title, Date entryDate, String image) {
         this.plantId = plantId;
         this.title = title;
-        this.entryData = entryData;
-        this.imageUrl = imageUrl;
+        this.entryDate = entryDate;
+        this.image = image;
     }
 
     public Integer getDiaryId() {
@@ -58,20 +58,20 @@ public class Diary {
         this.title = title;
     }
 
-    public Date getEntryData() {
-        return entryData;
+    public Date getEntryDate() {
+        return entryDate;
     }
 
-    public void setEntryData(Date entryData) {
-        this.entryData = entryData;
+    public void setEntryDate(Date entryDate) {
+        this.entryDate = entryDate;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImage() {
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override
@@ -80,8 +80,8 @@ public class Diary {
                 "diaryId=" + diaryId +
                 ", plantId=" + plantId +
                 ", title='" + title + '\'' +
-                ", entryData=" + entryData +
-                ", imageUrl='" + imageUrl + '\'' +
+                ", entryDate=" + entryDate +
+                ", image='" + image + '\'' +
                 '}';
     }
 }

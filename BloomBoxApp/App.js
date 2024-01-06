@@ -1,12 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import 'react-native-gesture-handler';
+import { StyleSheet } from 'react-native';
+import {AuthProvider} from "./src/context/AuthContext";
+import {Navigation} from "./src/screens/Navigation";
+
+import { setCustomText } from 'react-native-global-props';
+import {ImageProvider} from "./src/context/ImageContext";
+
+
 
 export default function App() {
+    // const customTextProps = {
+    //     style: {
+    //         fontFamily: "Inter",
+    //         color: "black"
+    //     }
+    // };
+    //
+    // setCustomText(customTextProps);
+
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+      <AuthProvider>
+          <ImageProvider>
+              <Navigation />
+          </ImageProvider>
+          {/*<Drawer.Navigator>*/}
+          {/*    <Drawer.Screen name="Home" component={Navigation} />*/}
+          {/*    <Drawer.Screen name="Garden" component={Garden} />*/}
+          {/*</Drawer.Navigator>*/}
+      </AuthProvider>
   );
 }
 

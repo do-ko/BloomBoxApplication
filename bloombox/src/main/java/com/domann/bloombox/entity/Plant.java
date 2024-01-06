@@ -19,8 +19,8 @@ public class Plant {
     @Column(name = "plant_name")
     private String plantName;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "species")
+    private String species;
 
     @Column(name = "light")
     private Integer light;
@@ -28,20 +28,20 @@ public class Plant {
     @Column(name = "water")
     private Integer water;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Column(name = "image")
+    private String image;
 
     public Plant() {
     }
 
-    public Plant(Integer locationId, Integer userId, String plantName, String description, Integer light, Integer water, String imageUrl) {
+    public Plant(Integer locationId, Integer userId, String plantName, String species, Integer light, Integer water, String image) {
         this.locationId = locationId;
         this.userId = userId;
         this.plantName = plantName;
-        this.description = description;
+        this.species = species;
         this.light = light;
         this.water = water;
-        this.imageUrl = imageUrl;
+        this.image = image;
     }
 
     public Integer getPlantId() {
@@ -76,12 +76,11 @@ public class Plant {
         this.plantName = plantName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getSpecies() {
+        return species;
     }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setSpecies(String species) {
+        this.species = species;
     }
 
     public Integer getLight() {
@@ -101,11 +100,11 @@ public class Plant {
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageUrl(String image) {
+        this.image = image;
     }
 
     @Override
@@ -115,10 +114,10 @@ public class Plant {
                 ", locationId=" + locationId +
                 ", userId=" + userId +
                 ", plantName='" + plantName + '\'' +
-                ", description='" + description + '\'' +
+                ", species='" + species + '\'' +
                 ", light=" + light +
                 ", water=" + water +
-                ", imageUrl='" + imageUrl + '\'' +
+                ", image='" + image + '\'' +
                 '}';
     }
 }
