@@ -1,2 +1,5 @@
 
 bloombox/src/main/resources/application.properties
+BloomBoxApp/src/config.js
+.vscode/settings.json
+package-lock.json

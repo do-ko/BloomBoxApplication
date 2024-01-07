@@ -120,9 +120,11 @@ const PlantScreen = ({route, navigation}) => {
                     </View>
                 </View>
 
+
+
                 <View style={styles.diarySectionContainer}>
                     <ReverseGradientSvg style={{
-                        position: 'absolute'
+                        position: 'absolute',
                     }}/>
                     <View style={styles.diaryTitleContainer}>
                     {/*    TITLE AND BUTTON*/}
@@ -148,6 +150,9 @@ const PlantScreen = ({route, navigation}) => {
                     </View>
 
                 </View>
+
+
+
 
             </View>
         </ScrollView>
@@ -329,8 +334,8 @@ const styles = StyleSheet.create({
         marginTop: 60,
         height: 392,
         width: "100%",
-        padding: 20
-        // backgroundColor: "red"
+        padding: 20,
+        //backgroundColor: "red",
     },
 
     diaryTitleContainer: {
