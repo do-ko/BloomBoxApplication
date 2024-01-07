@@ -8,7 +8,7 @@ import {
     ScrollView,
     StyleSheet,
     Text,
-    TextInput,
+    TextInput, TouchableOpacity,
     View
 } from "react-native";
 import {PlantContext} from "../context/PlantContext";
@@ -30,7 +30,11 @@ import Spinner from "react-native-loading-spinner-overlay";
 import PlantComponent from "../components/PlantComponent";
 import DiaryComponent from "../components/DiaryComponent";
 import {red} from "react-native-reanimated/src";
-import {Calendar} from "react-native-calendars";
+import {Agenda, Calendar} from "react-native-calendars";
+import {Card, Avatar} from 'react-native-paper';
+import ReminderComponent2 from "../components/ReminderComponent2";
+
+
 
 const PlantScreen = ({route, navigation}) => {
     // plant contains all parameters of current plant
@@ -40,18 +44,76 @@ const PlantScreen = ({route, navigation}) => {
     const {getAllDiariesForPlant, diaries, addDiary, isLoadingDiary} = useContext(DiaryContext);
     const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext)
 
-    const [test, setTest] = useState({})
+    const [items, setItems] = useState({});
+    const [day, setDay] = useState({})
+    const [tasks, setTasks] = useState({})
+
+    const testDates = {
+        '2024-01-08': {selected: true, marked: true, selectedColor: 'blue'},
+        '2024-01-09': {marked: true},
+        '2024-01-10': {marked: true, dotColor: 'red', activeOpacity: 0},
+        '2024-01-11': {disabled: true, disableTouchEvent: true}
+    };
 
     useEffect(() => {
         getAllDiariesForPlant(plant.plantId);
         getAllLocationForUser()
-        setTest(locations.filter(location => location.locationId === plant.locationId)[0])
     }, [])
 
 
     const plantChanged = (plant)=>{
      //   console.log("plant changed2: ",plant)
     }
+
+    const timeToString = (time) => {
+        const date = new Date(time);
+        return date.toISOString().split('T')[0];
+    };
+
+    const loadItems = (day) => {
+        setTimeout(() => {
+            for (let i = -15; i < 85; i++) {
+                const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+                const strTime = timeToString(time);
+                if (!items[strTime]) {
+                    items[strTime] = [];
+                    const numItems = Math.floor(Math.random() * 3 + 1);
+                    for (let j = 0; j < numItems; j++) {
+                        items[strTime].push({
+                            name: 'Item for ' + strTime + ' #' + j,
+                            height: Math.max(50, Math.floor(Math.random() * 150)),
+                        });
+                    }
+                }
+            }
+            const newItems = {};
+            Object.keys(items).forEach((key) => {
+                newItems[key] = items[key];
+            });
+            setItems(newItems);
+        }, 1000);
+    };
+
+    const renderItem = (item) => {
+        return (
+            <TouchableOpacity style={{marginRight: 10, marginTop: 17}}>
+                <Card>
+                    <Card.Content>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}>
+                            <Text>{item.name}</Text>
+                            <Avatar.Text label="J" />
+                        </View>
+                    </Card.Content>
+                </Card>
+            </TouchableOpacity>
+        );
+    };
+
 
     return(
         <ScrollView>
@@ -159,10 +221,109 @@ const PlantScreen = ({route, navigation}) => {
                         <Text style={styles.Title}>Calendar</Text>
                     </View>
                     <View>
+                        {/*<Agenda*/}
+                        {/*    // The list of items that have to be displayed in agenda. If you want to render item as empty date*/}
+                        {/*    // the value of date key has to be an empty array []. If there exists no value for date key it is*/}
+                        {/*    // considered that the date in question is not yet loaded*/}
+                        {/*    items={{*/}
+                        {/*        '2024-01-08': [{name: 'item 1 - any js object'}],*/}
+                        {/*        '2024-01-09': [{name: 'item 2 - any js object', height: 80}],*/}
+                        {/*        '2024-01-11': [],*/}
+                        {/*        '2024-01-12': [{name: 'item 3 - any js object'}, {name: 'any js object'}]*/}
+                        {/*    }}*/}
+                        {/*    // Callback that gets called when items for a certain month should be loaded (month became visible)*/}
+                        {/*    loadItemsForMonth={month => {*/}
+                        {/*        console.log('trigger items loading');*/}
+                        {/*    }}*/}
+                        {/*    // Callback that fires when the calendar is opened or closed*/}
+                        {/*    onCalendarToggled={calendarOpened => {*/}
+                        {/*        console.log(calendarOpened);*/}
+                        {/*    }}*/}
+                        {/*    // Callback that gets called on day press*/}
+                        {/*    onDayPress={day => {*/}
+                        {/*        console.log('day pressed');*/}
+                        {/*    }}*/}
+                        {/*    // Callback that gets called when day changes while scrolling agenda list*/}
+                        {/*    onDayChange={day => {*/}
+                        {/*        console.log('day changed');*/}
+                        {/*    }}*/}
+                        {/*    // Initially selected day*/}
+                        {/*    selected={'2024-01-07'}*/}
+                        {/*    // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined*/}
+                        {/*    // minDate={'2012-05-10'}*/}
+                        {/*    // // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined*/}
+                        {/*    // maxDate={'2012-05-30'}*/}
+                        {/*    // Max amount of months allowed to scroll to the past. Default = 50*/}
+                        {/*    pastScrollRange={50}*/}
+                        {/*    // Max amount of months allowed to scroll to the future. Default = 50*/}
+                        {/*    futureScrollRange={50}*/}
+                        {/*    // Specify how each item should be rendered in agenda*/}
+                        {/*    // renderItem={(item, firstItemInDay) => {*/}
+                        {/*    //     return <View><Text>ITEM</Text></View>;*/}
+                        {/*    // }}*/}
+                        {/*    // Specify how each date should be rendered. day can be undefined if the item is not first in that day*/}
+                        {/*    // renderDay={(day, item) => {*/}
+                        {/*    //     return <View />;*/}
+                        {/*    // }}*/}
+                        {/*    // Specify how empty date content with no items should be rendered*/}
+                        {/*    // renderEmptyDate={() => {*/}
+                        {/*    //     return <View />;*/}
+                        {/*    // }}*/}
+                        {/*    // // Specify how agenda knob should look like*/}
+                        {/*    // renderKnob={() => {*/}
+                        {/*    //     return <View />;*/}
+                        {/*    // }}*/}
+                        {/*    // Specify what should be rendered instead of ActivityIndicator*/}
+                        {/*    // renderEmptyData={() => {*/}
+                        {/*    //     return <View />;*/}
+                        {/*    // }}*/}
+                        {/*    // Specify your item comparison function for increased performance*/}
+                        {/*    rowHasChanged={(r1, r2) => {*/}
+                        {/*        return r1.text !== r2.text;*/}
+                        {/*    }}*/}
+                        {/*    // Hide knob button. Default = false*/}
+                        {/*    // hideKnob={true}*/}
+                        {/*    // When `true` and `hideKnob` prop is `false`, the knob will always be visible and the user will be able to drag the knob up and close the calendar. Default = false*/}
+                        {/*    // showClosingKnob={false}*/}
+                        {/*    // By default, agenda dates are marked if they have at least one item, but you can override this if needed*/}
+                        {/*    markedDates={{*/}
+                        {/*        '2024-01-08': {selected: true, marked: true},*/}
+                        {/*        '2024-01-09': {marked: true},*/}
+                        {/*        '2024-01-10': {disabled: true}*/}
+                        {/*    }}*/}
+                        {/*    // If disabledByDefault={true} dates flagged as not disabled will be enabled. Default = false*/}
+                        {/*    // disabledByDefault={true}*/}
+                        {/*    // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly*/}
+                        {/*    onRefresh={() => console.log('refreshing...')}*/}
+                        {/*    // Set this true while waiting for new data from a refresh*/}
+                        {/*    refreshing={false}*/}
+                        {/*    // Add a custom RefreshControl component, used to provide pull-to-refresh functionality for the ScrollView*/}
+                        {/*    refreshControl={null}*/}
+                        {/*    // Agenda theme*/}
+                        {/*    // theme={{*/}
+                        {/*    //     ...calendarTheme,*/}
+                        {/*    //     agendaDayTextColor: 'yellow',*/}
+                        {/*    //     agendaDayNumColor: 'green',*/}
+                        {/*    //     agendaTodayColor: 'red',*/}
+                        {/*    //     agendaKnobColor: 'blue'*/}
+                        {/*    // }}*/}
+                        {/*    // Agenda container style*/}
+                        {/*    style={{}}*/}
+                        {/*/>*/}
+                        {/*<Agenda*/}
+                        {/*    items={items}*/}
+                        {/*    loadItemsForMonth={loadItems}*/}
+                        {/*    selected={'2017-05-16'}*/}
+                        {/*    renderItem={renderItem}*/}
+                        {/*/>*/}
                         <Calendar
                             // Handler which gets executed on day press. Default = undefined
                             onDayPress={day => {
                                 console.log('selected day', day);
+                                setDay(day);
+                                setTasks(testDates["2024-01-08"])
+                                console.log('tasks', tasks);
+                            //     HERE SET TASKS FOR FLATLIST WITH REMINDERS BELOW
                             }}
                             // Handler which gets executed on day long press. Default = undefined
                             onDayLongPress={day => {
@@ -182,21 +343,16 @@ const PlantScreen = ({route, navigation}) => {
                             // Handler which gets executed when press arrow icon right. It receive a callback can go next month
                             onPressArrowRight={addMonth => addMonth()}
 
-                            // Replace default month and year title with custom one. the function receive a date as parameter
-                            // renderHeader={date => {
-                            //     /*Return JSX*/
-                            // }}
-
                             // Enable the option to swipe between months. Default = false
                             enableSwipeMonths={true}
 
-                            markedDates={{
-                                '2024-01-08': {selected: true, marked: true, selectedColor: 'blue'},
-                                '2024-01-09': {marked: true},
-                                '2024-01-10': {marked: true, dotColor: 'red', activeOpacity: 0},
-                                '2024-01-11': {disabled: true, disableTouchEvent: true}
-                            }}
+                            markedDates={testDates}
                         />
+                        <View style={styles.remainderContainer}>
+                            {/*<Text>Day: {day.day}</Text>*/}
+                            <ReminderComponent2 />
+                            {/*{tasks.map(task => <Text>{task}</Text>)}*/}
+                        </View>
                     </View>
 
 
@@ -437,6 +593,12 @@ const styles = StyleSheet.create({
 
     calendarTitleContainer: {
         marginBottom: 20
+    },
+
+    remainderContainer: {
+        marginTop: 20,
+        // backgroundColor: "red",
+        alignItems: "center"
     }
 
 })

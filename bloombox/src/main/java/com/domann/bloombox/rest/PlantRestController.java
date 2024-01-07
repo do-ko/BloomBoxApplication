@@ -50,12 +50,12 @@ public class PlantRestController {
     }
 
     @PutMapping("")
-    public Plant updateLocation(@RequestBody Plant plant){
+    public Plant updatePlant(@RequestBody Plant plant){
         return plantService.save(plant);
     }
 
     @DeleteMapping("/{plantId}")
-    public String deleteLocation(@PathVariable int plantId){
+    public String deletePlant(@PathVariable int plantId){
         Plant plant = plantService.findById(plantId);
         if (plant==null){
             throw new LocationNotFoundException("Plant id not found - " + plantId);
