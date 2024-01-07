@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
   },
 
   pressableBars: {
-    flex: 0,
     position: "absolute",
     top: 15,
     left: 15,
