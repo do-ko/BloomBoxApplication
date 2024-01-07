@@ -114,10 +114,6 @@ const AddDiaryScreen = ({navigation}) => {
             {text: 'OK', onPress: () => console.log('OK Pressed')},
         ]);
 
-    const getDataForLocations = () => {
-        return locations.map(location => location.locationName).concat("none")
-    }
-
 
     return(
         <ScrollView>
