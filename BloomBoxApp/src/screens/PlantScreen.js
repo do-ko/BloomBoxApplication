@@ -29,6 +29,8 @@ import ReverseGradientSvg from "../images/SVGs/ReverseGradient";
 import Spinner from "react-native-loading-spinner-overlay";
 import PlantComponent from "../components/PlantComponent";
 import DiaryComponent from "../components/DiaryComponent";
+import {red} from "react-native-reanimated/src";
+import {Calendar} from "react-native-calendars";
 
 const PlantScreen = ({route, navigation}) => {
     // plant contains all parameters of current plant
@@ -128,7 +130,7 @@ const PlantScreen = ({route, navigation}) => {
                     }}/>
                     <View style={styles.diaryTitleContainer}>
                     {/*    TITLE AND BUTTON*/}
-                        <Text style={styles.diaryTitle}>Diary</Text>
+                        <Text style={styles.Title}>Diary</Text>
                         <Pressable style={styles.addDiaryButton} onPress={() => navigation.navigate("AddDiary")}>
                             <Text style={styles.addDiaryText}>ADD</Text>
                         </Pressable>
@@ -148,11 +150,57 @@ const PlantScreen = ({route, navigation}) => {
                         }}
                         />
                     </View>
-
                 </View>
 
 
+                <View style={styles.calendarSectionContainer}>
+                    <View style={styles.calendarTitleContainer}>
+                        {/*    TITLE AND BUTTON*/}
+                        <Text style={styles.Title}>Calendar</Text>
+                    </View>
+                    <View>
+                        <Calendar
+                            // Handler which gets executed on day press. Default = undefined
+                            onDayPress={day => {
+                                console.log('selected day', day);
+                            }}
+                            // Handler which gets executed on day long press. Default = undefined
+                            onDayLongPress={day => {
+                                console.log('selected day', day);
+                            }}
+                            // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+                            monthFormat={'yyyy MM'}
+                            // Handler which gets executed when visible month changes in calendar. Default = undefined
+                            onMonthChange={month => {
+                                console.log('month changed', month);
+                            }}
 
+                            // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday
+                            firstDay={1}
+                            // Handler which gets executed when press arrow icon left. It receive a callback can go back month
+                            onPressArrowLeft={subtractMonth => subtractMonth()}
+                            // Handler which gets executed when press arrow icon right. It receive a callback can go next month
+                            onPressArrowRight={addMonth => addMonth()}
+
+                            // Replace default month and year title with custom one. the function receive a date as parameter
+                            // renderHeader={date => {
+                            //     /*Return JSX*/
+                            // }}
+
+                            // Enable the option to swipe between months. Default = false
+                            enableSwipeMonths={true}
+
+                            markedDates={{
+                                '2024-01-08': {selected: true, marked: true, selectedColor: 'blue'},
+                                '2024-01-09': {marked: true},
+                                '2024-01-10': {marked: true, dotColor: 'red', activeOpacity: 0},
+                                '2024-01-11': {disabled: true, disableTouchEvent: true}
+                            }}
+                        />
+                    </View>
+
+
+                </View>
 
             </View>
         </ScrollView>
@@ -332,7 +380,7 @@ const styles = StyleSheet.create({
 
     diarySectionContainer: {
         marginTop: 60,
-        height: 392,
+        // height: 392,
         width: "100%",
         padding: 20,
         //backgroundColor: "red",
@@ -345,7 +393,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between"
     },
 
-    diaryTitle: {
+    Title: {
         fontSize: 48,
         fontWeight: "bold",
         color: "#20201D",
@@ -380,6 +428,16 @@ const styles = StyleSheet.create({
         // flex: 6,
         marginTop: 20
     },
+
+    calendarSectionContainer: {
+        marginTop: 30,
+        width: "100%",
+        padding: 20,
+    },
+
+    calendarTitleContainer: {
+        marginBottom: 20
+    }
 
 })
 
