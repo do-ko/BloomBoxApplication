@@ -346,7 +346,7 @@ const PlantScreen = ({route, navigation}) => {
                             <FlatList
                                 data={tasksForToday}
                                 renderItem={({ item }) => (
-                                    <ReminderComponent2 />
+                                    <ReminderComponent2 remainder={item}/>
                                 )}
                                 keyExtractor={(item) => item.remainderId.toString()}
                                 horizontal={true}
