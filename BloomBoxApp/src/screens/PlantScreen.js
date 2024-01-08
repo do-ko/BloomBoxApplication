@@ -33,6 +33,7 @@ import {red} from "react-native-reanimated/src";
 import {Agenda, Calendar} from "react-native-calendars";
 import {Card, Avatar} from 'react-native-paper';
 import ReminderComponent2 from "../components/ReminderComponent2";
+import {RemainderContext} from "../context/RemainderContext";
 
 
 
@@ -42,7 +43,8 @@ const PlantScreen = ({route, navigation}) => {
     const {plant} = route.params;
     const {userInfo} = useContext(AuthContext);
     const {getAllDiariesForPlant, diaries, addDiary, isLoadingDiary} = useContext(DiaryContext);
-    const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext)
+    const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
+    const {getRemaindersByPlantId, remainders} = useContext(RemainderContext);
 
     const [items, setItems] = useState({});
     const [day, setDay] = useState({})
@@ -57,62 +59,14 @@ const PlantScreen = ({route, navigation}) => {
 
     useEffect(() => {
         getAllDiariesForPlant(plant.plantId);
-        getAllLocationForUser()
+        getAllLocationForUser();
+        getRemaindersByPlantId(plant.plantId);
     }, [])
 
 
     const plantChanged = (plant)=>{
      //   console.log("plant changed2: ",plant)
     }
-
-    const timeToString = (time) => {
-        const date = new Date(time);
-        return date.toISOString().split('T')[0];
-    };
-
-    const loadItems = (day) => {
-        setTimeout(() => {
-            for (let i = -15; i < 85; i++) {
-                const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-                const strTime = timeToString(time);
-                if (!items[strTime]) {
-                    items[strTime] = [];
-                    const numItems = Math.floor(Math.random() * 3 + 1);
-                    for (let j = 0; j < numItems; j++) {
-                        items[strTime].push({
-                            name: 'Item for ' + strTime + ' #' + j,
-                            height: Math.max(50, Math.floor(Math.random() * 150)),
-                        });
-                    }
-                }
-            }
-            const newItems = {};
-            Object.keys(items).forEach((key) => {
-                newItems[key] = items[key];
-            });
-            setItems(newItems);
-        }, 1000);
-    };
-
-    const renderItem = (item) => {
-        return (
-            <TouchableOpacity style={{marginRight: 10, marginTop: 17}}>
-                <Card>
-                    <Card.Content>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                            }}>
-                            <Text>{item.name}</Text>
-                            <Avatar.Text label="J" />
-                        </View>
-                    </Card.Content>
-                </Card>
-            </TouchableOpacity>
-        );
-    };
 
 
     return(
@@ -124,7 +78,7 @@ const PlantScreen = ({route, navigation}) => {
                     <View style={styles.imageContainer}>
                         <View style={{overflow: "hidden"}}>
                             <View style={styles.image}>
-                                <Image source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.imageUrl}} style={styles.imageStyle} />
+                                <Image source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.image}} style={styles.imageStyle} />
                             </View>
                         </View>
                         {/*menu*/}

@@ -45,11 +45,11 @@ const EditPlantScreen = ({route, navigation}) => {
     const [selectedLocation, setSelectedLocation] = useState();
 
 
-    const [image, setImage] = useState(BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.imageUrl)
+    const [image, setImage] = useState(BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.image)
     const [lightValue, setLightValue] = useState(plant.light)
     const [waterValue, setWaterValue] = useState(plant.water)
 
-    const initImageName = plant.imageUrl
+    const initImageName = plant.image
     // const initLocationName = locations.filter(location =>location.locationId === plant.locationId)[0]
 
     const selectImage = async (useLibrary) => {
@@ -118,7 +118,8 @@ const EditPlantScreen = ({route, navigation}) => {
             plant.light = lightValue;
             plant.water = waterValue;
             plant.species = species;
-            plant.imageUrl = image.split("/").pop();
+            plant.frequency = 14 - waterValue - lightValue;
+            plant.image = image.split("/").pop();
 
 
             editPlant(plant, image, initImageName);
