@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {
     Dimensions,
     Image,
@@ -14,11 +14,16 @@ import CheckButtonDoneSvg from "../images/SVGs/CheckButtonDone";
 import WateringDone from "../images/SVGs/WateringDone";
 import WateringDoneSvg from "../images/SVGs/WateringDone";
 import {RemainderContext} from "../context/RemainderContext";
+import CheckButtonOverdueSvg from "../images/SVGs/CheckButtonOverdue";
+import WateringOverdueSvg from "../images/SVGs/WateringOverdue";
 
 const ReminderComponent = ({remainder}) => {
     const [done, setDone] = useState(remainder.done)
     const [doneDate, setDoneDate] = useState(remainder.doneDate)
     const {editRemainder} = useContext(RemainderContext);
+    const [differenceInDays, setDifferenceInDays] = useState(0)
+
+
     const handleDonePress = () => {
         if (done){
         //     if was true before press -> now will be not done
@@ -31,7 +36,18 @@ const ReminderComponent = ({remainder}) => {
         setDone(!done);
         remainder.done = !done;
         editRemainder(remainder);
+
     }
+    const getDifferenceInDays = () => {
+        let Difference_In_Time = Date.now() - new Date(Date.parse(remainder.remainderDay));
+        let Difference_In_Days =
+            Math.round(Difference_In_Time / (1000 * 3600 * 24));
+        setDifferenceInDays(Difference_In_Days);
+    }
+
+    useEffect(() => {
+        getDifferenceInDays();
+    }, [])
 
     return (
         <>
@@ -46,16 +62,42 @@ const ReminderComponent = ({remainder}) => {
                 </Pressable>
                 </View>
                 :
-                <View style={styles.reminderContainer}>
-                <View style={styles.reminderTitleContainer}>
-                    <WateringSvg />
-                    <Text style={styles.reminderTitle}>{remainder.remainderType}</Text>
-                </View>
-                <Pressable onPress={() => handleDonePress()}>
-                    <CheckButtonSvg />
-                </Pressable>
+                (differenceInDays > 3 ?
+                    <View style={styles.reminderContainerVeryOverdue}>
+                        <View style={styles.reminderTitleContainer}>
+                            <WateringOverdueSvg />
+                            <Text style={styles.reminderTitleOverdue}>{remainder.remainderType}</Text>
+                        </View>
+                        <Pressable onPress={() => handleDonePress()}>
+                            <CheckButtonOverdueSvg />
+                        </Pressable>
 
-            </View>}
+                    </View>
+                    :
+                    (differenceInDays > 1 ?
+                        <View style={styles.reminderContainerOverdue}>
+                            <View style={styles.reminderTitleContainer}>
+                                <WateringOverdueSvg />
+                                <Text style={styles.reminderTitleOverdue}>{remainder.remainderType}</Text>
+                            </View>
+                            <Pressable onPress={() => handleDonePress()}>
+                                <CheckButtonOverdueSvg />
+                            </Pressable>
+
+                        </View>
+                        :
+                        <View style={styles.reminderContainer}>
+                            <View style={styles.reminderTitleContainer}>
+                                <WateringSvg />
+                                <Text style={styles.reminderTitle}>{remainder.remainderType}</Text>
+                            </View>
+                            <Pressable onPress={() => handleDonePress()}>
+                                <CheckButtonSvg />
+                            </Pressable>
+
+                        </View>)
+                )
+                }
         </>
 
 
@@ -92,6 +134,34 @@ const styles = StyleSheet.create({
         marginBottom: 50
     },
 
+    reminderContainerOverdue: {
+        backgroundColor : "#5B6E4E",
+        flex: 1,
+        flexDirection: "row",
+        padding: 20,
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 20,
+        borderRadius: 23,
+        width: "90%",
+        margin: 10,
+        marginBottom: 50
+    },
+
+    reminderContainerVeryOverdue: {
+        backgroundColor : "#20201D",
+        flex: 1,
+        flexDirection: "row",
+        padding: 20,
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 20,
+        borderRadius: 23,
+        width: "90%",
+        margin: 10,
+        marginBottom: 50
+    },
+
     reminderTitleContainer: {
         flexDirection: "row",
         justifyContent: "flex-start",
@@ -111,6 +181,12 @@ const styles = StyleSheet.create({
         color: "#A9A9A7",
         textTransform: "uppercase",
         textDecorationLine: "line-through"
+    },
+
+    reminderTitleOverdue: {
+        fontSize: 24,
+        color: "#FFFFFF",
+        textTransform: "uppercase"
     }
 });
 
