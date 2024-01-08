@@ -49,17 +49,18 @@ const PlantScreen = ({route, navigation}) => {
     const {remainders} = useContext(RemainderContext);
 
     const [items, setItems] = useState({});
-    const [day, setDay] = useState({})
+    const [currentDay, setCurrentDay] = useState("")
+    const [markedDatesOnCal, setMarkedDatesOnCal] = useState({})
     const [tasks, setTasks] = useState({})
     const [tasksForToday, setTasksForToday] = useState([])
     const scrollX = React.useRef(new Animated.Value(0)).current;
 
-    const testDates = {
-        '2024-01-08': {selected: true, marked: true, selectedColor: 'blue'},
-        '2024-01-09': {marked: true},
-        '2024-01-10': {marked: true, dotColor: 'red', activeOpacity: 0},
-        '2024-01-11': {disabled: true, disableTouchEvent: true}
-    };
+    // const testDates = {
+    //     '2024-01-08': {selected: true, marked: true, selectedColor: 'blue'},
+    //     '2024-01-09': {marked: true},
+    //     '2024-01-10': {marked: true, dotColor: 'red', activeOpacity: 0},
+    //     '2024-01-11': {disabled: true, disableTouchEvent: true}
+    // };
 
     useEffect(() => {
         getAllDiariesForPlant(plant.plantId);
@@ -71,24 +72,53 @@ const PlantScreen = ({route, navigation}) => {
 
     const formatMarkedDots = () => {
         let remaindersForPlant = remainders.filter(rem => rem.plantId === plant.plantId);
-        console.log("====");
-        console.log(remainders);
-        console.log("====");
+        let today = new Date();
+        let todayDateString = `${today.getFullYear()}-${today.getMonth()+1 < 10 ? "0" + (today.getMonth()+1) : today.getMonth()+1}-${today.getDate() < 10 ? "0" + today.getDate() : today.getDate()}`
+        setCurrentDay(todayDateString);
+        console.log(todayDateString);
         let formattedTasks = {}
         console.log(remaindersForPlant);
         remaindersForPlant.forEach((remainder) => {
             let date = new Date(Date.parse(remainder.remainderDay));
             let dateString = `${date.getFullYear()}-${date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
             // console.log(dateString);
-            let markedTask = {[dateString]: {marked: true, dotColor: "#5B6E4E"}}
-            console.log(markedTask);
-            formattedTasks[dateString] = {marked: true, dotColor: "#5B6E4E"};
-            console.log(formattedTasks);
+            // let markedTask;
+            // if (dateString === todayDateString){
+            //     markedTask = {[dateString]: {marked: true, dotColor: "#5B6E4E", customStyles: {
+            //                 container: {
+            //                     backgroundColor: 'green'
+            //                 },
+            //                 text: {
+            //                     color: 'black',
+            //                     fontWeight: 'bold'
+            //                 }
+            //             }}}
+            // } else {
+            //     markedTask = {[dateString]: {marked: true, dotColor: "#5B6E4E"}}
+            // }
+            // console.log(markedTask);
+            if (dateString === todayDateString){
+                formattedTasks[dateString] = {marked: true, dotColor: "#FFFFFF", selected: true, selectedColor: '#5B6E4E'};
+            } else {
+                formattedTasks[dateString] = {marked: true, dotColor: "#5B6E4E", selected: false, selectedColor: '#5B6E4E'};
+            }
+            // formattedTasks[dateString] = {marked: true, dotColor: "#5B6E4E"};
+            // console.log(formattedTasks);
         });
-        setTasks(formattedTasks);
+
+        // console.log("haha");
+        // console.log(formattedTasks['20-01-2014'])
+        if (formattedTasks[todayDateString] === undefined){
+            // console.log("hehe")
+            formattedTasks[todayDateString] = {selected: true, selectedColor: '#5B6E4E'};
+        }
+
+        // console.log(formattedTasks);
+        setMarkedDatesOnCal(formattedTasks);
+        // setTasks(formattedTasks);
     }
 
-    const getRemainderForToday = (dateStringInput) => {
+    const getRemaindersForToday = (dateStringInput) => {
         let remaindersForPlant = remainders.filter(rem => rem.plantId === plant.plantId);
         let remToday = []
         remaindersForPlant.forEach((remainder) => {
@@ -98,7 +128,7 @@ const PlantScreen = ({route, navigation}) => {
                 remToday.push(remainder);
             }
         });
-        console.log(remToday);
+        // console.log(remToday);
         setTasksForToday(remToday);
         return remToday;
     }
@@ -312,17 +342,120 @@ const PlantScreen = ({route, navigation}) => {
                         <Calendar
                             // Handler which gets executed on day press. Default = undefined
                             onDayPress={day => {
-                                console.log('selected day', day);
-                                setDay(day);
-                                console.log("today task:" + getRemainderForToday(day.dateString))
+                                // console.log('selected day', day);
+                                // console.log("MARKED DATES");
+                                // console.log(markedDatesOnCal);
+                                console.log("=============")
+                                let tempArrayWithDates = markedDatesOnCal;
+                                console.log("CURRENT DAY: ", currentDay)
+
+                                // FIX THIS SELECTION:
+                                // 1. handle old selected:
+                                if (tempArrayWithDates[currentDay].marked === undefined){
+                                //     if old selected was not marked:
+                                        tempArrayWithDates[currentDay] = {selected: false};
+                                } else {
+                                //     if old select was marked:
+                                        tempArrayWithDates[currentDay] = {selected: false, marked: true, dotColor: "#5B6E4E"}
+                                }
+
+                                // 2. handle new selected:
+                                if (tempArrayWithDates[day.dateString] === undefined){
+                                //     if new selected not in markedDots yet (not a task day)
+                                    tempArrayWithDates[day.dateString] = {selected: true, selectedColor: "#8AA578"};
+                                } else {
+                                    if (tempArrayWithDates[day.dateString].marked === undefined){
+                                            // if new selected is not marked
+                                            tempArrayWithDates[day.dateString] = {selected: true, selectedColor: "#8AA578"};
+                                        } else {
+                                            // if new selected is marked
+                                            tempArrayWithDates[day.dateString] = {selected: true, selectedColor: "#5B6E4E", marked: true, dotColor: "#fff"};
+                                        }
+                                }
+                                // if (tempArrayWithDates[day.dateString].marked === undefined){
+                                // //     if new selected is not marked
+                                //         tempArrayWithDates[day.dateString] = {selected: true, selectedColor: "#000"};
+                                // } else {
+                                //     // if new selected is marked
+                                //     tempArrayWithDates[day.dateString] = {selected: true, selectedColor: "#000", marked: true, dotColor: "#fff"};
+                                // }
+
+
+
+                                // if (tempArrayWithDates[currentDay].marked === undefined) {
+                                //     tempArrayWithDates[currentDay] = {selected: false, selectedColor: "#000"};
+                                //
+                                //     if (tempArrayWithDates[day.dateString] === undefined) {
+                                //         tempArrayWithDates[day.dateString] = {selected: true, selectedColor: "#000"};
+                                //     } else {
+                                //         tempArrayWithDates[day.dateString] = {marked: true, dotColor: "#fff", selected: true, selectedColor: "#000"};
+                                //     }
+                                //
+                                // } else {
+                                //     tempArrayWithDates[currentDay] = {marked: true, dotColor: "#bbb", selected: false, selectedColor: "#000"};
+                                //     if (tempArrayWithDates[day.dateString] === undefined) {
+                                //         tempArrayWithDates[day.dateString] = {selected: true, selectedColor: "#000"};
+                                //     } else {
+                                //         tempArrayWithDates[day.dateString] = {marked: true, dotColor: "#fff", selected: true, selectedColor: "#000"};
+                                //     }
+                                // }
+
+
+
+                                // remove selected from current
+                                // console.log(tempArrayWithDates[currentDay]);
+                                // console.log(tempArrayWithDates[currentDay].marked);
+                                // if (tempArrayWithDates[currentDay].marked === undefined) {
+                                // //     NOT A TASK
+                                //     tempArrayWithDates[currentDay].selected = false
+                                // } else {
+                                //     tempArrayWithDates[currentDay].selected = false;
+                                //     tempArrayWithDates[currentDay].marked = true;
+                                // }
+                                // // markedDatesOnCal[currentDay].selected = false
+                                //
+                                // // add selected to new day
+                                // if (tempArrayWithDates[day.dateString] === undefined) {
+                                // //     if today is not on marked list
+                                //     console.log("MARKED DATES UNDEFINED - notTask");
+                                //     // let temp = tempArrayWithDates;
+                                //     // console.log("TEMP BEFORE:");
+                                //     // console.log(temp);
+                                //     tempArrayWithDates[day.dateString] = {selected: true, selectedColor: '#8AA578'};
+                                //     // console.log("TEMP AFTER:");
+                                //     // console.log(temp);
+                                //     // setMarkedDatesOnCal(temp);
+                                //
+                                // } else {
+                                //     console.log("MARKED DATES DEFINED - Task");
+                                //     tempArrayWithDates[day.dateString].selected = true;
+                                //     tempArrayWithDates[day.dateString].selectedColor = '#8AA578';
+                                //     tempArrayWithDates[day.dateString].dotColor = '#FFFFFF';
+                                //
+                                // }
+
+
+
+
+
+                                setMarkedDatesOnCal(tempArrayWithDates);
+
+
+
+                                // change current day
+                                setCurrentDay(day.dateString)
+
+
+                                getRemaindersForToday(day.dateString);
+
                                 // setTasks(testDates["2024-01-08"])
-                                console.log('tasks', tasks);
-                            //     HERE SET TASKS FOR FLATLIST WITH REMINDERS BELOW
+                                // console.log('tasks', tasks);
+
                             }}
-                            // Handler which gets executed on day long press. Default = undefined
-                            onDayLongPress={day => {
-                                console.log('selected day', day);
-                            }}
+                            // // Handler which gets executed on day long press. Default = undefined
+                            // onDayLongPress={day => {
+                            //     console.log('selected day', day);
+                            // }}
                             // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
                             monthFormat={'yyyy MM'}
                             // Handler which gets executed when visible month changes in calendar. Default = undefined
@@ -340,8 +473,9 @@ const PlantScreen = ({route, navigation}) => {
                             // Enable the option to swipe between months. Default = false
                             enableSwipeMonths={true}
 
-                            markedDates={tasks}
+                            markedDates={markedDatesOnCal}
                         />
+
                         <View style={styles.remainderContainer}>
                             {/*<Text>Day: {day.day}</Text>*/}
                             {/*<ReminderComponent2 />*/}
