@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {
+    Animated,
     Button,
     Dimensions,
     FlatList,
@@ -9,7 +10,7 @@ import {
     StyleSheet,
     Text,
     TextInput, TouchableOpacity,
-    View
+    View, VirtualizedList
 } from "react-native";
 import {PlantContext} from "../context/PlantContext";
 import {DiaryContext} from "../context/DiaryContext";
@@ -34,6 +35,7 @@ import {Agenda, Calendar} from "react-native-calendars";
 import {Card, Avatar} from 'react-native-paper';
 import ReminderComponent2 from "../components/ReminderComponent2";
 import {RemainderContext} from "../context/RemainderContext";
+import {ExpandingDot} from "react-native-animated-pagination-dots";
 
 
 
@@ -49,6 +51,8 @@ const PlantScreen = ({route, navigation}) => {
     const [items, setItems] = useState({});
     const [day, setDay] = useState({})
     const [tasks, setTasks] = useState({})
+    const [tasksForToday, setTasksForToday] = useState([])
+    const scrollX = React.useRef(new Animated.Value(0)).current;
 
     const testDates = {
         '2024-01-08': {selected: true, marked: true, selectedColor: 'blue'},
@@ -80,6 +84,21 @@ const PlantScreen = ({route, navigation}) => {
             // setTasks({...tasks, [dateString]: {marked: true, dotColor: "#5B6E4E"}})
         });
         setTasks(formattedTasks);
+    }
+
+    const getRemainderForToday = (dateStringInput) => {
+        let remaindersForPlant = remainders.filter(rem => rem.plantId === plant.plantId);
+        let remToday = []
+        remaindersForPlant.forEach((remainder) => {
+            let date = new Date(Date.parse(remainder.remainderDay));
+            let dateString = `${date.getFullYear()}-${date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
+            if (dateString === dateStringInput){
+                remToday.push(remainder);
+            }
+        });
+        console.log(remToday);
+        setTasksForToday(remToday);
+        return remToday;
     }
 
     const plantChanged = (plant)=>{
@@ -293,6 +312,7 @@ const PlantScreen = ({route, navigation}) => {
                             onDayPress={day => {
                                 console.log('selected day', day);
                                 setDay(day);
+                                console.log("today task:" + getRemainderForToday(day.dateString))
                                 // setTasks(testDates["2024-01-08"])
                                 console.log('tasks', tasks);
                             //     HERE SET TASKS FOR FLATLIST WITH REMINDERS BELOW
@@ -322,8 +342,42 @@ const PlantScreen = ({route, navigation}) => {
                         />
                         <View style={styles.remainderContainer}>
                             {/*<Text>Day: {day.day}</Text>*/}
-                            <ReminderComponent2 />
-                            {/*{tasks.map(task => <Text>{task}</Text>)}*/}
+                            {/*<ReminderComponent2 />*/}
+                            <FlatList
+                                data={tasksForToday}
+                                renderItem={({ item }) => (
+                                    <ReminderComponent2 />
+                                )}
+                                keyExtractor={(item) => item.remainderId.toString()}
+                                horizontal={true}
+                                pagingEnabled
+                                decelerationRate={'normal'}
+                                scrollEventThrottle={16}
+                                showsHorizontalScrollIndicator={false}
+                                onScroll={Animated.event(
+                                    [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                                    {
+                                        useNativeDriver: false,
+                                    }
+                                )}
+                            />
+
+                            <ExpandingDot
+                                data={tasksForToday}
+                                expandingDotWidth={30}
+                                scrollX={scrollX}
+                                inActiveDotOpacity={0.6}
+                                dotStyle={{
+                                    width: 10,
+                                    height: 10,
+                                    backgroundColor: "#8AA578",
+                                    borderRadius: 5,
+                                    marginHorizontal: 5
+                                }}
+                                containerStyle={{
+                                    bottom: 30,
+                                }}
+                            />
                         </View>
                     </View>
 

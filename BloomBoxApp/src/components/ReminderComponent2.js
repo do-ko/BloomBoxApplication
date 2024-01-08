@@ -36,7 +36,9 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         gap: 20,
         borderRadius: 23,
-        width: "90%"
+        width: "90%",
+        margin: 10,
+        marginBottom: 50
     },
 
     reminderTitleContainer: {
