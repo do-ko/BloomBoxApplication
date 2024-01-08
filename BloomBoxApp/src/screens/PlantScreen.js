@@ -50,6 +50,7 @@ const PlantScreen = ({route, navigation}) => {
 
     const [items, setItems] = useState({});
     const [currentDay, setCurrentDay] = useState("")
+    const [todayDate, setTodayDate] = useState("")
     const [markedDatesOnCal, setMarkedDatesOnCal] = useState({})
     const [tasks, setTasks] = useState({})
     const [tasksForToday, setTasksForToday] = useState([])
@@ -75,6 +76,7 @@ const PlantScreen = ({route, navigation}) => {
         let today = new Date();
         let todayDateString = `${today.getFullYear()}-${today.getMonth()+1 < 10 ? "0" + (today.getMonth()+1) : today.getMonth()+1}-${today.getDate() < 10 ? "0" + today.getDate() : today.getDate()}`
         setCurrentDay(todayDateString);
+        setTodayDate(todayDateString);
         console.log(todayDateString);
         let formattedTasks = {}
         console.log(remaindersForPlant);
@@ -110,7 +112,7 @@ const PlantScreen = ({route, navigation}) => {
         // console.log(formattedTasks['20-01-2014'])
         if (formattedTasks[todayDateString] === undefined){
             // console.log("hehe")
-            formattedTasks[todayDateString] = {selected: true, selectedColor: '#5B6E4E'};
+            formattedTasks[todayDateString] = {selected: true, selectedColor: '#8AA578'};
         }
 
         // console.log(formattedTasks);
@@ -351,13 +353,25 @@ const PlantScreen = ({route, navigation}) => {
 
                                 // FIX THIS SELECTION:
                                 // 1. handle old selected:
-                                if (tempArrayWithDates[currentDay].marked === undefined){
-                                //     if old selected was not marked:
+                                if (currentDay !== todayDate){
+                                //     if old selected is not today's date
+                                    if (tempArrayWithDates[currentDay].marked === undefined){
+                                        //     if old selected was not marked:
                                         tempArrayWithDates[currentDay] = {selected: false};
-                                } else {
-                                //     if old select was marked:
+                                    } else {
+                                        //     if old select was marked:
                                         tempArrayWithDates[currentDay] = {selected: false, marked: true, dotColor: "#5B6E4E"}
+                                    }
+                                } else {
+                                    if (tempArrayWithDates[currentDay].marked === undefined){
+                                        //     if old selected was not marked:
+                                        tempArrayWithDates[currentDay] = {selected: true, selectedColor: "#DFDFD9"};
+                                    } else {
+                                        //     if old select was marked:
+                                        tempArrayWithDates[currentDay] = {selected: true, marked: true, dotColor: "#5B6E4E", selectedColor: "#DFDFD9"}
+                                    }
                                 }
+
 
                                 // 2. handle new selected:
                                 if (tempArrayWithDates[day.dateString] === undefined){
