@@ -4,6 +4,7 @@ import {BASE_URL} from "../config";
 import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
 import {AuthContext} from "./AuthContext";
 import {ImageContext} from "./ImageContext";
+import {RemainderContext} from "./RemainderContext";
 
 export const PlantContext = createContext();
 
@@ -13,6 +14,7 @@ export const PlantProvider = ({children}) => {
 
     const {userInfo} = useContext(AuthContext);
     const {uploadImage, deleteImage} = useContext(ImageContext);
+    const {addRemainder} = useContext(RemainderContext);
 
     const getAllPlants = () => {
         setIsLoading(true);
@@ -28,7 +30,7 @@ export const PlantProvider = ({children}) => {
             })
     }
 
-    const addPlant = (locationId, plantName, species, light, water, frequency, image, imageUrl) => {
+    const addPlant = (locationId, plantName, species, light, water, frequency, image, imageUrl, firstRemainder) => {
         setIsLoading(true);
 
         if (image !== "") {
@@ -46,6 +48,9 @@ export const PlantProvider = ({children}) => {
                 let newPlant = res.data;
                 console.log(newPlant);
                 setPlants([...plants, newPlant]);
+                if (firstRemainder){
+                    addRemainder(newPlant.plantId, "watering", Date.now(), false, null);
+                }
                 setIsLoading(false);
             }).catch(e => {
                 console.log(`plant adding error ${e}`);
@@ -67,6 +72,9 @@ export const PlantProvider = ({children}) => {
                 let newPlant = res.data;
                 console.log(newPlant);
                 setPlants([...plants, newPlant]);
+                if (firstRemainder){
+                    addRemainder(newPlant.plantId, "watering", Date.now(), false, null);
+                }
                 setIsLoading(false);
             }).catch(e => {
                 console.log(`plant adding error ${e}`);

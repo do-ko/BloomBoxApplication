@@ -26,6 +26,7 @@ import SunFilledSvg from "../images/SVGs/SunFilled";
 import SunEmptySvg from "../images/SVGs/SunEmpty";
 import DropletFilledSvg from "../images/SVGs/DropletFilled";
 import DropletEmptySvg from "../images/SVGs/DropletEmpty";
+import {RemainderContext} from "../context/RemainderContext";
 
 const imgDir = FileSystem.documentDirectory + "images/"
 
@@ -38,6 +39,7 @@ const ensureDirExists = async () => {
 
 const AddPlantScreen = ({navigation}) => {
     const {addPlant} = useContext(PlantContext);
+
 
     const {getAllLocationForUser, locations} = useContext(LocationContext);
     const [selectedLocation, setSelectedLocation] = useState(null);
@@ -95,7 +97,7 @@ const AddPlantScreen = ({navigation}) => {
             createAlert("Select a water value")
         } else {
             let frequency = 14 - waterValue - lightValue;
-            addPlant(selectedLocation, plantName, species, lightValue, waterValue, frequency, image, image.split("/").pop());
+            addPlant(selectedLocation, plantName, species, lightValue, waterValue, frequency, image, image.split("/").pop(), true);
             navigation.goBack();
         }
 

@@ -14,8 +14,8 @@ import {RemainderProvider} from "../context/RemainderContext";
 const Stack = createNativeStackNavigator();
 const GardenStack = () => {
     return(
-        <PlantProvider>
-            <RemainderProvider>
+        <RemainderProvider>
+            <PlantProvider>
                 <LocationProvider>
                     <DiaryProvider>
                         <Stack.Navigator>
@@ -28,8 +28,8 @@ const GardenStack = () => {
                         </Stack.Navigator>
                     </DiaryProvider>
                 </LocationProvider>
-            </RemainderProvider>
-        </PlantProvider>
+            </PlantProvider>
+        </RemainderProvider>
     );
 }
 

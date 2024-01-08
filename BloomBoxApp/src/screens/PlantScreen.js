@@ -44,7 +44,7 @@ const PlantScreen = ({route, navigation}) => {
     const {userInfo} = useContext(AuthContext);
     const {getAllDiariesForPlant, diaries, addDiary, isLoadingDiary} = useContext(DiaryContext);
     const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
-    const {getRemaindersByPlantId, remainders} = useContext(RemainderContext);
+    const {remainders} = useContext(RemainderContext);
 
     const [items, setItems] = useState({});
     const [day, setDay] = useState({})
@@ -60,9 +60,27 @@ const PlantScreen = ({route, navigation}) => {
     useEffect(() => {
         getAllDiariesForPlant(plant.plantId);
         getAllLocationForUser();
-        getRemaindersByPlantId(plant.plantId);
+        // setTasks(remainders.filter(rem => rem.plantId === plant.plantId));
+        formatMarkedDots();
     }, [])
 
+
+    const formatMarkedDots = () => {
+        let remaindersForPlant = remainders.filter(rem => rem.plantId === plant.plantId);
+        let formattedTasks = {}
+        console.log(remaindersForPlant);
+        remaindersForPlant.forEach((remainder) => {
+            let date = new Date(Date.parse(remainder.remainderDay));
+            let dateString = `${date.getFullYear()}-${date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
+            // console.log(dateString);
+            let markedTask = {[dateString]: {marked: true, dotColor: "#5B6E4E"}}
+            console.log(markedTask);
+            formattedTasks[dateString] = {marked: true, dotColor: "#5B6E4E"};
+            console.log(formattedTasks);
+            // setTasks({...tasks, [dateString]: {marked: true, dotColor: "#5B6E4E"}})
+        });
+        setTasks(formattedTasks);
+    }
 
     const plantChanged = (plant)=>{
      //   console.log("plant changed2: ",plant)
@@ -275,7 +293,7 @@ const PlantScreen = ({route, navigation}) => {
                             onDayPress={day => {
                                 console.log('selected day', day);
                                 setDay(day);
-                                setTasks(testDates["2024-01-08"])
+                                // setTasks(testDates["2024-01-08"])
                                 console.log('tasks', tasks);
                             //     HERE SET TASKS FOR FLATLIST WITH REMINDERS BELOW
                             }}
@@ -300,7 +318,7 @@ const PlantScreen = ({route, navigation}) => {
                             // Enable the option to swipe between months. Default = false
                             enableSwipeMonths={true}
 
-                            markedDates={testDates}
+                            markedDates={tasks}
                         />
                         <View style={styles.remainderContainer}>
                             {/*<Text>Day: {day.day}</Text>*/}
