@@ -58,8 +58,32 @@ export const RemainderProvider = ({children}) => {
             })
     }
 
+    const editRemainder = (remainder) => {
+        setIsLoading(true);
+        axios.put(`${BASE_URL}/remainders`, {
+            remainderId : remainder.remainderId,
+            userId: userInfo.userId,
+            plantId: remainder.plantId,
+            remainderType: remainder.remainderType,
+            remainderDay: remainder.remainderDay,
+            done: remainder.done,
+            doneDate: remainder.doneDate
+        }).then(res => {
+            let newRemainder = res.data;
+            console.log(newRemainder);
+            const editArray = remainders.map(rem => rem.remainderId === newRemainder.remainderId ? newRemainder : rem)
+            setRemainders(editArray)
+
+            setIsLoading(false);
+        }).catch(e => {
+            console.log(`remainder edit error ${e}`);
+            setIsLoading(false);
+
+        })
+    }
+
     return(
-        <RemainderContext.Provider value={{isLoading, remainders, getRemaindersByUserId, getRemaindersByPlantId, addRemainder}}>
+        <RemainderContext.Provider value={{isLoading, remainders, getRemaindersByUserId, getRemaindersByPlantId, addRemainder, editRemainder}}>
             {children}
         </RemainderContext.Provider>
     );

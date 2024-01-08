@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useContext, useState} from "react";
 import {
     Dimensions,
     Image,
@@ -13,18 +13,24 @@ import CheckedButtonDone from "../images/SVGs/CheckButtonDone";
 import CheckButtonDoneSvg from "../images/SVGs/CheckButtonDone";
 import WateringDone from "../images/SVGs/WateringDone";
 import WateringDoneSvg from "../images/SVGs/WateringDone";
+import {RemainderContext} from "../context/RemainderContext";
 
 const ReminderComponent = ({remainder}) => {
     const [done, setDone] = useState(remainder.done)
     const [doneDate, setDoneDate] = useState(remainder.doneDate)
+    const {editRemainder} = useContext(RemainderContext);
     const handleDonePress = () => {
         if (done){
         //     if was true before press -> now will be not done
             setDoneDate(null);
+            remainder.doneDate = null;
         } else {
             setDoneDate(Date.now());
+            remainder.doneDate = Date.now();
         }
         setDone(!done);
+        remainder.done = !done;
+        editRemainder(remainder);
     }
 
     return (
