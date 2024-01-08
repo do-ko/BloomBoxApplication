@@ -71,6 +71,9 @@ const PlantScreen = ({route, navigation}) => {
 
     const formatMarkedDots = () => {
         let remaindersForPlant = remainders.filter(rem => rem.plantId === plant.plantId);
+        console.log("====");
+        console.log(remainders);
+        console.log("====");
         let formattedTasks = {}
         console.log(remaindersForPlant);
         remaindersForPlant.forEach((remainder) => {
@@ -81,7 +84,6 @@ const PlantScreen = ({route, navigation}) => {
             console.log(markedTask);
             formattedTasks[dateString] = {marked: true, dotColor: "#5B6E4E"};
             console.log(formattedTasks);
-            // setTasks({...tasks, [dateString]: {marked: true, dotColor: "#5B6E4E"}})
         });
         setTasks(formattedTasks);
     }

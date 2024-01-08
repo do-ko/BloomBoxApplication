@@ -7,6 +7,7 @@ import com.domann.bloombox.service.RemainderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -57,6 +58,15 @@ public class RemainderRestController {
         return remainderService.save(remainder);
     }
 
+    @PostMapping("/many")
+    public List<Remainder> addRemainders(@RequestBody List<Remainder> remainders){
+        List<Remainder> listOfRemainders = new ArrayList<>();
+        remainders.forEach(remainder -> remainder.setRemainderId(0));
+        remainders.forEach(remainder -> listOfRemainders.add(remainderService.save(remainder)));
+
+        return listOfRemainders;
+//        return remainderService.save(remainder);
+    }
     @PutMapping("")
     public Remainder updateRemainder(@RequestBody Remainder remainder){
         return remainderService.save(remainder);

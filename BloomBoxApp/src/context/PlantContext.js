@@ -14,7 +14,7 @@ export const PlantProvider = ({children}) => {
 
     const {userInfo} = useContext(AuthContext);
     const {uploadImage, deleteImage} = useContext(ImageContext);
-    const {addRemainder} = useContext(RemainderContext);
+    const {addRemainders} = useContext(RemainderContext);
 
     const getAllPlants = () => {
         setIsLoading(true);
@@ -49,7 +49,41 @@ export const PlantProvider = ({children}) => {
                 console.log(newPlant);
                 setPlants([...plants, newPlant]);
                 if (firstRemainder){
-                    addRemainder(newPlant.plantId, "watering", Date.now(), false, null);
+                    let remainderDay1 = new Date();
+                    // console.log("date: " + date);
+                    let remainderDay2 = new Date();
+                    remainderDay2.setDate(remainderDay2.getDate() + frequency);
+                    // console.log("date1: " + remainderDay2);
+                    let remainderDay3 = new Date();
+                    remainderDay3.setDate(remainderDay3.getDate() + (2*frequency));
+                    // console.log("date1: " + remainderDay3);
+
+                    addRemainders([{
+                        userId: userInfo.userId,
+                        plantId: newPlant.plantId,
+                        remainderType: "watering",
+                        remainderDay: remainderDay1,
+                        done: false,
+                        doneDate: null
+                    }, {
+                        userId: userInfo.userId,
+                        plantId: newPlant.plantId,
+                        remainderType: "watering",
+                        remainderDay: remainderDay2,
+                        done: false,
+                        doneDate: null
+                    }, {
+                        userId: userInfo.userId,
+                        plantId: newPlant.plantId,
+                        remainderType: "watering",
+                        remainderDay: remainderDay3,
+                        done: false,
+                        doneDate: null
+                    }]);
+                    // addRemainder(newPlant.plantId, "watering", date1, false, null);
+                    // addRemainder(newPlant.plantId, "watering", date2, false, null);
+                    //add3Remainders(newPlant.plantId, "watering", date, date1, date2, false, null);
+                    // addRemainder(newPlant.plantId, "watering", date.getDate() + (2*frequency), false, null);
                 }
                 setIsLoading(false);
             }).catch(e => {
@@ -73,7 +107,37 @@ export const PlantProvider = ({children}) => {
                 console.log(newPlant);
                 setPlants([...plants, newPlant]);
                 if (firstRemainder){
-                    addRemainder(newPlant.plantId, "watering", Date.now(), false, null);
+                    let remainderDay1 = new Date();
+                    // console.log("date: " + date);
+                    let remainderDay2 = new Date();
+                    remainderDay2.setDate(remainderDay2.getDate() + frequency);
+                    // console.log("date1: " + remainderDay2);
+                    let remainderDay3 = new Date();
+                    remainderDay3.setDate(remainderDay3.getDate() + (2*frequency));
+                    // console.log("date1: " + remainderDay3);
+
+                    addRemainders([{
+                        userId: userInfo.userId,
+                        plantId: newPlant.plantId,
+                        remainderType: "watering",
+                        remainderDay: remainderDay1,
+                        done: false,
+                        doneDate: null
+                    }, {
+                        userId: userInfo.userId,
+                        plantId: newPlant.plantId,
+                        remainderType: "watering",
+                        remainderDay: remainderDay2,
+                        done: false,
+                        doneDate: null
+                    }, {
+                        userId: userInfo.userId,
+                        plantId: newPlant.plantId,
+                        remainderType: "watering",
+                        remainderDay: remainderDay3,
+                        done: false,
+                        doneDate: null
+                    }]);
                 }
                 setIsLoading(false);
             }).catch(e => {
