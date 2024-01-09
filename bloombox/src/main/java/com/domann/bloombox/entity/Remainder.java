@@ -26,11 +26,13 @@ public class Remainder {
     private Boolean done;
     @Column(name = "done_date")
     private Date doneDate;
+    @Column(name = "failed")
+    private Boolean failed;
 
     public Remainder() {
     }
 
-    public Remainder(Integer plantId, String plantName, Integer userId, String remainderType, Date remainderDay, Boolean done, Date doneDate) {
+    public Remainder(Integer plantId, String plantName, Integer userId, String remainderType, Date remainderDay, Boolean done, Date doneDate, Boolean failed) {
         this.plantId = plantId;
         this.plantName = plantName;
         this.userId = userId;
@@ -38,6 +40,7 @@ public class Remainder {
         this.remainderDay = remainderDay;
         this.done = done;
         this.doneDate = doneDate;
+        this.failed = failed;
     }
 
     public Integer getRemainderId() {
@@ -104,17 +107,25 @@ public class Remainder {
         this.doneDate = doneDate;
     }
 
+    public Boolean getFailed() {
+        return failed;
+    }
+
+    public void setFailed(Boolean failed) {
+        this.failed = failed;
+    }
     @Override
     public String toString() {
         return "Remainder{" +
                 "remainderId=" + remainderId +
                 ", plantId=" + plantId +
-                ", plantName=" + plantName +
+                ", plantName='" + plantName + '\'' +
                 ", userId=" + userId +
                 ", remainderType='" + remainderType + '\'' +
                 ", remainderDay=" + remainderDay +
                 ", done=" + done +
                 ", doneDate=" + doneDate +
+                ", failed=" + failed +
                 '}';
     }
 }

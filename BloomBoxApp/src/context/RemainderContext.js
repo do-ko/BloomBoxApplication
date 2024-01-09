@@ -39,7 +39,7 @@ export const RemainderProvider = ({children}) => {
             })
     }
 
-    const addRemainder = (plantId, plantName, remainderType, remainderDay, done, doneDate) => {
+    const addRemainder = (plantId, plantName, remainderType, remainderDay, done, doneDate, failed) => {
         console.log("remainders:");
         console.log(remainders);
         setIsLoading(true);
@@ -50,7 +50,8 @@ export const RemainderProvider = ({children}) => {
                 remainderType: remainderType,
                 remainderDay: remainderDay,
                 done: done,
-                doneDate: doneDate
+                doneDate: doneDate,
+                failed: failed
             }).then(res => {
                 let newRemainder = res.data;
                 console.log(newRemainder);
@@ -95,7 +96,8 @@ export const RemainderProvider = ({children}) => {
             remainderType: remainder.remainderType,
             remainderDay: remainder.remainderDay,
             done: remainder.done,
-            doneDate: remainder.doneDate
+            doneDate: remainder.doneDate,
+            failed: remainder.failed
         }).then(res => {
             let newRemainder = res.data;
             console.log(newRemainder);

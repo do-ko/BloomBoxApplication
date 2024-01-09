@@ -65,7 +65,8 @@ export const PlantProvider = ({children}) => {
                         remainderType: "watering",
                         remainderDay: remainderDay1,
                         done: false,
-                        doneDate: null
+                        doneDate: null,
+                        failed: false
                     }, {
                         userId: userInfo.userId,
                         plantId: newPlant.plantId,
@@ -73,7 +74,8 @@ export const PlantProvider = ({children}) => {
                         remainderType: "watering",
                         remainderDay: remainderDay2,
                         done: false,
-                        doneDate: null
+                        doneDate: null,
+                        failed: false
                     }, {
                         userId: userInfo.userId,
                         plantId: newPlant.plantId,
@@ -81,7 +83,8 @@ export const PlantProvider = ({children}) => {
                         remainderType: "watering",
                         remainderDay: remainderDay3,
                         done: false,
-                        doneDate: null
+                        doneDate: null,
+                        failed: false
                     }]);
                     // addRemainder(newPlant.plantId, "watering", date1, false, null);
                     // addRemainder(newPlant.plantId, "watering", date2, false, null);
@@ -126,7 +129,8 @@ export const PlantProvider = ({children}) => {
                         remainderType: "watering",
                         remainderDay: remainderDay1,
                         done: false,
-                        doneDate: null
+                        doneDate: null,
+                        failed: false
                     }, {
                         userId: userInfo.userId,
                         plantId: newPlant.plantId,
@@ -134,7 +138,8 @@ export const PlantProvider = ({children}) => {
                         remainderType: "watering",
                         remainderDay: remainderDay2,
                         done: false,
-                        doneDate: null
+                        doneDate: null,
+                        failed: false
                     }, {
                         userId: userInfo.userId,
                         plantId: newPlant.plantId,
@@ -142,7 +147,8 @@ export const PlantProvider = ({children}) => {
                         remainderType: "watering",
                         remainderDay: remainderDay3,
                         done: false,
-                        doneDate: null
+                        doneDate: null,
+                        failed: false
                     }]);
                 }
                 setIsLoading(false);
