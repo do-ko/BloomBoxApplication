@@ -28,18 +28,20 @@ export const DiaryProvider = ({children}) => {
             })
     }
 
-    const addDiary = (plantId, title, entryDate, image) => {
+    const addDiary = (plantId, title, entryDate, image, diaryContent) => {
         console.log(plantId)
         console.log(title)
         console.log(entryDate)
         console.log(image)
+        console.log(diaryContent)
 
         setIsLoading(true);
         axios.post(`${BASE_URL}/diaries`, {
             plantId: plantId,
             title: title,
             entryDate: entryDate,
-            image: image
+            image: image,
+            diaryContent : diaryContent
         }).then(res => {
             let newDiary = res.data;
             console.log(newDiary);

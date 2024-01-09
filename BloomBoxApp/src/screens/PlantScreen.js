@@ -129,7 +129,7 @@ const PlantScreen = ({route, navigation}) => {
                     <View style={styles.diaryTitleContainer}>
                     {/*    TITLE AND BUTTON*/}
                         <Text style={styles.diaryTitle}>Diary</Text>
-                        <Pressable style={styles.addDiaryButton} onPress={() => addDiary(plant.plantId, "test", Date.now(), "defaultDiary.jpg")}>
+                        <Pressable style={styles.addDiaryButton} onPress={() => navigation.navigate("AddDiary")}>
                             <Text style={styles.addDiaryText}>ADD</Text>
                         </Pressable>
                     </View>

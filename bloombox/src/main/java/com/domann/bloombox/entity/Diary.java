@@ -24,14 +24,18 @@ public class Diary {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "diary_content")
+    private String diaryContent;
+
     public Diary() {
     }
 
-    public Diary(Integer plantId, String title, Date entryDate, String image) {
+    public Diary(Integer plantId, String title, Date entryDate, String image, String diaryContent) {
         this.plantId = plantId;
         this.title = title;
         this.entryDate = entryDate;
         this.image = image;
+        this.diaryContent = diaryContent;
     }
 
     public Integer getDiaryId() {
@@ -74,6 +78,14 @@ public class Diary {
         this.image = image;
     }
 
+    public String getDiaryContent() {
+        return diaryContent;
+    }
+
+    public void setDiaryContent(String diaryContent) {
+        this.diaryContent = diaryContent;
+    }
+
     @Override
     public String toString() {
         return "Diary{" +
@@ -82,6 +94,7 @@ public class Diary {
                 ", title='" + title + '\'' +
                 ", entryDate=" + entryDate +
                 ", image='" + image + '\'' +
+                ", diaryContent='" + diaryContent + '\'' +
                 '}';
     }
 }

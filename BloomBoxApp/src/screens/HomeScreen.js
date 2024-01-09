@@ -29,13 +29,6 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Pressable
-        style={styles.pressableBars}
-        onPress={() => navigation.openDrawer()}
-      >
-        <BarsSvg />
-      </Pressable>
-
       <View style={styles.topBar}>
         {/* <Text style={styles.userInfo}>{userInfo.userLogin}</Text> */}
         {/* <View style={styles.barsContainer}></View> */}
@@ -48,6 +41,16 @@ const HomeScreen = ({ navigation }) => {
         </View>
         <View style={styles.rightTopBarMargin}></View>
       </View>
+
+      {/*NOTE: DRAWER NEEDS TO BE BELOW TOP BAR CONTAINER TO APPEAR ABOVE THAT VIEW ON PHONE*/}
+      <Pressable
+          style={styles.pressableBars}
+          onPress={() => navigation.openDrawer()}
+      >
+        <BarsSvg />
+      </Pressable>
+
+
       <Button
         title="Add reminder"
         onPress={(reminderInputHandler, addReminder)}
@@ -95,7 +98,7 @@ const styles = StyleSheet.create({
   },
 
   topBar: {
-    //backgroundColor: "blue",
+    // backgroundColor: "blue",
     flex: 3,
     flexDirection: "row",
     //alignItems: "flex-start",
@@ -122,7 +125,7 @@ const styles = StyleSheet.create({
   welcomeImageContainer: {
     flex: 11,
     height: "100%",
-    //backgroundColor: "pink",
+    // backgroundColor: "pink",
     alignItems: "center",
     //justifyContent: "center",
   },
