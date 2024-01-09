@@ -5,9 +5,13 @@ import com.domann.bloombox.entity.Remainder;
 import com.domann.bloombox.service.PlantService;
 import com.domann.bloombox.service.RemainderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.crypto.Data;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -83,4 +87,16 @@ public class RemainderRestController {
 
         return "Deleted remainder with id: " + remainderId;
     }
+
+//    @Scheduled(fixedDelay = 5000)
+//    public void ReviewRemaindersAtMidnight(){
+//        System.out.println("hello");
+//        Date today = new Date();
+////        LocalDate today = new LocalDate;
+//        List<Remainder> remainders = remainderService.findAllRemainders();
+//        System.out.println(today.toString().split(" "));
+//        remainders.forEach(remainder -> {
+//            System.out.println(remainder.getRemainderDay().toString());
+//        });
+//    }
 }
