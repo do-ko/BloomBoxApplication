@@ -48,7 +48,7 @@ const HomeScreen = ({ navigation }) => {
     // console.log("=====DATA-NOW=====")
     // console.log(tempData.filter(rem => new Date(Date.parse(rem.remainderDay)) - new Date() <= 0));
 
-    return tempData.filter(rem => new Date(Date.parse(rem.remainderDay)) - new Date() <= 0);
+    return tempData.filter(rem => new Date(Date.parse(rem.remainderDay)) - new Date() <= 0 && !rem.failed);
   }
 
   useEffect(() => {
