@@ -11,7 +11,7 @@ const PlantComponent = ({plant, navigation}) => {
         <Pressable style={styles.plantItem} onPress={() => {navigation.navigate("PlantScreen", {plant})}}>
 
             <View style={styles.plantImageContainer}>
-                <Image style={styles.plantImage} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.imageUrl}} />
+                <Image style={styles.plantImage} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.image}} />
             </View>
 
             <View style={styles.plantTextContainer}>

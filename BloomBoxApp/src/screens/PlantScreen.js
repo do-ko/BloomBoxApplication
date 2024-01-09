@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {
+    Animated,
     Button,
     Dimensions,
     FlatList,
@@ -8,8 +9,8 @@ import {
     ScrollView,
     StyleSheet,
     Text,
-    TextInput,
-    View
+    TextInput, TouchableOpacity,
+    View, VirtualizedList
 } from "react-native";
 import {PlantContext} from "../context/PlantContext";
 import {DiaryContext} from "../context/DiaryContext";
@@ -29,6 +30,14 @@ import ReverseGradientSvg from "../images/SVGs/ReverseGradient";
 import Spinner from "react-native-loading-spinner-overlay";
 import PlantComponent from "../components/PlantComponent";
 import DiaryComponent from "../components/DiaryComponent";
+import {red} from "react-native-reanimated/src";
+import {Agenda, Calendar} from "react-native-calendars";
+import {Card, Avatar} from 'react-native-paper';
+import ReminderComponent2 from "../components/ReminderComponent2";
+import {RemainderContext} from "../context/RemainderContext";
+import {ExpandingDot} from "react-native-animated-pagination-dots";
+
+
 
 const PlantScreen = ({route, navigation}) => {
     // plant contains all parameters of current plant
@@ -36,20 +45,103 @@ const PlantScreen = ({route, navigation}) => {
     const {plant} = route.params;
     const {userInfo} = useContext(AuthContext);
     const {getAllDiariesForPlant, diaries, addDiary, isLoadingDiary} = useContext(DiaryContext);
-    const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext)
+    const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
+    const {remainders} = useContext(RemainderContext);
 
-    const [test, setTest] = useState({})
+    const [items, setItems] = useState({});
+    const [currentDay, setCurrentDay] = useState("")
+    const [todayDate, setTodayDate] = useState("")
+    const [markedDatesOnCal, setMarkedDatesOnCal] = useState({})
+    const [tasks, setTasks] = useState({})
+    const [tasksForToday, setTasksForToday] = useState([])
+    const scrollX = React.useRef(new Animated.Value(0)).current;
+
+    // const testDates = {
+    //     '2024-01-08': {selected: true, marked: true, selectedColor: 'blue'},
+    //     '2024-01-09': {marked: true},
+    //     '2024-01-10': {marked: true, dotColor: 'red', activeOpacity: 0},
+    //     '2024-01-11': {disabled: true, disableTouchEvent: true}
+    // };
 
     useEffect(() => {
         getAllDiariesForPlant(plant.plantId);
-        getAllLocationForUser()
-        setTest(locations.filter(location => location.locationId === plant.locationId)[0])
+        getAllLocationForUser();
+        // setTasks(remainders.filter(rem => rem.plantId === plant.plantId));
+        formatMarkedDots();
+        let today = new Date();
+        let todayDateString = `${today.getFullYear()}-${today.getMonth()+1 < 10 ? "0" + (today.getMonth()+1) : today.getMonth()+1}-${today.getDate() < 10 ? "0" + today.getDate() : today.getDate()}`
+        getRemaindersForToday(todayDateString);
     }, [])
 
+
+    const formatMarkedDots = () => {
+        let remaindersForPlant = remainders.filter(rem => rem.plantId === plant.plantId);
+        let today = new Date();
+        let todayDateString = `${today.getFullYear()}-${today.getMonth()+1 < 10 ? "0" + (today.getMonth()+1) : today.getMonth()+1}-${today.getDate() < 10 ? "0" + today.getDate() : today.getDate()}`
+        setCurrentDay(todayDateString);
+        setTodayDate(todayDateString);
+        console.log(todayDateString);
+        let formattedTasks = {}
+        console.log(remaindersForPlant);
+        remaindersForPlant.forEach((remainder) => {
+            let date = new Date(Date.parse(remainder.remainderDay));
+            let dateString = `${date.getFullYear()}-${date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
+            // console.log(dateString);
+            // let markedTask;
+            // if (dateString === todayDateString){
+            //     markedTask = {[dateString]: {marked: true, dotColor: "#5B6E4E", customStyles: {
+            //                 container: {
+            //                     backgroundColor: 'green'
+            //                 },
+            //                 text: {
+            //                     color: 'black',
+            //                     fontWeight: 'bold'
+            //                 }
+            //             }}}
+            // } else {
+            //     markedTask = {[dateString]: {marked: true, dotColor: "#5B6E4E"}}
+            // }
+            // console.log(markedTask);
+            if (dateString === todayDateString){
+                formattedTasks[dateString] = {marked: true, dotColor: "#FFFFFF", selected: true, selectedColor: '#5B6E4E'};
+            } else {
+                formattedTasks[dateString] = {marked: true, dotColor: "#5B6E4E", selected: false, selectedColor: '#5B6E4E'};
+            }
+            // formattedTasks[dateString] = {marked: true, dotColor: "#5B6E4E"};
+            // console.log(formattedTasks);
+        });
+
+        // console.log("haha");
+        // console.log(formattedTasks['20-01-2014'])
+        if (formattedTasks[todayDateString] === undefined){
+            // console.log("hehe")
+            formattedTasks[todayDateString] = {selected: true, selectedColor: '#8AA578'};
+        }
+
+        // console.log(formattedTasks);
+        setMarkedDatesOnCal(formattedTasks);
+        // setTasks(formattedTasks);
+    }
+
+    const getRemaindersForToday = (dateStringInput) => {
+        let remaindersForPlant = remainders.filter(rem => rem.plantId === plant.plantId);
+        let remToday = []
+        remaindersForPlant.forEach((remainder) => {
+            let date = new Date(Date.parse(remainder.remainderDay));
+            let dateString = `${date.getFullYear()}-${date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
+            if (dateString === dateStringInput){
+                remToday.push(remainder);
+            }
+        });
+        // console.log(remToday);
+        setTasksForToday(remToday);
+        // return remToday;
+    }
 
     const plantChanged = (plant)=>{
      //   console.log("plant changed2: ",plant)
     }
+
 
     return(
         <ScrollView>
@@ -60,7 +152,7 @@ const PlantScreen = ({route, navigation}) => {
                     <View style={styles.imageContainer}>
                         <View style={{overflow: "hidden"}}>
                             <View style={styles.image}>
-                                <Image source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.imageUrl}} style={styles.imageStyle} />
+                                <Image source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.image}} style={styles.imageStyle} />
                             </View>
                         </View>
                         {/*menu*/}
@@ -120,14 +212,16 @@ const PlantScreen = ({route, navigation}) => {
                     </View>
                 </View>
 
+
+
                 <View style={styles.diarySectionContainer}>
                     <ReverseGradientSvg style={{
-                        position: 'absolute'
+                        position: 'absolute',
                     }}/>
                     <View style={styles.diaryTitleContainer}>
                     {/*    TITLE AND BUTTON*/}
-                        <Text style={styles.diaryTitle}>Diary</Text>
-                        <Pressable style={styles.addDiaryButton} onPress={() => addDiary(plant.plantId, "test", Date.now(), "defaultDiary.jpg")}>
+                        <Text style={styles.Title}>Diary</Text>
+                        <Pressable style={styles.addDiaryButton} onPress={() => navigation.navigate("AddDiary")}>
                             <Text style={styles.addDiaryText}>ADD</Text>
                         </Pressable>
                     </View>
@@ -146,6 +240,128 @@ const PlantScreen = ({route, navigation}) => {
                         }}
                         />
                     </View>
+                </View>
+
+
+                <View style={styles.calendarSectionContainer}>
+                    <View style={styles.calendarTitleContainer}>
+                        {/*    TITLE AND BUTTON*/}
+                        <Text style={styles.Title}>Calendar</Text>
+                    </View>
+                    <View>
+                        <Calendar
+                            // Handler which gets executed on day press. Default = undefined
+                            onDayPress={day => {
+                                let tempArrayWithDates = markedDatesOnCal;
+
+                                // 1. handle old selected:
+                                if (currentDay !== todayDate){
+                                //     if old selected is not today's date
+                                    if (tempArrayWithDates[currentDay].marked === undefined){
+                                        //     if old selected was not marked:
+                                        tempArrayWithDates[currentDay] = {selected: false};
+                                    } else {
+                                        //     if old select was marked:
+                                        tempArrayWithDates[currentDay] = {selected: false, marked: true, dotColor: "#5B6E4E"}
+                                    }
+                                } else {
+                                    if (tempArrayWithDates[currentDay].marked === undefined){
+                                        //     if old selected was not marked:
+                                        tempArrayWithDates[currentDay] = {selected: true, selectedColor: "#DFDFD9"};
+                                    } else {
+                                        //     if old select was marked:
+                                        tempArrayWithDates[currentDay] = {selected: true, marked: true, dotColor: "#5B6E4E", selectedColor: "#DFDFD9"}
+                                    }
+                                }
+
+
+                                // 2. handle new selected:
+                                if (tempArrayWithDates[day.dateString] === undefined){
+                                //     if new selected not in markedDots yet (not a task day)
+                                    tempArrayWithDates[day.dateString] = {selected: true, selectedColor: "#8AA578"};
+                                } else {
+                                    if (tempArrayWithDates[day.dateString].marked === undefined){
+                                            // if new selected is not marked
+                                            tempArrayWithDates[day.dateString] = {selected: true, selectedColor: "#8AA578"};
+                                        } else {
+                                            // if new selected is marked
+                                            tempArrayWithDates[day.dateString] = {selected: true, selectedColor: "#5B6E4E", marked: true, dotColor: "#fff"};
+                                        }
+                                }
+
+                                setMarkedDatesOnCal(tempArrayWithDates);
+
+                                // change current day
+                                setCurrentDay(day.dateString)
+
+                                getRemaindersForToday(day.dateString);
+
+                            }}
+                            // // Handler which gets executed on day long press. Default = undefined
+                            // onDayLongPress={day => {
+                            //     console.log('selected day', day);
+                            // }}
+                            // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+                            monthFormat={'yyyy MM'}
+                            // Handler which gets executed when visible month changes in calendar. Default = undefined
+                            onMonthChange={month => {
+                                console.log('month changed', month);
+                            }}
+
+                            // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday
+                            firstDay={1}
+                            // Handler which gets executed when press arrow icon left. It receive a callback can go back month
+                            onPressArrowLeft={subtractMonth => subtractMonth()}
+                            // Handler which gets executed when press arrow icon right. It receive a callback can go next month
+                            onPressArrowRight={addMonth => addMonth()}
+
+                            // Enable the option to swipe between months. Default = false
+                            enableSwipeMonths={true}
+
+                            markedDates={markedDatesOnCal}
+                        />
+
+                        <View style={styles.remainderContainer}>
+                            {/*<Text>Day: {day.day}</Text>*/}
+                            {/*<ReminderComponent2 />*/}
+                            <FlatList
+                                data={tasksForToday}
+                                renderItem={({ item }) => (
+                                    <ReminderComponent2 remainder={item}/>
+                                )}
+                                keyExtractor={(item) => item.remainderId.toString()}
+                                horizontal={true}
+                                pagingEnabled
+                                decelerationRate={'normal'}
+                                scrollEventThrottle={16}
+                                showsHorizontalScrollIndicator={false}
+                                onScroll={Animated.event(
+                                    [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                                    {
+                                        useNativeDriver: false,
+                                    }
+                                )}
+                            />
+
+                            <ExpandingDot
+                                data={tasksForToday}
+                                expandingDotWidth={30}
+                                scrollX={scrollX}
+                                inActiveDotOpacity={0.6}
+                                dotStyle={{
+                                    width: 10,
+                                    height: 10,
+                                    backgroundColor: "#8AA578",
+                                    borderRadius: 5,
+                                    marginHorizontal: 5
+                                }}
+                                containerStyle={{
+                                    bottom: 30,
+                                }}
+                            />
+                        </View>
+                    </View>
+
 
                 </View>
 
@@ -327,10 +543,10 @@ const styles = StyleSheet.create({
 
     diarySectionContainer: {
         marginTop: 60,
-        height: 392,
+        // height: 392,
         width: "100%",
-        padding: 20
-        // backgroundColor: "red"
+        padding: 20,
+        //backgroundColor: "red",
     },
 
     diaryTitleContainer: {
@@ -340,7 +556,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between"
     },
 
-    diaryTitle: {
+    Title: {
         fontSize: 48,
         fontWeight: "bold",
         color: "#20201D",
@@ -375,6 +591,22 @@ const styles = StyleSheet.create({
         // flex: 6,
         marginTop: 20
     },
+
+    calendarSectionContainer: {
+        marginTop: 30,
+        width: "100%",
+        padding: 20,
+    },
+
+    calendarTitleContainer: {
+        marginBottom: 20
+    },
+
+    remainderContainer: {
+        marginTop: 20,
+        // backgroundColor: "red",
+        alignItems: "center"
+    }
 
 })
 

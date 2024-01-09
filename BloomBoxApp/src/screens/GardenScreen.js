@@ -11,6 +11,7 @@ import PlantComponent from "../components/PlantComponent";
 import Gradient from "../images/SVGs/Gradient";
 import filter from "lodash.filter"
 import {LocationContext} from "../context/LocationContext";
+import {RemainderContext} from "../context/RemainderContext";
 
 const formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
@@ -26,6 +27,8 @@ const formatData = (data, numColumns) => {
 const GardenScreen = ({navigation}) => {
     const {getAllPlants, plants, isLoading} = useContext(PlantContext);
     const {getAllLocationForUser} = useContext(LocationContext)
+    const {getRemaindersByUserId} = useContext(RemainderContext);
+
 
     const [isFocused, setIsFocused] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
@@ -33,6 +36,7 @@ const GardenScreen = ({navigation}) => {
     useEffect(() => {
         getAllPlants();
         getAllLocationForUser();
+        getRemaindersByUserId();
     }, [])
 
     return (

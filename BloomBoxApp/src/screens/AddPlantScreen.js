@@ -1,9 +1,14 @@
 import React, {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Alert, Button, Dimensions, Image, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+
+
 import {PlantContext} from "../context/PlantContext";
 import {LocationContext} from "../context/LocationContext";
 import {SelectList} from "react-native-dropdown-select-list/index";
 import SelectDropdown from 'react-native-select-dropdown'
+import { Menu, MenuProvider, MenuTrigger, MenuOptions, MenuOption} from "react-native-popup-menu";
+
+// SVG imports
 import Gradient from "../images/SVGs/Gradient";
 import GradientSvg from "../images/SVGs/Gradient";
 import BarsSvg from "../images/SVGs/Bars";
@@ -21,6 +26,7 @@ import SunFilledSvg from "../images/SVGs/SunFilled";
 import SunEmptySvg from "../images/SVGs/SunEmpty";
 import DropletFilledSvg from "../images/SVGs/DropletFilled";
 import DropletEmptySvg from "../images/SVGs/DropletEmpty";
+import {RemainderContext} from "../context/RemainderContext";
 
 const imgDir = FileSystem.documentDirectory + "images/"
 
@@ -33,6 +39,7 @@ const ensureDirExists = async () => {
 
 const AddPlantScreen = ({navigation}) => {
     const {addPlant} = useContext(PlantContext);
+
 
     const {getAllLocationForUser, locations} = useContext(LocationContext);
     const [selectedLocation, setSelectedLocation] = useState(null);
@@ -89,7 +96,8 @@ const AddPlantScreen = ({navigation}) => {
         } else if (waterValue === 0){
             createAlert("Select a water value")
         } else {
-            addPlant(selectedLocation, plantName, species, lightValue, waterValue, image,  image.split("/").pop());
+            let frequency = 14 - waterValue - lightValue;
+            addPlant(selectedLocation, plantName, species, lightValue, waterValue, frequency, image, image.split("/").pop(), true);
             navigation.goBack();
         }
 
@@ -124,19 +132,36 @@ const AddPlantScreen = ({navigation}) => {
                             {image === "" ? <View style={styles.image}></View> : <View style={styles.image}><Image source={{uri: image}} style={styles.imageStyle} /></View>}
                         </View>
                         {/*menu*/}
+                        
+                        <View style={styles.menuContainer}>
+                            <MenuProvider style={styles.menuProvider}> 
+                                <Menu style={styles.menu}>
+                                    <MenuTrigger customStyles={{triggerWrapper: styles.popup}}>
+                                        <BigAdd/>
+                                    </MenuTrigger>
+                                    
+                                    <MenuOptions style={styles.menuOptions}>
+                                        <MenuOption onSelect={() => selectImage(false)} text="Take a photo" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                                        <View style={styles.divider}/>
+                                        <MenuOption onSelect={() => selectImage(true)} text="Open gallery" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                                    </MenuOptions>
+                                </Menu>
+                            </MenuProvider>
+                        </View>
+                        
                         <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
                             <BackSvg/>
                         </Pressable>
-
-                        <View style={styles.addButton}>
+                        
+                        {/* ORIGINAL ADD PICTURE */}
+                        {/* <View style={styles.addButton}>
                             <Pressable  onPress={() => selectImage(true)}>
                                 <BigAdd/>
                             </Pressable>
                             <Pressable  onPress={() => selectImage(false)}>
                                 <BigAdd/>
                             </Pressable>
-                        </View>
-
+                        </View> */}
 
                         <Pressable style={styles.saveButton} onPress={() => addNewPlant()}>
                             <SaveSvg/>
@@ -152,10 +177,7 @@ const AddPlantScreen = ({navigation}) => {
                                 <TextInput style={styles.speciesInput} underlineColorAndroid={"transparent"} placeholder={"enter species"} placeholderTextColor={"black"} value={species} onChangeText={(text) => setSpecies(text)}/>
                             </View>
                         </View>
-
-
                 </View>
-
             </View>
 
 
@@ -269,7 +291,52 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 80,
         borderBottomLeftRadius: 80,
     },
+    
+    menuContainer: {
+        //backgroundColor: "yellow",
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+    },
+    
+    menuProvider: {
+        //backgroundColor: "pink",
+        width: "100%",
+        height: "100%",
+        borderBottomRightRadius: 80,
+        borderBottomLeftRadius: 80,
+    },
+    
+    menu: {
+        //backgroundColor: "green",
+        width:"100%", 
+        height: "100%",
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderBottomRightRadius: 80,
+        borderBottomLeftRadius: 80,
+    },
+    
+    // clickable
+    popup: {
+        padding: 20,
+    },
 
+    
+    optionWrapper: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        
+        padding: 10,
+        fontSize: 20,
+    },
+    
+    divider: {
+        width: "100%",
+        backgroundColor: "lightgrey",
+        height: 0.2,
+    },
 
 
     backButton: {

@@ -1,5 +1,16 @@
 import React, {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {Alert, Button, Dimensions, Image, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {
+    Alert,
+    Button,
+    Dimensions,
+    Image,
+    Pressable,
+    SafeAreaView, ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    View
+} from "react-native";
 import {PlantContext} from "../context/PlantContext";
 import {LocationContext} from "../context/LocationContext";
 import {SelectList} from "react-native-dropdown-select-list/index";
@@ -21,6 +32,7 @@ import SunFilledSvg from "../images/SVGs/SunFilled";
 import SunEmptySvg from "../images/SVGs/SunEmpty";
 import DropletFilledSvg from "../images/SVGs/DropletFilled";
 import DropletEmptySvg from "../images/SVGs/DropletEmpty";
+import {DiaryContext} from "../context/DiaryContext";
 
 const imgDir = FileSystem.documentDirectory + "images/"
 
@@ -31,26 +43,13 @@ const ensureDirExists = async () => {
     }
 }
 
-const EditPlantScreen = ({route, navigation}) => {
-    const {plant,plantChanged} = route.params;
-    const {editPlant} = useContext(PlantContext);
-    const {userInfo} = useContext(AuthContext);
-    const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
+const AddDiaryScreen = ({navigation}) => {
+    const {addDiary} = useContext(DiaryContext);
 
-    // setting initial data
-    const [plantName, setPlantName] = useState(plant.plantName);
-    const [species, setSpecies] = useState(plant.species)
-    //const [selectedLocationId, setSelectedLocationId] = useState(plant.locationId);
-
-    const [selectedLocation, setSelectedLocation] = useState();
-
-
-    const [image, setImage] = useState(BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.image)
-    const [lightValue, setLightValue] = useState(plant.light)
-    const [waterValue, setWaterValue] = useState(plant.water)
-
-    const initImageName = plant.image
-    // const initLocationName = locations.filter(location =>location.locationId === plant.locationId)[0]
+    const [title, setTitle] = useState("");
+    const [image, setImage] = useState("")
+    const [date, setDate] = useState(null)
+    const [description, setDescription] = useState("")
 
     const selectImage = async (useLibrary) => {
         let result;
@@ -85,50 +84,29 @@ const EditPlantScreen = ({route, navigation}) => {
         const filename = new Date().getTime() + ".jpg";
         const dest = imgDir + filename;
         await FileSystem.copyAsync({from: imageUri, to: dest});
-
         setImage(dest);
-
         console.log("dest coming:")
         console.log(dest);
     }
 
-    const edit = async () => {
+    const addNewDiary = async () => {
         if (plantName === ""){
             createAlert("Add Name");
-        } else if (selectedLocation === ""){
-            createAlert("Select a location")
         } else if (lightValue === 0){
             createAlert("Select a light value")
         } else if (waterValue === 0){
             createAlert("Select a water value")
         } else {
-            console.log("Name: " + plantName)
-            console.log("Species: " + species)
-            console.log("Location id: " + selectedLocation.locationId)
-            console.log("Light: " + lightValue)
-            console.log("Water: " + waterValue)
-            console.log("Image: " + image)
-
-            // to delete from server
-            console.log("OldImage: " + initImageName)
-
-            // only change here in case of canceling
-            plant.locationId = selectedLocation.locationId;
-            plant.plantName = plantName;
-            plant.light = lightValue;
-            plant.water = waterValue;
-            plant.species = species;
-            plant.frequency = 14 - waterValue - lightValue;
-            plant.image = image.split("/").pop();
-
-
-            editPlant(plant, image, initImageName);
-
-            plantChanged(plant)
+            addPlant(selectedLocation, plantName, species, lightValue, waterValue, image,  image.split("/").pop());
             navigation.goBack();
         }
 
-
+        // console.log("Name: " + plantName)
+        // console.log("Species: " + species)
+        // console.log("Location id: " + selectedLocation)
+        // console.log("Light: " + lightValue)
+        // console.log("Water: " + waterValue)
+        // console.log("Image: " + image)
     }
 
     const createAlert = (msg) =>
@@ -137,20 +115,8 @@ const EditPlantScreen = ({route, navigation}) => {
         ]);
 
 
-    useEffect(() => {
-        getAllLocationForUser();
-    }, [])
-
-    useEffect(() => {
-        // setInitLocation(locations.filter(location => location.locationId === plant.locationId)[0].locationName);
-
-        if (plant.locationId) {
-            setSelectedLocation(locations.filter(location => location.locationId === plant.locationId)[0]);
-        }
-
-    }, [locations])
-
     return(
+        <ScrollView>
         <View style={styles.appContainer}>
             <View style={styles.imageNameContainer}>
                 {/*    image and name/species*/}
@@ -171,24 +137,16 @@ const EditPlantScreen = ({route, navigation}) => {
                         <Pressable  onPress={() => selectImage(false)}>
                             <BigAdd/>
                         </Pressable>
-                        <Pressable  onPress={() => setImage(BASE_URL + "/images/download/" + userInfo.userId + "/plant/defaultPlant.jpg")}>
-                            <BigAdd/>
-                        </Pressable>
                     </View>
 
 
-                    <Pressable style={styles.saveButton} onPress={() => edit()}>
+                    <Pressable style={styles.saveButton} onPress={() => console.log("ADD DIARY BUTTON PRESS!")}>
                         <SaveSvg/>
                     </Pressable>
 
                     <View style={styles.nameInputContainer}>
-                        {/*<Text>Name</Text>*/}
                         <View  style={styles.nameSpeciesContainer} >
-                            <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} placeholderTextColor={"black"} value={plantName} onChangeText={(text) => setPlantName(text)}/>
-                        </View>
-
-                        <View  style={styles.nameSpeciesContainer} >
-                            <TextInput style={styles.speciesInput} underlineColorAndroid={"transparent"} placeholder={"enter species"} placeholderTextColor={"black"} value={species} onChangeText={(text) => setSpecies(text)}/>
+                            <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} placeholderTextColor={"black"} value={title} onChangeText={(text) => setTitle(text)}/>
                         </View>
                     </View>
 
@@ -199,63 +157,27 @@ const EditPlantScreen = ({route, navigation}) => {
 
 
             {/*    DATA SECTION*/}
-            <View style={styles.locationWaterLightContainer}>
-                {/*    location light water*/}
+            <View style={styles.dateDescriptionContainer}>
+                <View style={{marginBottom: 20, backgroundColor:"yellow"}}><Text>test</Text></View>
+                <View style={{flex: 1, backgroundColor:"blue"}}><Text>test2</Text></View>
+                {/*/!*    location light water*!/*/}
+                {/*/!*    light*!/*/}
+                {/*<View style={styles.dataContainer}>*/}
+                {/*    <Text style={styles.dataText}>Date</Text>*/}
+                {/*</View>*/}
 
-                <View style={styles.dataContainer}>
-                    {/*    location*/}
-
-                    <SelectDropdown
-                        buttonStyle={{width: "100%"}}
-                        data={locations}
-                        defaultButtonText={"select location..."}
-                        defaultValue={selectedLocation}
-                        onSelect={(selectedItem, index) => {
-                            console.log(selectedItem, index)
-                            // let location = locations.filter(location =>location.locationName === selectedItem)
-                            setSelectedLocation(selectedItem)
-                            setLightValue(selectedItem.light)
-                            setWaterValue(selectedItem.water)
-                        }}
-                        buttonTextAfterSelection={(selectedItem, index) => {
-                            // text represented after item is selected
-                            // if data array is an array of objects then return selectedItem.property to render after item is selected
-                            return selectedItem.locationName
-                        }}
-                        rowTextForSelection={(item, index) => {
-                            // text represented for each item in dropdown
-                            // if data array is an array of objects then return item.property to represent item in dropdown
-                            return item.locationName
-                        }} />
-                </View>
-
-                {/*    light*/}
-                <View style={styles.dataContainer}>
-                    <Text style={styles.dataText}>Light</Text>
-                    <View style={styles.lightWaterIconContainer}>
-                        {
-                            [...Array(5).keys()].map( i =><Pressable onPress={() => setLightValue(i+1)}>
-                                {i < lightValue ? <SunFilledSvg/> : <SunEmptySvg/>}
-                            </Pressable>)
-                        }
-                    </View>
-                </View>
-
-                {/*    water*/}
-                <View style={styles.dataContainer}>
-                    <Text style={styles.dataText}>Water</Text>
-                    <View style={styles.lightWaterIconContainer}>
-                        {
-                            [...Array(5).keys()].map( i =><Pressable onPress={() => setWaterValue(i+1)}>
-                                {i < waterValue ? <DropletFilledSvg/> : <DropletEmptySvg/>}
-                            </Pressable>)
-                        }
-                    </View>
-                </View>
+                {/*/!*    water*!/*/}
+                {/*<View style={styles.dataContainer}>*/}
+                {/*    <Text style={styles.dataText}>Description</Text>*/}
+                {/*    <View style={{backgroundColor: "yellow", height: "100%"}}>*/}
+                {/*        <TextInput multiline={true} placeholder={"Enter diary entry description..."} placeholderTextColor={"black"} value={description} onChangeText={(text) => setDescription(text)}/>*/}
+                {/*    </View>*/}
+                {/*</View>*/}
 
 
             </View>
         </View>
+        </ScrollView>
     )
 }
 
@@ -270,17 +192,18 @@ const styles = StyleSheet.create({
 
     imageNameContainer: {
         flex: 2,
-        backgroundColor: "#fff",
+        backgroundColor: "red",
         width: "100%",
         paddingBottom: 90,
     },
 
-    locationWaterLightContainer: {
+    dateDescriptionContainer: {
         flex: 2,
-        backgroundColor: "#DFDFD9",
+        backgroundColor: "green",
         width: "100%",
+        height: 500,
         padding: 15,
-        alignItems: "center"
+        // alignItems: "center",
     },
 
     imageContainer: {
@@ -368,22 +291,16 @@ const styles = StyleSheet.create({
 
     dataContainer: {
         width: "80%",
-        // backgroundColor: "blue",
-        marginBottom: 32
+        backgroundColor: "blue",
+        marginBottom: 32,
+        // gap: 20
     },
 
     dataText: {
         fontSize: 32,
         fontWeight: "bold"
     },
-
-
-    lightWaterIconContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between"
-    }
 })
 
 
-export default EditPlantScreen;
+export default AddDiaryScreen;

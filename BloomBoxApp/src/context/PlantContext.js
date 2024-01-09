@@ -4,6 +4,7 @@ import {BASE_URL} from "../config";
 import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
 import {AuthContext} from "./AuthContext";
 import {ImageContext} from "./ImageContext";
+import {RemainderContext} from "./RemainderContext";
 
 export const PlantContext = createContext();
 
@@ -13,6 +14,7 @@ export const PlantProvider = ({children}) => {
 
     const {userInfo} = useContext(AuthContext);
     const {uploadImage, deleteImage} = useContext(ImageContext);
+    const {addRemainders} = useContext(RemainderContext);
 
     const getAllPlants = () => {
         setIsLoading(true);
@@ -28,7 +30,7 @@ export const PlantProvider = ({children}) => {
             })
     }
 
-    const addPlant = (locationId, plantName, species, light, water, image, imageUrl) => {
+    const addPlant = (locationId, plantName, species, light, water, frequency, image, imageUrl, firstRemainder) => {
         setIsLoading(true);
 
         if (image !== "") {
@@ -40,11 +42,49 @@ export const PlantProvider = ({children}) => {
                 species: species,
                 light: light,
                 water: water,
-                imageUrl: imageUrl
+                frequency: frequency,
+                image: imageUrl
             }).then(res => {
                 let newPlant = res.data;
                 console.log(newPlant);
                 setPlants([...plants, newPlant]);
+                if (firstRemainder){
+                    let remainderDay1 = new Date();
+                    // console.log("date: " + date);
+                    let remainderDay2 = new Date();
+                    remainderDay2.setDate(remainderDay2.getDate() + frequency);
+                    // console.log("date1: " + remainderDay2);
+                    let remainderDay3 = new Date();
+                    remainderDay3.setDate(remainderDay3.getDate() + (2*frequency));
+                    // console.log("date1: " + remainderDay3);
+
+                    addRemainders([{
+                        userId: userInfo.userId,
+                        plantId: newPlant.plantId,
+                        remainderType: "watering",
+                        remainderDay: remainderDay1,
+                        done: false,
+                        doneDate: null
+                    }, {
+                        userId: userInfo.userId,
+                        plantId: newPlant.plantId,
+                        remainderType: "watering",
+                        remainderDay: remainderDay2,
+                        done: false,
+                        doneDate: null
+                    }, {
+                        userId: userInfo.userId,
+                        plantId: newPlant.plantId,
+                        remainderType: "watering",
+                        remainderDay: remainderDay3,
+                        done: false,
+                        doneDate: null
+                    }]);
+                    // addRemainder(newPlant.plantId, "watering", date1, false, null);
+                    // addRemainder(newPlant.plantId, "watering", date2, false, null);
+                    //add3Remainders(newPlant.plantId, "watering", date, date1, date2, false, null);
+                    // addRemainder(newPlant.plantId, "watering", date.getDate() + (2*frequency), false, null);
+                }
                 setIsLoading(false);
             }).catch(e => {
                 console.log(`plant adding error ${e}`);
@@ -60,11 +100,45 @@ export const PlantProvider = ({children}) => {
                 species: species,
                 light: light,
                 water: water,
-                imageUrl: "defaultPlant.jpg"
+                frequency: frequency,
+                image: "defaultPlant.jpg"
             }).then(res => {
                 let newPlant = res.data;
                 console.log(newPlant);
                 setPlants([...plants, newPlant]);
+                if (firstRemainder){
+                    let remainderDay1 = new Date();
+                    // console.log("date: " + date);
+                    let remainderDay2 = new Date();
+                    remainderDay2.setDate(remainderDay2.getDate() + frequency);
+                    // console.log("date1: " + remainderDay2);
+                    let remainderDay3 = new Date();
+                    remainderDay3.setDate(remainderDay3.getDate() + (2*frequency));
+                    // console.log("date1: " + remainderDay3);
+
+                    addRemainders([{
+                        userId: userInfo.userId,
+                        plantId: newPlant.plantId,
+                        remainderType: "watering",
+                        remainderDay: remainderDay1,
+                        done: false,
+                        doneDate: null
+                    }, {
+                        userId: userInfo.userId,
+                        plantId: newPlant.plantId,
+                        remainderType: "watering",
+                        remainderDay: remainderDay2,
+                        done: false,
+                        doneDate: null
+                    }, {
+                        userId: userInfo.userId,
+                        plantId: newPlant.plantId,
+                        remainderType: "watering",
+                        remainderDay: remainderDay3,
+                        done: false,
+                        doneDate: null
+                    }]);
+                }
                 setIsLoading(false);
             }).catch(e => {
                 console.log(`plant adding error ${e}`);
@@ -79,16 +153,16 @@ export const PlantProvider = ({children}) => {
         const editPlant = (plant, image, oldImageName) => {
             setIsLoading(true);
 
-            if (plant.imageUrl !== "defaultPlant.jpg"){
+            if (plant.image !== "defaultPlant.jpg"){
                 // if new image is not default
 
                 // delete old image from server
-                if (oldImageName !== "defaultPlant.jpg" && plant.imageUrl !== oldImageName){
+                if (oldImageName !== "defaultPlant.jpg" && plant.image !== oldImageName){
                     deleteImage(oldImageName, userInfo.userId, "plant");
                 }
 
                 // upload new image to server if different
-                if (plant.imageUrl !== oldImageName){
+                if (plant.image !== oldImageName){
                     uploadImage(image, userInfo.userId, "plant");
                 }
 
@@ -100,7 +174,8 @@ export const PlantProvider = ({children}) => {
                     species: plant.species,
                     light: plant.light,
                     water: plant.water,
-                    imageUrl: plant.imageUrl
+                    frequency: plant.frequency,
+                    image: plant.image
                 }).then(res => {
                     let newPlant = res.data;
                     console.log(newPlant);
@@ -110,7 +185,7 @@ export const PlantProvider = ({children}) => {
 
                     setIsLoading(false);
                 }).catch(e => {
-                    console.log(`plant adding error ${e}`);
+                    console.log(`plant editing error ${e}`);
                     setIsLoading(false);
 
                 })
@@ -131,7 +206,8 @@ export const PlantProvider = ({children}) => {
                     species: plant.species,
                     light: plant.light,
                     water: plant.water,
-                    imageUrl: "defaultPlant.jpg"
+                    frequency: plant.frequency,
+                    image: "defaultPlant.jpg"
                 }).then(res => {
                     let newPlant = res.data;
                     console.log(newPlant);
@@ -141,8 +217,9 @@ export const PlantProvider = ({children}) => {
 
                     setIsLoading(false);
                 }).catch(e => {
-                    console.log(`plant adding error ${e}`);
+                    console.log(`plant editing error ${e}`);
                     setIsLoading(false);
+
 
                 })
             }
