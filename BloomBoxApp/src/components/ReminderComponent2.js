@@ -16,6 +16,7 @@ import WateringDoneSvg from "../images/SVGs/WateringDone";
 import {RemainderContext} from "../context/RemainderContext";
 import CheckButtonOverdueSvg from "../images/SVGs/CheckButtonOverdue";
 import WateringOverdueSvg from "../images/SVGs/WateringOverdue";
+import FailedSvg from "../images/SVGs/Failed";
 
 const ReminderComponent2 = ({remainder}) => {
     const [done, setDone] = useState(remainder.done)
@@ -51,53 +52,64 @@ const ReminderComponent2 = ({remainder}) => {
 
     return (
         <>
-            {done ?
-                <View style={styles.reminderContainerDone}>
-                <View style={styles.reminderTitleContainer}>
-                    <WateringDoneSvg />
-                    <Text style={styles.reminderTitleDone}>{remainder.remainderType}</Text>
-                </View>
-                <Pressable onPress={() => handleDonePress()}>
-                    <CheckButtonDoneSvg />
-                </Pressable>
+            {remainder.failed ?
+                <View style={styles.reminderContainerFailed}>
+                    <View style={styles.reminderTitleContainer}>
+                        <WateringDoneSvg />
+                        <Text style={styles.reminderTitleFailed}>{remainder.remainderType}</Text>
+                    </View>
+                    <View>
+                        <FailedSvg />
+                    </View>
                 </View>
                 :
-                (differenceInDays > 3 ?
-                    <View style={styles.reminderContainerVeryOverdue}>
+                (remainder.done ?
+                    <View style={styles.reminderContainerDone}>
                         <View style={styles.reminderTitleContainer}>
-                            <WateringOverdueSvg />
-                            <Text style={styles.reminderTitleOverdue}>{remainder.remainderType}</Text>
+                            <WateringDoneSvg />
+                            <Text style={styles.reminderTitleDone}>{remainder.remainderType}</Text>
                         </View>
                         <Pressable onPress={() => handleDonePress()}>
-                            <CheckButtonOverdueSvg />
+                            <CheckButtonDoneSvg />
                         </Pressable>
-
                     </View>
                     :
-                    (differenceInDays > 1 ?
-                        <View style={styles.reminderContainerOverdue}>
-                            <View style={styles.reminderTitleContainer}>
-                                <WateringOverdueSvg />
-                                <Text style={styles.reminderTitleOverdue}>{remainder.remainderType}</Text>
-                            </View>
-                            <Pressable onPress={() => handleDonePress()}>
-                                <CheckButtonOverdueSvg />
-                            </Pressable>
+                    (differenceInDays > 3 ?
+                            <View style={styles.reminderContainerVeryOverdue}>
+                                <View style={styles.reminderTitleContainer}>
+                                    <WateringOverdueSvg />
+                                    <Text style={styles.reminderTitleOverdue}>{remainder.remainderType}</Text>
+                                </View>
+                                <Pressable onPress={() => handleDonePress()}>
+                                    <CheckButtonOverdueSvg />
+                                </Pressable>
 
-                        </View>
-                        :
-                        <View style={styles.reminderContainer}>
-                            <View style={styles.reminderTitleContainer}>
-                                <WateringSvg />
-                                <Text style={styles.reminderTitle}>{remainder.remainderType}</Text>
                             </View>
-                            <Pressable onPress={() => handleDonePress()}>
-                                <CheckButtonSvg />
-                            </Pressable>
+                            :
+                            (differenceInDays > 1 ?
+                                <View style={styles.reminderContainerOverdue}>
+                                    <View style={styles.reminderTitleContainer}>
+                                        <WateringOverdueSvg />
+                                        <Text style={styles.reminderTitleOverdue}>{remainder.remainderType}</Text>
+                                    </View>
+                                    <Pressable onPress={() => handleDonePress()}>
+                                        <CheckButtonOverdueSvg />
+                                    </Pressable>
 
-                        </View>)
-                )
-                }
+                                </View>
+                                :
+                                <View style={styles.reminderContainer}>
+                                    <View style={styles.reminderTitleContainer}>
+                                        <WateringSvg />
+                                        <Text style={styles.reminderTitle}>{remainder.remainderType}</Text>
+                                    </View>
+                                    <Pressable onPress={() => handleDonePress()}>
+                                        <CheckButtonSvg />
+                                    </Pressable>
+
+                                </View>)
+                    ))
+            }
         </>
 
 
@@ -121,6 +133,20 @@ const styles = StyleSheet.create({
     },
 
     reminderContainerDone: {
+        backgroundColor : "#DFDFD9",
+        flex: 1,
+        flexDirection: "row",
+        padding: 20,
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 20,
+        borderRadius: 23,
+        width: "90%",
+        margin: 10,
+        marginBottom: 50
+    },
+
+    reminderContainerFailed : {
         backgroundColor : "#DFDFD9",
         flex: 1,
         flexDirection: "row",
@@ -181,6 +207,13 @@ const styles = StyleSheet.create({
         color: "#A9A9A7",
         textTransform: "uppercase",
         textDecorationLine: "line-through"
+    },
+
+    reminderTitleFailed: {
+        fontSize: 24,
+        color: "#A9A9A7",
+        textTransform: "uppercase",
+        // textDecorationLine: "line-through"
     },
 
     reminderTitleOverdue: {
