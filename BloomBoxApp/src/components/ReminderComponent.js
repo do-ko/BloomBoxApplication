@@ -36,7 +36,6 @@ const ReminderComponent = ({remainder, name}) => {
     setDone(!done);
     remainder.done = !done;
     editRemainder(remainder);
-
   }
   const getDifferenceInDays = () => {
     let Difference_In_Time = Date.now() - new Date(Date.parse(remainder.remainderDay));

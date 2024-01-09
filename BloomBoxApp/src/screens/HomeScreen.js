@@ -37,6 +37,21 @@ const HomeScreen = ({ navigation }) => {
     setReminder((currentReminders) => [...currentReminders, enteredReminder]);
   }
 
+  const formatDateToString = (date) => {
+    return `${date.getFullYear()}-${date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
+  }
+  const formatData = () => {
+    let today = formatDateToString(new Date());
+    let tempData = remainders;
+    console.log(today);
+    console.log(tempData);
+    let test = tempData.sort((rem1, rem2) => {
+      return new Date(Date.parse(rem1.remainderDay)) - new Date(Date.parse(rem2.remainderDay));
+    })
+    console.log(tempData);
+    return tempData;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
@@ -64,7 +79,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.reminderListBackground}>
 
           <FlatList
-              data={remainders}
+              data={formatData()}
               renderItem={({ item }) => (
                   <ReminderComponent remainder={item} name={item.plantName}/>
               )}
