@@ -17,7 +17,7 @@ import {RemainderContext} from "../context/RemainderContext";
 import CheckButtonOverdueSvg from "../images/SVGs/CheckButtonOverdue";
 import WateringOverdueSvg from "../images/SVGs/WateringOverdue";
 
-const ReminderComponent = ({remainder}) => {
+const ReminderComponent2 = ({remainder}) => {
     const [done, setDone] = useState(remainder.done)
     const [doneDate, setDoneDate] = useState(remainder.doneDate)
     const {editRemainder} = useContext(RemainderContext);
@@ -190,4 +190,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ReminderComponent;
+export default ReminderComponent2;

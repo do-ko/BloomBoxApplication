@@ -9,6 +9,8 @@ export const RemainderProvider = ({children}) => {
     const {userInfo} = useContext(AuthContext);
     const [remainders, setRemainders] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [wasEdited, setWasEdited] = useState(false);
+
     const getRemaindersByUserId = () => {
         setIsLoading(true);
         axios.get(`${BASE_URL}/remainders/user/${userInfo.userId}`)
@@ -37,17 +39,19 @@ export const RemainderProvider = ({children}) => {
             })
     }
 
-    const addRemainder = (plantId, remainderType, remainderDay, done, doneDate) => {
+    const addRemainder = (plantId, plantName, remainderType, remainderDay, done, doneDate, failed) => {
         console.log("remainders:");
         console.log(remainders);
         setIsLoading(true);
         axios.post(`${BASE_URL}/remainders`, {
                 userId: userInfo.userId,
                 plantId: plantId,
+                plantName: plantName,
                 remainderType: remainderType,
                 remainderDay: remainderDay,
                 done: done,
-                doneDate: doneDate
+                doneDate: doneDate,
+                failed: failed
             }).then(res => {
                 let newRemainder = res.data;
                 console.log(newRemainder);
@@ -61,8 +65,8 @@ export const RemainderProvider = ({children}) => {
     }
 
     const addRemainders = (remaindersToAdd) => {
-        console.log("remainders:");
-        console.log(remainders);
+        // console.log("remainders:");
+        // console.log(remainders);
         setIsLoading(true);
         axios.post(`${BASE_URL}/remainders/many`, remaindersToAdd
         ).then(res => {
@@ -88,15 +92,18 @@ export const RemainderProvider = ({children}) => {
             remainderId : remainder.remainderId,
             userId: userInfo.userId,
             plantId: remainder.plantId,
+            plantName: remainder.plantName,
             remainderType: remainder.remainderType,
             remainderDay: remainder.remainderDay,
             done: remainder.done,
-            doneDate: remainder.doneDate
+            doneDate: remainder.doneDate,
+            failed: remainder.failed
         }).then(res => {
             let newRemainder = res.data;
             console.log(newRemainder);
             const editArray = remainders.map(rem => rem.remainderId === newRemainder.remainderId ? newRemainder : rem)
             setRemainders(editArray)
+            setWasEdited(true);
 
             setIsLoading(false);
         }).catch(e => {
@@ -107,7 +114,7 @@ export const RemainderProvider = ({children}) => {
     }
 
     return(
-        <RemainderContext.Provider value={{isLoading, remainders, getRemaindersByUserId, getRemaindersByPlantId, addRemainder, addRemainders, editRemainder}}>
+        <RemainderContext.Provider value={{isLoading, remainders, getRemaindersByUserId, getRemaindersByPlantId, addRemainder, addRemainders, editRemainder, wasEdited}}>
             {children}
         </RemainderContext.Provider>
     );

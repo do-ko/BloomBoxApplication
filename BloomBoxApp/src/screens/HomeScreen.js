@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {
   Button,
   Pressable,
@@ -6,32 +6,62 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
+  Image, Animated, FlatList,
 } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 import { AuthContext } from "../context/AuthContext";
 import BarsSvg from "../images/SVGs/Bars";
 import HangingLampSvg from "../images/SVGs/HangingLamp";
 import Plant2 from "../images/SVGs/Plant2";
+import ReminderComponent2 from "../components/ReminderComponent2";
+import ReminderComponent from "../components/ReminderComponent";
+import {RemainderContext} from "../context/RemainderContext";
+import {PlantContext} from "../context/PlantContext";
+
+
 
 const HomeScreen = ({ navigation }) => {
   const { isLoading, logout, userInfo } = useContext(AuthContext);
-  const [enteredReminder, setEnteredReminder] = useState(1);
-  const [reminder, setReminder] = useState([]);
+  const { remainders, getRemaindersByUserId, wasEdited } = useContext(RemainderContext);
 
-  function reminderInputHandler() {
-    setEnteredReminder(enteredReminder + 1);
+  const formatDateToString = (date) => {
+    return `${date.getFullYear()}-${date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
+  }
+  // const formatData = () => {
+  //   let today = formatDateToString(new Date());
+  //   let tempData = remainders;
+  //   console.log(today);
+  //   console.log(tempData);
+  //   let test = tempData.sort((rem1, rem2) => {
+  //     return new Date(Date.parse(rem1.remainderDay)) - new Date(Date.parse(rem2.remainderDay));
+  //   })
+  //   console.log(tempData);
+  //   return tempData;
+  // }
+  const formatDataForList = () => {
+    let today = formatDateToString(new Date());
+    let tempData = remainders;
+
+    tempData.sort((rem1, rem2) => {
+      return new Date(Date.parse(rem1.remainderDay)) - new Date(Date.parse(rem2.remainderDay));
+    })
+    // console.log("=====DATA-NOW=====")
+    // console.log(tempData.filter(rem => new Date(Date.parse(rem.remainderDay)) - new Date() <= 0));
+
+    return tempData.filter(rem => new Date(Date.parse(rem.remainderDay)) - new Date() <= 0);
   }
 
-  function addReminder() {
-    setReminder((currentReminders) => [...currentReminders, enteredReminder]);
-  }
+  useEffect(() => {
+    getRemaindersByUserId();
+  }, [])
+
+  useEffect(() => {
+    console.log("reminders changed ",remainders)
+  }, [remainders])
 
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        {/* <Text style={styles.userInfo}>{userInfo.userLogin}</Text> */}
-        {/* <View style={styles.barsContainer}></View> */}
         <View style={styles.rightTopBarMargin} />
         <View style={styles.welcomeImageContainer}>
           <Image
@@ -50,34 +80,18 @@ const HomeScreen = ({ navigation }) => {
         <BarsSvg />
       </Pressable>
 
-
-      <Button
-        title="Add reminder"
-        onPress={(reminderInputHandler, addReminder)}
-        //color={reminder ? "blue" : "green"}
-        style={styles.addReminderBtn}
-      />
       <Spinner visible={isLoading} />
-
-      {/* <View style={styles.headerTextContainer}>
-        
-        {/* <Text style={styles.headerText}>Welcome</Text> */}
-      {/* <Text style={styles.headerText}>back</Text> */}
-      {/* <Text style={styles.subheaderText}>here are your reminders</Text> */}
-      {/*<HangingLampSvg style={styles.hangingLamp1} />*/}
-      {/* <HangingLampSvg style={styles.hangingLamp2} /> */}
-      {/* <Plant2 style={styles.plant2} /> */}
-      {/*</View> */}
-
       <View style={styles.reminderListContainer}>
         <View style={styles.reminderListBackground}>
-          <ScrollView>
-            {reminder.map((r) => (
-              <View style={styles.reminderItem}>
-                <Text style={styles.reminderItemText}>Hello</Text>
-              </View>
-            ))}
-          </ScrollView>
+
+          <FlatList
+              data={formatDataForList()}
+              renderItem={({ item }) => (
+                  <ReminderComponent remainder={item} />
+              )}
+              keyExtractor={(item) => item.remainderId.toString()}
+              extraData={remainders}
+          />
         </View>
       </View>
     </View>

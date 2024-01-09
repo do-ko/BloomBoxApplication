@@ -13,6 +13,8 @@ public class Remainder {
     private Integer remainderId;
     @Column(name = "plant_id")
     private Integer plantId;
+    @Column(name = "plant_name")
+    private String plantName;
 
     @Column(name = "user_id")
     private Integer userId;
@@ -24,17 +26,21 @@ public class Remainder {
     private Boolean done;
     @Column(name = "done_date")
     private Date doneDate;
+    @Column(name = "failed")
+    private Boolean failed;
 
     public Remainder() {
     }
 
-    public Remainder(Integer plantId, Integer userId, String remainderType, Date remainderDay, Boolean done, Date doneDate) {
+    public Remainder(Integer plantId, String plantName, Integer userId, String remainderType, Date remainderDay, Boolean done, Date doneDate, Boolean failed) {
         this.plantId = plantId;
+        this.plantName = plantName;
         this.userId = userId;
         this.remainderType = remainderType;
         this.remainderDay = remainderDay;
         this.done = done;
         this.doneDate = doneDate;
+        this.failed = failed;
     }
 
     public Integer getRemainderId() {
@@ -51,6 +57,14 @@ public class Remainder {
 
     public void setPlantId(Integer plantId) {
         this.plantId = plantId;
+    }
+
+    public String getPlantName() {
+        return plantName;
+    }
+
+    public void setPlantName(String plantName) {
+        this.plantName = plantName;
     }
 
     public Integer getUserId() {
@@ -93,16 +107,25 @@ public class Remainder {
         this.doneDate = doneDate;
     }
 
+    public Boolean getFailed() {
+        return failed;
+    }
+
+    public void setFailed(Boolean failed) {
+        this.failed = failed;
+    }
     @Override
     public String toString() {
         return "Remainder{" +
                 "remainderId=" + remainderId +
                 ", plantId=" + plantId +
+                ", plantName='" + plantName + '\'' +
                 ", userId=" + userId +
                 ", remainderType='" + remainderType + '\'' +
                 ", remainderDay=" + remainderDay +
                 ", done=" + done +
                 ", doneDate=" + doneDate +
+                ", failed=" + failed +
                 '}';
     }
 }
