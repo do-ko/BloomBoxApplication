@@ -118,8 +118,8 @@ const ReminderComponent = ({remainder}) => {
                             <View style={styles.remainderTitleContainer}>
                               <WateringSvg />
                               <View>
-                                <Text>{remainder.remainderType}</Text>
-                                <Text>{remainder.plantName}</Text>
+                                <Text style={styles.reminderTitle}>{remainder.remainderType}</Text>
+                                <Text style={styles.reminderPlantName}>{remainder.plantName}</Text>
                               </View>
                             </View>
 

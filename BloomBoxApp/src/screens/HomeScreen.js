@@ -24,16 +24,31 @@ const HomeScreen = ({ navigation }) => {
   const { isLoading, logout, userInfo } = useContext(AuthContext);
   const { remainders, getRemaindersByUserId, wasEdited } = useContext(RemainderContext);
 
+  const formatDateToString = (date) => {
+    return `${date.getFullYear()}-${date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
+  }
+  // const formatData = () => {
+  //   let today = formatDateToString(new Date());
+  //   let tempData = remainders;
+  //   console.log(today);
+  //   console.log(tempData);
+  //   let test = tempData.sort((rem1, rem2) => {
+  //     return new Date(Date.parse(rem1.remainderDay)) - new Date(Date.parse(rem2.remainderDay));
+  //   })
+  //   console.log(tempData);
+  //   return tempData;
+  // }
   const formatDataForList = () => {
+    let today = formatDateToString(new Date());
     let tempData = remainders;
 
     tempData.sort((rem1, rem2) => {
       return new Date(Date.parse(rem1.remainderDay)) - new Date(Date.parse(rem2.remainderDay));
     })
     console.log("=====DATA-NOW=====")
-    console.log(tempData);
+    // console.log(tempData.filter(rem => new Date(Date.parse(rem.remainderDay)) - new Date() <= 0));
 
-    return tempData;
+    return tempData.filter(rem => new Date(Date.parse(rem.remainderDay)) - new Date() <= 0);
   }
 
   useEffect(() => {
@@ -70,7 +85,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.reminderListBackground}>
 
           <FlatList
-              data={remainders}
+              data={formatDataForList()}
               renderItem={({ item }) => (
                   <ReminderComponent remainder={item} />
               )}
