@@ -13,6 +13,8 @@ public class Remainder {
     private Integer remainderId;
     @Column(name = "plant_id")
     private Integer plantId;
+    @Column(name = "plant_name")
+    private String plantName;
 
     @Column(name = "user_id")
     private Integer userId;
@@ -28,8 +30,9 @@ public class Remainder {
     public Remainder() {
     }
 
-    public Remainder(Integer plantId, Integer userId, String remainderType, Date remainderDay, Boolean done, Date doneDate) {
+    public Remainder(Integer plantId, String plantName, Integer userId, String remainderType, Date remainderDay, Boolean done, Date doneDate) {
         this.plantId = plantId;
+        this.plantName = plantName;
         this.userId = userId;
         this.remainderType = remainderType;
         this.remainderDay = remainderDay;
@@ -51,6 +54,14 @@ public class Remainder {
 
     public void setPlantId(Integer plantId) {
         this.plantId = plantId;
+    }
+
+    public String getPlantName() {
+        return plantName;
+    }
+
+    public void setPlantName(String plantName) {
+        this.plantName = plantName;
     }
 
     public Integer getUserId() {
@@ -98,6 +109,7 @@ public class Remainder {
         return "Remainder{" +
                 "remainderId=" + remainderId +
                 ", plantId=" + plantId +
+                ", plantName=" + plantName +
                 ", userId=" + userId +
                 ", remainderType='" + remainderType + '\'' +
                 ", remainderDay=" + remainderDay +

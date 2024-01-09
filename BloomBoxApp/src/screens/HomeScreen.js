@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {
   Button,
   Pressable,
@@ -6,18 +6,28 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
+  Image, Animated, FlatList,
 } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 import { AuthContext } from "../context/AuthContext";
 import BarsSvg from "../images/SVGs/Bars";
 import HangingLampSvg from "../images/SVGs/HangingLamp";
 import Plant2 from "../images/SVGs/Plant2";
+import ReminderComponent2 from "../components/ReminderComponent2";
+import ReminderComponent from "../components/ReminderComponent";
+import {RemainderContext} from "../context/RemainderContext";
+import {PlantContext} from "../context/PlantContext";
 
 const HomeScreen = ({ navigation }) => {
   const { isLoading, logout, userInfo } = useContext(AuthContext);
+  const { remainders, getRemaindersByUserId } = useContext(RemainderContext);
+
   const [enteredReminder, setEnteredReminder] = useState(1);
   const [reminder, setReminder] = useState([]);
+
+  useEffect(() => {
+    getRemaindersByUserId();
+  }, [])
 
   function reminderInputHandler() {
     setEnteredReminder(enteredReminder + 1);
@@ -30,8 +40,6 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        {/* <Text style={styles.userInfo}>{userInfo.userLogin}</Text> */}
-        {/* <View style={styles.barsContainer}></View> */}
         <View style={styles.rightTopBarMargin} />
         <View style={styles.welcomeImageContainer}>
           <Image
@@ -51,33 +59,17 @@ const HomeScreen = ({ navigation }) => {
       </Pressable>
 
 
-      <Button
-        title="Add reminder"
-        onPress={(reminderInputHandler, addReminder)}
-        //color={reminder ? "blue" : "green"}
-        style={styles.addReminderBtn}
-      />
       <Spinner visible={isLoading} />
-
-      {/* <View style={styles.headerTextContainer}>
-        
-        {/* <Text style={styles.headerText}>Welcome</Text> */}
-      {/* <Text style={styles.headerText}>back</Text> */}
-      {/* <Text style={styles.subheaderText}>here are your reminders</Text> */}
-      {/*<HangingLampSvg style={styles.hangingLamp1} />*/}
-      {/* <HangingLampSvg style={styles.hangingLamp2} /> */}
-      {/* <Plant2 style={styles.plant2} /> */}
-      {/*</View> */}
-
       <View style={styles.reminderListContainer}>
         <View style={styles.reminderListBackground}>
-          <ScrollView>
-            {reminder.map((r) => (
-              <View style={styles.reminderItem}>
-                <Text style={styles.reminderItemText}>Hello</Text>
-              </View>
-            ))}
-          </ScrollView>
+
+          <FlatList
+              data={remainders}
+              renderItem={({ item }) => (
+                  <ReminderComponent remainder={item} name={item.plantName}/>
+              )}
+              keyExtractor={(item) => item.remainderId.toString()}
+          />
         </View>
       </View>
     </View>
