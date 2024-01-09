@@ -17,7 +17,7 @@ import {RemainderContext} from "../context/RemainderContext";
 import CheckButtonOverdueSvg from "../images/SVGs/CheckButtonOverdue";
 import WateringOverdueSvg from "../images/SVGs/WateringOverdue";
 
-const ReminderComponent = ({remainder, name}) => {
+const ReminderComponent = ({remainder}) => {
   const [done, setDone] = useState(remainder.done)
   const [doneDate, setDoneDate] = useState(remainder.doneDate)
   const {editRemainder} = useContext(RemainderContext);
@@ -46,27 +46,30 @@ const ReminderComponent = ({remainder, name}) => {
 
   useEffect(() => {
     getDifferenceInDays();
+    // console.log("done1:", remainder.done);
   }, [])
+
+  useEffect(() => {
+    // getDifferenceInDays();
+    console.log("done:", remainder.done);
+    // setDone(remainder.done)
+  }, [remainder])
+
+  const getStyle = (done,days) => {
+
+  }
+
 
   return (
       <>
-        {done ?
-            // <View style={styles.reminderContainerDone}>
-            //   <View style={styles.reminderTitleContainer}>
-            //     <WateringDoneSvg />
-            //     <Text style={styles.reminderTitleDone}>{remainder.remainderType}</Text>
-            //   </View>
-            //   <Pressable onPress={() => handleDonePress()}>
-            //     <CheckButtonDoneSvg />
-            //   </Pressable>
-            // </View>
+        {remainder.done ?
             <View style={styles.reminderContainerDone}>
               <View style={styles.remainderDataContainer}>
                 <View style={styles.remainderTitleContainer}>
                   <WateringDoneSvg />
                   <View>
                     <Text style={styles.reminderTitleDone}>{remainder.remainderType}</Text>
-                    <Text style={styles.reminderPlantNameDone}>{name}</Text>
+                    <Text style={styles.reminderPlantNameDone}>{remainder.plantName}</Text>
                   </View>
                 </View>
 
@@ -83,7 +86,7 @@ const ReminderComponent = ({remainder, name}) => {
                           <WateringOverdueSvg />
                           <View>
                             <Text style={styles.reminderTitleOverdue}>{remainder.remainderType}!!!</Text>
-                            <Text style={styles.reminderPlantNameOverdue}>Joffrey</Text>
+                            <Text style={styles.reminderPlantNameOverdue}>{remainder.plantName}</Text>
                           </View>
                         </View>
 
@@ -100,7 +103,7 @@ const ReminderComponent = ({remainder, name}) => {
                               <WateringOverdueSvg />
                               <View>
                                 <Text style={styles.reminderTitleOverdue}>{remainder.remainderType}!</Text>
-                                <Text style={styles.reminderPlantNameOverdue}>Joffrey</Text>
+                                <Text style={styles.reminderPlantNameOverdue}>{remainder.plantName}</Text>
                               </View>
                             </View>
 
@@ -115,8 +118,8 @@ const ReminderComponent = ({remainder, name}) => {
                             <View style={styles.remainderTitleContainer}>
                               <WateringSvg />
                               <View>
-                                <Text style={styles.reminderTitle}>{remainder.remainderType}</Text>
-                                <Text style={styles.reminderPlantName}>Joffrey</Text>
+                                <Text>{remainder.remainderType}</Text>
+                                <Text>{remainder.plantName}</Text>
                               </View>
                             </View>
 

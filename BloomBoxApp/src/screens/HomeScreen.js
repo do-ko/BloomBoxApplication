@@ -18,39 +18,31 @@ import ReminderComponent from "../components/ReminderComponent";
 import {RemainderContext} from "../context/RemainderContext";
 import {PlantContext} from "../context/PlantContext";
 
+
+
 const HomeScreen = ({ navigation }) => {
   const { isLoading, logout, userInfo } = useContext(AuthContext);
-  const { remainders, getRemaindersByUserId } = useContext(RemainderContext);
+  const { remainders, getRemaindersByUserId, wasEdited } = useContext(RemainderContext);
 
-  const [enteredReminder, setEnteredReminder] = useState(1);
-  const [reminder, setReminder] = useState([]);
+  const formatDataForList = () => {
+    let tempData = remainders;
+
+    tempData.sort((rem1, rem2) => {
+      return new Date(Date.parse(rem1.remainderDay)) - new Date(Date.parse(rem2.remainderDay));
+    })
+    console.log("=====DATA-NOW=====")
+    console.log(tempData);
+
+    return tempData;
+  }
 
   useEffect(() => {
     getRemaindersByUserId();
   }, [])
 
-  function reminderInputHandler() {
-    setEnteredReminder(enteredReminder + 1);
-  }
-
-  function addReminder() {
-    setReminder((currentReminders) => [...currentReminders, enteredReminder]);
-  }
-
-  const formatDateToString = (date) => {
-    return `${date.getFullYear()}-${date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
-  }
-  const formatData = () => {
-    let today = formatDateToString(new Date());
-    let tempData = remainders;
-    console.log(today);
-    console.log(tempData);
-    let test = tempData.sort((rem1, rem2) => {
-      return new Date(Date.parse(rem1.remainderDay)) - new Date(Date.parse(rem2.remainderDay));
-    })
-    console.log(tempData);
-    return tempData;
-  }
+  useEffect(() => {
+    console.log("reminders changed ",remainders)
+  }, [remainders])
 
   return (
     <View style={styles.container}>
@@ -73,17 +65,17 @@ const HomeScreen = ({ navigation }) => {
         <BarsSvg />
       </Pressable>
 
-
       <Spinner visible={isLoading} />
       <View style={styles.reminderListContainer}>
         <View style={styles.reminderListBackground}>
 
           <FlatList
-              data={formatData()}
+              data={remainders}
               renderItem={({ item }) => (
-                  <ReminderComponent remainder={item} name={item.plantName}/>
+                  <ReminderComponent remainder={item} />
               )}
               keyExtractor={(item) => item.remainderId.toString()}
+              extraData={remainders}
           />
         </View>
       </View>

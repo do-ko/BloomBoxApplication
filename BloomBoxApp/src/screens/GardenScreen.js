@@ -36,7 +36,7 @@ const GardenScreen = ({navigation}) => {
     useEffect(() => {
         getAllPlants();
         getAllLocationForUser();
-        getRemaindersByUserId();
+        // getRemaindersByUserId();
     }, [])
 
     return (

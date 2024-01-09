@@ -61,6 +61,7 @@ export const PlantProvider = ({children}) => {
                     addRemainders([{
                         userId: userInfo.userId,
                         plantId: newPlant.plantId,
+                        plantName: newPlant.plantName,
                         remainderType: "watering",
                         remainderDay: remainderDay1,
                         done: false,
@@ -68,6 +69,7 @@ export const PlantProvider = ({children}) => {
                     }, {
                         userId: userInfo.userId,
                         plantId: newPlant.plantId,
+                        plantName: newPlant.plantName,
                         remainderType: "watering",
                         remainderDay: remainderDay2,
                         done: false,
@@ -75,6 +77,7 @@ export const PlantProvider = ({children}) => {
                     }, {
                         userId: userInfo.userId,
                         plantId: newPlant.plantId,
+                        plantName: newPlant.plantName,
                         remainderType: "watering",
                         remainderDay: remainderDay3,
                         done: false,
@@ -119,6 +122,7 @@ export const PlantProvider = ({children}) => {
                     addRemainders([{
                         userId: userInfo.userId,
                         plantId: newPlant.plantId,
+                        plantName: newPlant.plantName,
                         remainderType: "watering",
                         remainderDay: remainderDay1,
                         done: false,
@@ -126,6 +130,7 @@ export const PlantProvider = ({children}) => {
                     }, {
                         userId: userInfo.userId,
                         plantId: newPlant.plantId,
+                        plantName: newPlant.plantName,
                         remainderType: "watering",
                         remainderDay: remainderDay2,
                         done: false,
@@ -133,6 +138,7 @@ export const PlantProvider = ({children}) => {
                     }, {
                         userId: userInfo.userId,
                         plantId: newPlant.plantId,
+                        plantName: newPlant.plantName,
                         remainderType: "watering",
                         remainderDay: remainderDay3,
                         done: false,
