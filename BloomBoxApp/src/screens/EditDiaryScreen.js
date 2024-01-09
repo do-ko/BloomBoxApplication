@@ -19,24 +19,105 @@ import {BASE_URL} from "../config";
 import SaveSvg from "../images/SVGs/SaveButton";
 import {AuthContext} from "../context/AuthContext";
 
-import {LocationContext} from "../context/LocationContext";
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+
+//import {LocationContext} from "../context/LocationContext";
 
 import BigEditSvg from "../images/SVGs/BigEdit";
 
 
+
+const imgDir = FileSystem.documentDirectory + "images/"
+
+const ensureDirExists = async () => {
+    const dirInfo = await FileSystem.getInfoAsync(imgDir);
+    if (!dirInfo.exists){
+        await FileSystem.makeDirectoryAsync(imgDir, {intermediates: true});
+    }
+}
+
 const DiaryScreen = ({route, navigation}) => {
     
-    const {diary} = route.params;
+    const {diary, diaryChanged} = route.params;
+    //const {editDiary} = useContext(DiaryContext);
     const {userInfo} = useContext(AuthContext);
+    
+    // initial data
+    const [title, setTitle] = useState(diary.title)
     const [date, setDate] = useState(new Date(Date.parse(diary.entryDate)))
-    //const {getAllDiariesForPlant, diaries, addDiary, isLoadingDiary} = useContext(DiaryContext);
-    //const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext)
+    const [image, setImage] = useState(BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image)
     
+    const initImageName = diary.image;
     
-    const diaryChanged = (diary)=>{
-        //   console.log("plant changed2: ",plant)
+    const selectImage = async (useLibrary) => {
+        let result;
+        if (useLibrary){
+            result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1,1],
+                quality: 0.75
+            });
+        } else {
+            await ImagePicker.requestCameraPermissionsAsync();
+
+            result = await ImagePicker.launchCameraAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1,1],
+                quality: 0.75
+            });
+        }
+
+        // do something with the image here
+        if (!result.canceled){
+            console.log(result.assets[0].uri)
+            saveImage(result.assets[0].uri);
+            setImage(result.assets[0].uri);
+        }
+    };
+
+    const saveImage = async (imageUri) => {
+        await ensureDirExists();
+        const filename = new Date().getTime() + ".jpg";
+        const dest = imgDir + filename;
+        await FileSystem.copyAsync({from: imageUri, to: dest});
+
+        setImage(dest);
+
+        console.log("dest coming:")
+        console.log(dest);
+    }
+
+    const edit = async () => {
+        if (title === ""){
+            createAlert("Title cannot be empty!");
+        } else {
+            console.log("Title: " + title)
+            console.log("Date: " + date)
+            console.log("Image: " + image)
+
+            // to delete from server
+            console.log("OldImage: " + initImageName)
+
+            // only change here in case of canceling
+            diary.title = title;
+            diary.date = date;
+            diary.image = image.split("/").pop();
+
+
+            editDiary(title, image, initImageName);
+            console.log("HELLO  - - - - - - - - -")
+            diaryChanged(diary)
+            navigation.goBack();
+        }
     }
     
+    
+    const {getAllDiariesForPlant, diaries, addDiary, isLoadingDiary, editDiary} = useContext(DiaryContext);
+    //const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext)
+
     return(
         
         <View style={styles.appContainer}>
@@ -45,7 +126,10 @@ const DiaryScreen = ({route, navigation}) => {
                 {/*    image and name/species*/}
 
                 <View style={styles.imageContainer}>
-                    <Image style={styles.imageStyle} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image}} />
+                    <View style={{overflow: "hidden"}}>
+                        {image === "" ? <View style={styles.image}></View> : <View style={styles.image}><Image source={{uri: image}} style={styles.imageStyle} /></View>}
+                    </View>
+                    {/* <Image style={styles.image} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image}} /> */}
                 </View>
                 
                 <View style={styles.headerContainer}>
@@ -56,7 +140,8 @@ const DiaryScreen = ({route, navigation}) => {
                     </View>
 
                     <View>
-                        <Text style={styles.diaryTitleText}>{diary.title}</Text>
+                        {/* <Text style={styles.diaryTitleText}>{diary.title}</Text> */}
+                        <TextInput style={styles.titleInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} placeholderTextColor={"black"} value={title} onChangeText={(text) => setTitle(text)}/>
                     </View>
                 </View>
                 
@@ -75,10 +160,21 @@ const DiaryScreen = ({route, navigation}) => {
             </Pressable>
             
             {/* TODO: navigate to edit diary page */}
-            <Pressable style={styles.editButton} onPress={() => navigation.navigate("EditDiary", {diary,diaryChanged})}>
-                <BigEditSvg/>
+            <Pressable style={styles.editButton} onPress={() => edit()}>
+                <SaveSvg/>
             </Pressable>
             
+            <View style={styles.addButton}>
+                <Pressable  onPress={() => selectImage(true)}>
+                    <BigAdd/>
+                </Pressable>
+                <Pressable  onPress={() => selectImage(false)}>
+                    <BigAdd/>
+                </Pressable>
+                <Pressable  onPress={() => setImage(BASE_URL + "/images/download/" + userInfo.userId + "/plant/defaultPlant.jpg")}>
+                    <BigAdd/>
+                </Pressable>
+            </View>
             
             
             <View style={styles.diaryEntryContainer}>
@@ -97,8 +193,7 @@ const DiaryScreen = ({route, navigation}) => {
 }
 
 const styles = StyleSheet.create({
-    
-    
+        
     // the whole app screen
     appContainer: {
         flex: 1,
@@ -123,14 +218,14 @@ const styles = StyleSheet.create({
     },
 
     image: {
-        flex: 1,
-        //width: "100%",
-        //height: "100%",
+        width: "100%",
+        height: "100%",
         borderBottomRightRadius: 80,
         borderBottomLeftRadius: 80,
-        //elevation: 10
+        backgroundColor: "#fff",
+        elevation: 10
     },
-    
+
     imageStyle: {
         width: "100%",
         height: "100%",
@@ -195,6 +290,12 @@ const styles = StyleSheet.create({
         color: "#20201D"
     },
     
+    titleInput: {
+        textAlign: "center",
+        fontSize: 36,
+        // fontWeight: "bold"
+    },
+    
     scrolledText: {
         flex: 1,
     },
@@ -227,6 +328,7 @@ const styles = StyleSheet.create({
 
     },
     
+        
 })
 
 export default DiaryScreen;

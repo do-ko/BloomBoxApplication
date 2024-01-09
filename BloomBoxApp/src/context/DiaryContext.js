@@ -9,6 +9,8 @@ export const DiaryContext = createContext();
 export const DiaryProvider = ({children}) => {
     const [isLoadingDiary, setIsLoading] = useState(false);
     const [diaries, setDiaries] = useState([]);
+    const {uploadImage, deleteImage} = useContext(ImageContext);
+    const {userInfo} = useContext(AuthContext);
 
     const getAllDiariesForPlant = (plantId) => {
         setIsLoading(true);
@@ -48,9 +50,78 @@ export const DiaryProvider = ({children}) => {
             setIsLoading(false);
         })
     }
+    
+    
+    const editDiary = (diary, image, oldImageName) => {
+        setIsLoading(true);
+        
+        
+        if (diary.image !== "defaultDiary.jpg"){
+            // if new image is not default
+
+            // delete old image from server
+            if (oldImageName !== "defaultDiary.jpg" && diary.image !== oldImageName){
+                deleteImage(oldImageName, userInfo.userId, "diary");
+            }
+
+            // upload new image to server if different
+            if (diary.image !== oldImageName){
+                uploadImage(image, userInfo.userId, "diary");
+            }
+
+            axios.put(`${BASE_URL}/diaries`, {
+                diaryId : diary.diaryId,
+                plantId : diary.plantId,
+                title : diary.title,
+                entry_date : diary.entryDate,
+                image: image
+            }).then(res => {
+                let newDiary = res.data;
+                //console.log("   This works!!!!!!!!!!   ");
+                console.log(newDiary);
+
+                const editArray = diaries.map(diary => diary.diaryId === newDiary.diaryId ? newDiary : diary)
+                setDiaries(editArray)
+
+                setIsLoading(false);
+            }).catch(e => {
+                console.log(`1rst diary editing error ${e}`);
+                setIsLoading(false);
+            })
+
+        } else {
+
+            // delete old image from server
+            if (oldImageName !== "defaultDiary.jpg"){
+                deleteImage(oldImageName, userInfo.userId, "diary");
+            }
+
+            
+            
+            axios.put(`${BASE_URL}/diaries`, {
+                diaryId : diary.diaryId,
+                plantId : plant.plantId,
+                title : diary.title,
+                entry_date : diary.entryDate,
+                image: "defualtDiary.jpg"
+            }).then(res => {
+                let newDiary = res.data;
+                console.log(newDiary);
+
+                const editArray = diaries.map(diary => diary.diaryId === newDiary.diaryId ? newDiary : diary)
+                setDiaries(editArray)
+
+                setIsLoading(false);
+            }).catch(e => {
+                console.log(`2nd diary editing error ${e}`);
+                setIsLoading(false);
+
+            })
+        }
+}
 
     return(
-        <DiaryContext.Provider value={{getAllDiariesForPlant, diaries, isLoadingDiary, addDiary}}>
+        <DiaryContext.Provider value={{getAllDiariesForPlant, diaries, isLoadingDiary, addDiary, editDiary}}>
             {children}
         </DiaryContext.Provider>
     );
