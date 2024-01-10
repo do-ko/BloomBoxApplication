@@ -95,7 +95,7 @@ public class RemainderRestController {
         return "Deleted remainder with id: " + remainderId;
     }
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 30000)
 //    @Scheduled(cron = "0 0 0 * * *")
     public void ReviewRemaindersAtMidnight(){
         List<Remainder> remainders = remainderService.findAllRemainders();
@@ -127,8 +127,8 @@ public class RemainderRestController {
                     String remainder1DateString = remainder1.getRemainderDay().toString().split(" ")[0];
                     if (!remainder1.getDone() && compareDates(todayDateString, remainder1DateString)){
                         System.out.println("Failed: " + remainder1.getRemainderId());
-                        remainder.setFailed(true);
-                        remainderService.save(remainder);
+                        remainder1.setFailed(true);
+                        remainderService.save(remainder1);
                     }
                 });
             }
@@ -178,16 +178,45 @@ public class RemainderRestController {
 
                         System.out.println(allNotDoneRemainders);
 //                        PUSH REMAINDERS BY DIFFERENCE IN TIME BETWEEN LATEST COMPLETED TASK AND TASK ON THE LIST
-                        allNotDoneRemainders.forEach(task -> {
-//                            get individual difference here
-                            LocalDate date = LocalDate.parse(task.getRemainderDay().toString().split(" ")[0]);
+//                        allNotDoneRemainders.forEach(task -> {
+////                            get individual difference here
+//                            LocalDate date = LocalDate.parse(task.getRemainderDay().toString().split(" ")[0]);
+//
 //                            System.out.println(date.toString());
 //                            System.out.println(localDateYesterday);
 //                            System.out.println(DAYS.between(localDateYesterday, date));
-                            long difference = plant.getFrequency() - DAYS.between(localDateYesterday, date);
+//
+//                            long difference = plant.getFrequency() - DAYS.between(localDateYesterday, date);
+//
+//                            System.out.println(difference);
 //                            System.out.println(date.plusDays(difference));
-                            Date newDate = Date.from(date.plusDays(difference).atStartOfDay(ZoneId.systemDefault()).toInstant());
+//                            Date newDate = Date.from(date.plusDays(difference).atStartOfDay(ZoneId.systemDefault()).toInstant());
 //                            System.out.println(newDate);
+//                            task.setRemainderDay(newDate);
+//                            remainderService.save(task);
+//                        });
+
+//                        GET SOONEST TASK IN THE FURURE -> GET DIFFERENCT AND SAVE IT -> ADDD IT TO FREQUENCY OF EACH UPCOMING TASK.
+                        String soonestUpcomingTaskDate = allNotDoneRemainders.get(0).getRemainderDay().toString().split(" ")[0];
+                        Remainder soonestUpcomingTask = allNotDoneRemainders.get(0);
+                        for (Remainder task : allNotDoneRemainders) {
+                            if (compareDates(soonestUpcomingTaskDate, task.getRemainderDay().toString().split(" ")[0])) {
+                                soonestUpcomingTaskDate = task.getRemainderDay().toString().split(" ")[0];
+                                soonestUpcomingTask = task;
+                            }
+                        }
+
+                        System.out.println(soonestUpcomingTask);
+                        LocalDate date = LocalDate.parse(soonestUpcomingTaskDate);
+                        long difference = plant.getFrequency() - DAYS.between(localDateYesterday, date);
+                        System.out.println(difference);
+
+
+                        allNotDoneRemainders.forEach(task -> {
+//                            get individual difference here
+                            LocalDate date1 = LocalDate.parse(task.getRemainderDay().toString().split(" ")[0]);
+                            Date newDate = Date.from(date1.plusDays(difference).atStartOfDay(ZoneId.systemDefault()).toInstant());
+                            System.out.println(newDate);
                             task.setRemainderDay(newDate);
                             remainderService.save(task);
                         });
