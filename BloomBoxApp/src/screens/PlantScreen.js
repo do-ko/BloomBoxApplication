@@ -39,6 +39,9 @@ import {ExpandingDot} from "react-native-animated-pagination-dots";
 
 
 
+import { Menu, MenuProvider, MenuTrigger, MenuOptions, MenuOption} from "react-native-popup-menu";
+
+
 const PlantScreen = ({route, navigation}) => {
     // plant contains all parameters of current plant
     // diaries contains all parameters belonging to this plant
@@ -220,8 +223,8 @@ const PlantScreen = ({route, navigation}) => {
                     }}/>
                     <View style={styles.diaryTitleContainer}>
                     {/*    TITLE AND BUTTON*/}
-                        <Text style={styles.Title}>Diary</Text>
-                        <Pressable style={styles.addDiaryButton} onPress={() => navigation.navigate("AddDiary")}>
+                        <Text style={styles.diaryTitle}>Diary</Text>
+                        <Pressable style={styles.addDiaryButton} onPress={() => navigation.navigate("AddDiary", {plant})}>
                             <Text style={styles.addDiaryText}>ADD</Text>
                         </Pressable>
                     </View>

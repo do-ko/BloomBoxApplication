@@ -11,6 +11,10 @@ import {
     TextInput,
     View
 } from "react-native";
+;
+import { Menu, MenuProvider, MenuTrigger, MenuOptions, MenuOption} from "react-native-popup-menu";
+
+
 import {PlantContext} from "../context/PlantContext";
 import {LocationContext} from "../context/LocationContext";
 import {SelectList} from "react-native-dropdown-select-list/index";
@@ -34,6 +38,8 @@ import DropletFilledSvg from "../images/SVGs/DropletFilled";
 import DropletEmptySvg from "../images/SVGs/DropletEmpty";
 import {DiaryContext} from "../context/DiaryContext";
 
+import DatePickerComponent from "../components/DatePickerComponent";
+
 const imgDir = FileSystem.documentDirectory + "images/"
 
 const ensureDirExists = async () => {
@@ -43,13 +49,18 @@ const ensureDirExists = async () => {
     }
 }
 
-const AddDiaryScreen = ({navigation}) => {
+const AddDiaryScreen = ({route, navigation}) => {
     const {addDiary} = useContext(DiaryContext);
-
+    
+    const {plant} = route.params;
+    
+    
     const [title, setTitle] = useState("");
-    const [image, setImage] = useState("")
-    const [date, setDate] = useState(null)
-    const [description, setDescription] = useState("")
+    const [image, setImage] = useState("");
+    const [date, setDate] = useState(new Date());
+    const [description, setDescription] = useState("");
+    
+    const [open, setOpen] = useState(false);
 
     const selectImage = async (useLibrary) => {
         let result;
@@ -90,14 +101,11 @@ const AddDiaryScreen = ({navigation}) => {
     }
 
     const addNewDiary = async () => {
-        if (plantName === ""){
-            createAlert("Add Name");
-        } else if (lightValue === 0){
-            createAlert("Select a light value")
-        } else if (waterValue === 0){
-            createAlert("Select a water value")
+        if (title === ""){
+            createAlert("Title cannot be empty.");
         } else {
-            addPlant(selectedLocation, plantName, species, lightValue, waterValue, image,  image.split("/").pop());
+            //addPlant(selectedLocation, plantName, species, lightValue, waterValue, image,  image.split("/").pop());
+            addDiary(plant.plantId, title, date, image, description);
             navigation.goBack();
         }
 
@@ -130,23 +138,43 @@ const AddDiaryScreen = ({navigation}) => {
                         <BackSvg/>
                     </Pressable>
 
-                    <View style={styles.addButton}>
+                    {/* <View style={styles.addButton}>
                         <Pressable  onPress={() => selectImage(true)}>
                             <BigAdd/>
                         </Pressable>
                         <Pressable  onPress={() => selectImage(false)}>
                             <BigAdd/>
                         </Pressable>
+                    </View> */}
+                    
+                    <View style={styles.menuContainer}>
+                        <MenuProvider style={styles.menuProvider}> 
+                            <Menu style={styles.menu}>
+                                <MenuTrigger customStyles={{triggerWrapper: styles.popup}}>
+                                    <BigAdd/>
+                                </MenuTrigger>
+                                
+                                <MenuOptions style={styles.menuOptions}>
+                                    <MenuOption onSelect={() => selectImage(false)} text="Take a photo" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                                    <View style={styles.divider}/>
+                                    <MenuOption onSelect={() => selectImage(true)} text="Open gallery" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                                </MenuOptions>
+                            </Menu>
+                        </MenuProvider>
                     </View>
 
 
-                    <Pressable style={styles.saveButton} onPress={() => console.log("ADD DIARY BUTTON PRESS!")}>
+                    <Pressable style={styles.saveButton} onPress={addNewDiary}>
                         <SaveSvg/>
                     </Pressable>
 
                     <View style={styles.nameInputContainer}>
                         <View  style={styles.nameSpeciesContainer} >
-                            <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} placeholderTextColor={"black"} value={title} onChangeText={(text) => setTitle(text)}/>
+                            {/* <Button title="Select date" onPress={() => setOpen(true)} /> */}
+                            <DatePickerComponent
+                            />
+                            
+                            <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter title"} placeholderTextColor={"black"} value={title} onChangeText={(text) => setTitle(text)}/>
                         </View>
                     </View>
 
@@ -157,9 +185,13 @@ const AddDiaryScreen = ({navigation}) => {
 
 
             {/*    DATA SECTION*/}
-            <View style={styles.dateDescriptionContainer}>
-                <View style={{marginBottom: 20, backgroundColor:"yellow"}}><Text>test</Text></View>
-                <View style={{flex: 1, backgroundColor:"blue"}}><Text>test2</Text></View>
+            <View style={styles.descriptionContainer}>
+
+                <View style={styles.descriptionInputContainer}>
+                    
+                    <TextInput style={styles.descriptionInput} multiline={true} underlineColorAndroid={"transparent"} placeholder={"Enter description"} placeholderTextColor={"black"} value={description} onChangeText={(text) => setDescription(text)}/>
+                    
+                </View>
                 {/*/!*    location light water*!/*/}
                 {/*/!*    light*!/*/}
                 {/*<View style={styles.dataContainer}>*/}
@@ -192,19 +224,12 @@ const styles = StyleSheet.create({
 
     imageNameContainer: {
         flex: 2,
-        backgroundColor: "red",
+        //backgroundColor: "red",
         width: "100%",
         paddingBottom: 90,
     },
 
-    dateDescriptionContainer: {
-        flex: 2,
-        backgroundColor: "green",
-        width: "100%",
-        height: 500,
-        padding: 15,
-        // alignItems: "center",
-    },
+    
 
     imageContainer: {
         height: 318,
@@ -243,15 +268,62 @@ const styles = StyleSheet.create({
         // backgroundColor: "yellow",
         // padding: 20
     },
-
-    addButton: {
+    
+    
+    menuContainer: {
+        //backgroundColor: "yellow",
         position: "absolute",
-        top: 318 / 2 - 20,
-        left: Dimensions.get('window').width / 2 - 45,
-        // backgroundColor: "yellow",
-        flexDirection: "row",
-        gap: 10
+        width: "100%",
+        height: "100%",
     },
+    
+    menuProvider: {
+        //backgroundColor: "pink",
+        width: "100%",
+        height: "100%",
+        borderBottomRightRadius: 80,
+        borderBottomLeftRadius: 80,
+    },
+    
+    menu: {
+        //backgroundColor: "green",
+        width:"100%", 
+        height: "100%",
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderBottomRightRadius: 80,
+        borderBottomLeftRadius: 80,
+    },
+    
+    // clickable
+    popup: {
+        padding: 20,
+    },
+
+    
+    optionWrapper: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        
+        padding: 10,
+        fontSize: 20,
+    },
+    
+    divider: {
+        width: "100%",
+        backgroundColor: "lightgrey",
+        height: 0.2,
+    },
+
+    // addButton: {
+    //     position: "absolute",
+    //     top: 318 / 2 - 20,
+    //     left: Dimensions.get('window').width / 2 - 45,
+    //     // backgroundColor: "yellow",
+    //     flexDirection: "row",
+    //     gap: 10
+    // },
 
     nameInputContainer: {
         width: "80%",
@@ -283,8 +355,30 @@ const styles = StyleSheet.create({
         fontSize: 36,
         // fontWeight: "bold"
     },
+    
+    descriptionContainer: {
+        flex: 2,
+        flexDirection: 'column',
+        backgroundColor: '#DFDFD9',
+        width: "100%",
+        height: 500,
+        paddingTop: 20,
+        paddingBottom: 20,
+        alignItems: "center",
+    },
+    
+    descriptionInputContainer: {
+        flex: 1,
+        width: "80%",
+    },
+    
+    descriptionInput: {
+        textAlign: 'justify',
+        fontSize: 22,
+    },
 
     speciesInput: {
+        flex: 1,
         textAlign: "center",
         fontSize: 14
     },

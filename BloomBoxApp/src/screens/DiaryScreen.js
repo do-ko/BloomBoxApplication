@@ -29,9 +29,14 @@ const DiaryScreen = ({route, navigation}) => {
     const {diary} = route.params;
     const {userInfo} = useContext(AuthContext);
     const [date, setDate] = useState(new Date(Date.parse(diary.entryDate)))
-    const {getAllDiariesForPlant, diaries, addDiary, isLoadingDiary} = useContext(DiaryContext);
-    const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext)
-
+    //const {getAllDiariesForPlant, diaries, addDiary, isLoadingDiary} = useContext(DiaryContext);
+    //const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext)
+    
+    
+    const diaryChanged = (diary)=>{
+        //   console.log("plant changed2: ",plant)
+    }
+    
     return(
         
         <View style={styles.appContainer}>
@@ -40,7 +45,7 @@ const DiaryScreen = ({route, navigation}) => {
                 {/*    image and name/species*/}
 
                 <View style={styles.imageContainer}>
-                    <Image style={styles.image} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image}} />
+                    <Image style={styles.imageStyle} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image}} />
                 </View>
                 
                 <View style={styles.headerContainer}>
@@ -70,7 +75,7 @@ const DiaryScreen = ({route, navigation}) => {
             </Pressable>
             
             {/* TODO: navigate to edit diary page */}
-            <Pressable style={styles.editButton} onPress={() => navigation.navigate("EditPlant", {plant,plantChanged})}>
+            <Pressable style={styles.editButton} onPress={() => navigation.navigate("EditDiary", {diary,diaryChanged})}>
                 <BigEditSvg/>
             </Pressable>
             
@@ -124,6 +129,13 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 80,
         borderBottomLeftRadius: 80,
         //elevation: 10
+    },
+    
+    imageStyle: {
+        width: "100%",
+        height: "100%",
+        borderBottomRightRadius: 80,
+        borderBottomLeftRadius: 80,
     },
     
     backButton: {
