@@ -95,8 +95,8 @@ public class RemainderRestController {
         return "Deleted remainder with id: " + remainderId;
     }
 
-    @Scheduled(fixedDelay = 30000)
-//    @Scheduled(cron = "0 0 0 * * *")
+//    @Scheduled(fixedDelay = 30000)
+    @Scheduled(cron = "0 0 0 * * *")
     public void ReviewRemaindersAtMidnight(){
         List<Remainder> remainders = remainderService.findAllRemainders();
         List<Remainder> completedTasks = new ArrayList<>();
