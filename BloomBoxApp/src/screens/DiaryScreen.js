@@ -55,7 +55,7 @@ const DiaryScreen = ({route, navigation}) => {
                     </Pressable>
 
 
-                    <Pressable style={styles.editButton} onPress={() => navigation.navigate("Diary", {diary,diaryChanged})}>
+                    <Pressable style={styles.editButton} onPress={() => navigation.navigate("EditDiary", {diary,diaryChanged})}>
                         <BigEditSvg/>
                     </Pressable>
 

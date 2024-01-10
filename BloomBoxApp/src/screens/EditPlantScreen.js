@@ -163,11 +163,6 @@ const EditPlantScreen = ({route, navigation}) => {
                         {image === "" ? <View style={styles.image}></View> : <View style={styles.image}><Image source={{uri: image}} style={styles.imageStyle} /></View>}
                     </View>
                     {/*menu*/}
-                    <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-                        <BackSvg/>
-                    </Pressable>
-                    
-                    
                     <View style={styles.menuContainer}>
                         <MenuProvider style={styles.menuProvider}> 
                             <Menu style={styles.menu}>
@@ -183,6 +178,10 @@ const EditPlantScreen = ({route, navigation}) => {
                             </Menu>
                         </MenuProvider>
                     </View>
+
+                    <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+                        <BackSvg/>
+                    </Pressable>
                     
                     
                     {/* <View style={styles.addButton}>

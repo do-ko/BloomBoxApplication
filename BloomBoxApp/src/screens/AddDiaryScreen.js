@@ -134,9 +134,7 @@ const AddDiaryScreen = ({route, navigation}) => {
                         {image === "" ? <View style={styles.image}></View> : <View style={styles.image}><Image source={{uri: image}} style={styles.imageStyle} /></View>}
                     </View>
                     {/*menu*/}
-                    <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-                        <BackSvg/>
-                    </Pressable>
+
 
                     {/* <View style={styles.addButton}>
                         <Pressable  onPress={() => selectImage(true)}>
@@ -166,6 +164,10 @@ const AddDiaryScreen = ({route, navigation}) => {
 
                     <Pressable style={styles.saveButton} onPress={addNewDiary}>
                         <SaveSvg/>
+                    </Pressable>
+
+                    <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+                        <BackSvg/>
                     </Pressable>
 
                     <View style={styles.nameInputContainer}>
