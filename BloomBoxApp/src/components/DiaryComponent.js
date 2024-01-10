@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     },
 
     diaryImage: {
-        backgroundColor: "red",
+        //backgroundColor: "red",
         width: "80%",
         height: "80%",
         borderTopRightRadius: 23,

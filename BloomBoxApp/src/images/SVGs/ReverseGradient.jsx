@@ -7,6 +7,8 @@ const ReverseGradientSvg = (props) => (
         width={Dimensions.get('window').width}
         height={392}
         fill="none"
+        preserveAspectRatio="none"
+        viewBox="0 0 360 392"
         {...props}
     >
         <Path fill="url(#a)" d="M0 0h360v392H0z" />
