@@ -10,7 +10,7 @@ import AddLocationScreen from "./AddLocationScreen";
 import EditLocationScreen from "./EditLocationScreen";
 
 const Stack = createNativeStackNavigator();
-const GardenStack = () => {
+const LocationsStack = () => {
     return(
         <LocationProvider>
             <Stack.Navigator>
@@ -22,4 +22,4 @@ const GardenStack = () => {
     );
 }
 
-export default GardenStack;
+export default LocationsStack;

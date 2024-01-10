@@ -174,6 +174,7 @@ const EditPlantScreen = ({route, navigation}) => {
                                     <MenuOption onSelect={() => selectImage(false)} text="Take a photo" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
                                     <View style={styles.divider}/>
                                     <MenuOption onSelect={() => selectImage(true)} text="Open gallery" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                                    <MenuOption onSelect={() => setImage(BASE_URL + "/images/download/" + userInfo.userId + "/plant/defaultPlant.jpg")} text="Default" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
                                 </MenuOptions>
                             </Menu>
                         </MenuProvider>
