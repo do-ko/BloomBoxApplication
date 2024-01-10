@@ -9,6 +9,7 @@ import {DiaryProvider} from "../context/DiaryContext";
 import EditPlantScreen from "./EditPlantScreen";
 import DiaryScreen from "./DiaryScreen";
 import EditDiaryScreen from "./EditDiaryScreen";
+import AddDiaryScreen from "./AddDiaryScreen";
 
 const Stack = createNativeStackNavigator();
 const GardenStack = () => {
@@ -23,6 +24,7 @@ const GardenStack = () => {
                         <Stack.Screen name={"EditPlant"} component={EditPlantScreen} options={{headerShown:false}}/>
                         <Stack.Screen name={"DiaryScreen"} component={DiaryScreen} options={{headerShown:false}}/>
                         <Stack.Screen name={"EditDiary"} component={EditDiaryScreen} options={{headerShown:false}}/>
+                        <Stack.Screen name={"AddDiary"} component={AddDiaryScreen} options={{headerShown:false}}/>
                     </Stack.Navigator>
                 </DiaryProvider>
             </LocationProvider>

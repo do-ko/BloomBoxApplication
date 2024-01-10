@@ -18,6 +18,8 @@ import BigAdd from "../images/SVGs/BigAdd";
 import {BASE_URL} from "../config";
 import SaveSvg from "../images/SVGs/SaveButton";
 import {AuthContext} from "../context/AuthContext";
+import { Menu, MenuProvider, MenuTrigger, MenuOptions, MenuOption} from "react-native-popup-menu";
+
 
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
@@ -164,7 +166,25 @@ const DiaryScreen = ({route, navigation}) => {
                 <SaveSvg/>
             </Pressable>
             
-            <View style={styles.addButton}>
+            
+            <View style={styles.menuContainer}>
+                <MenuProvider style={styles.menuProvider}> 
+                    <Menu style={styles.menu}>
+                        <MenuTrigger customStyles={{triggerWrapper: styles.popup}}>
+                            <BigAdd/>
+                        </MenuTrigger>
+                        
+                        <MenuOptions style={styles.menuOptions}>
+                            <MenuOption onSelect={() => selectImage(false)} text="Take a photo" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                            <View style={styles.divider}/>
+                            <MenuOption onSelect={() => selectImage(true)} text="Open gallery" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                        </MenuOptions>
+                    </Menu>
+                </MenuProvider>
+            </View>
+            
+            
+            {/* <View style={styles.addButton}>
                 <Pressable  onPress={() => selectImage(true)}>
                     <BigAdd/>
                 </Pressable>
@@ -174,7 +194,7 @@ const DiaryScreen = ({route, navigation}) => {
                 <Pressable  onPress={() => setImage(BASE_URL + "/images/download/" + userInfo.userId + "/plant/defaultPlant.jpg")}>
                     <BigAdd/>
                 </Pressable>
-            </View>
+            </View> */}
             
             
             <View style={styles.diaryEntryContainer}>
@@ -203,6 +223,7 @@ const styles = StyleSheet.create({
         //backgroundColor: 'yellow',
     },
     
+    // IMAGE
     imageTitleContainer: {
         //flex: 1,
         width: "100%",
@@ -233,6 +254,8 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 80,
     },
     
+    
+    // BACK PRESSABLE
     backButton: {
         position: "absolute",
         //flex: 1,
@@ -242,6 +265,8 @@ const styles = StyleSheet.create({
         //padding: 5,
     },
     
+    
+    // EDIT PRESSABLE
     editButton: {
         position: "absolute",
         //flex: 1,
@@ -249,6 +274,55 @@ const styles = StyleSheet.create({
         right: 15,
         //padding: 5,
     },
+    
+    
+    menuContainer: {
+        //backgroundColor: "yellow",
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+    },
+    
+    menuProvider: {
+        //backgroundColor: "pink",
+        width: "100%",
+        height: "100%",
+        borderBottomRightRadius: 80,
+        borderBottomLeftRadius: 80,
+    },
+    
+    menu: {
+        //backgroundColor: "green",
+        width:"100%", 
+        height: "100%",
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderBottomRightRadius: 80,
+        borderBottomLeftRadius: 80,
+    },
+    
+    // clickable
+    popup: {
+        padding: 20,
+    },
+
+    
+    optionWrapper: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        
+        padding: 10,
+        fontSize: 20,
+    },
+    
+    divider: {
+        width: "100%",
+        backgroundColor: "lightgrey",
+        height: 0.2,
+    },
+    
+    
     
     headerContainer: {
         width: "80%",
