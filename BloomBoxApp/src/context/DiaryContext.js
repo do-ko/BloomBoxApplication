@@ -28,7 +28,7 @@ export const DiaryProvider = ({children}) => {
             })
     }
 
-    const addDiary = (plantId, title, entryDate, image, diaryContent) => {
+    const addDiary = (plantId, title, entryDate, image, imageUrl, diaryContent) => {
         console.log(plantId)
         console.log(title)
         console.log(entryDate)
@@ -36,21 +36,42 @@ export const DiaryProvider = ({children}) => {
         console.log(diaryContent)
 
         setIsLoading(true);
-        axios.post(`${BASE_URL}/diaries`, {
-            plantId: plantId,
-            title: title,
-            entryDate: entryDate,
-            image: image,
-            diaryContent : diaryContent
-        }).then(res => {
-            let newDiary = res.data;
-            console.log(newDiary);
-            setDiaries([...diaries, newDiary]);
-            setIsLoading(false);
-        }).catch(e => {
-            console.log(`diary adding error ${e}`);
-            setIsLoading(false);
-        })
+        if (image !== "") {
+            uploadImage(image, userInfo.userId, "diary");
+            axios.post(`${BASE_URL}/diaries`, {
+                plantId: plantId,
+                title: title,
+                entryDate: entryDate,
+                image: imageUrl,
+                diaryContent : diaryContent
+            }).then(res => {
+                let newDiary = res.data;
+                console.log(newDiary);
+                setDiaries([...diaries, newDiary]);
+                setIsLoading(false);
+            }).catch(e => {
+                console.log(`diary adding error ${e}`);
+                setIsLoading(false);
+            })
+        } else {
+            axios.post(`${BASE_URL}/diaries`, {
+                plantId: plantId,
+                title: title,
+                entryDate: entryDate,
+                image: "defaultDiary.jpg",
+                diaryContent : diaryContent
+            }).then(res => {
+                let newDiary = res.data;
+                console.log(newDiary);
+                setDiaries([...diaries, newDiary]);
+                setIsLoading(false);
+            }).catch(e => {
+                console.log(`diary adding error ${e}`);
+                setIsLoading(false);
+            })
+        }
+
+
     }
     
     

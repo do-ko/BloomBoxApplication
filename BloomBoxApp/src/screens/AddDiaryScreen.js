@@ -105,7 +105,7 @@ const AddDiaryScreen = ({route, navigation}) => {
             createAlert("Title cannot be empty.");
         } else {
             //addPlant(selectedLocation, plantName, species, lightValue, waterValue, image,  image.split("/").pop());
-            addDiary(plant.plantId, title, date, image, description);
+            addDiary(plant.plantId, title, date, image, image.split("/").pop(), description);
             navigation.goBack();
         }
 
