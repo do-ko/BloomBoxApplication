@@ -40,25 +40,59 @@ const DiaryScreen = ({route, navigation}) => {
     return(
         
         <View style={styles.appContainer}>
-            
-            <View style={styles.imageTitleContainer}>
+            <View style={styles.imageNameContainer}>
                 {/*    image and name/species*/}
 
                 <View style={styles.imageContainer}>
-                    <Image style={styles.imageStyle} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image}} />
-                </View>
-                
-                <View style={styles.headerContainer}>
-                    <View  style={styles.dateContainer} >
-                        <Text style={styles.diaryDateText}>
-                            {date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}.{date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}.{date.getFullYear()}
-                        </Text>
+                    <View style={{overflow: "hidden"}}>
+                        <View style={styles.image}>
+                            <Image source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image}} style={styles.imageStyle} />
+                        </View>
+                    </View>
+                    {/*menu*/}
+                    <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+                        <BackSvg/>
+                    </Pressable>
+
+
+                    <Pressable style={styles.editButton} onPress={() => navigation.navigate("Diary", {diary,diaryChanged})}>
+                        <BigEditSvg/>
+                    </Pressable>
+
+                    <View style={styles.nameDataContainer}>
+                        <View  style={styles.diaryDateContainer} >
+                            <Text style={styles.diaryDateText}>{date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}</Text>
+                            <Text style={styles.diaryDateMonthText}>{date.toLocaleString('default', { month: 'long' })}</Text>
+                            <Text style={styles.diaryDateText}>{date.getFullYear()}</Text>
+                        </View>
+
+                        <View  style={styles.diaryDateContainer} >
+                            <Text style={styles.diaryTitleText}>{diary.title}</Text>
+                        </View>
                     </View>
 
-                    <View>
-                        <Text style={styles.diaryTitleText}>{diary.title}</Text>
-                    </View>
+
                 </View>
+            </View>
+            
+            {/*<View style={styles.imageTitleContainer}>*/}
+            {/*    /!*    image and name/species*!/*/}
+
+            {/*    <View style={styles.imageContainer}>*/}
+            {/*        <Image style={styles.image} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image}} />*/}
+            {/*    </View>*/}
+            {/*    */}
+            {/*    <View style={styles.headerContainer}>*/}
+            {/*        <View  style={styles.dateContainer} >*/}
+            {/*            <Text style={styles.diaryDateText}>*/}
+            {/*                {date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}.{date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}.{date.getFullYear()}*/}
+            {/*            </Text>*/}
+            {/*        </View>*/}
+
+            {/*        <View>*/}
+            {/*            <Text style={styles.diaryTitleText}>{diary.title}</Text>*/}
+            {/*        </View>*/}
+            {/*    </View>*/}
                 
 
                 {/* <View style={styles.diaryTextContainer}>
@@ -68,16 +102,16 @@ const DiaryScreen = ({route, navigation}) => {
                 </View> 
                 */}
                 
-            </View>
+            {/*</View>*/}
             
-            <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-                <BackSvg/>
-            </Pressable>
+            {/*<Pressable style={styles.backButton} onPress={() => navigation.goBack()}>*/}
+            {/*    <BackSvg/>*/}
+            {/*</Pressable>*/}
             
-            {/* TODO: navigate to edit diary page */}
-            <Pressable style={styles.editButton} onPress={() => navigation.navigate("EditDiary", {diary,diaryChanged})}>
-                <BigEditSvg/>
-            </Pressable>
+            {/*/!* TODO: navigate to edit diary page *!/*/}
+            {/*<Pressable style={styles.editButton} onPress={() => navigation.navigate("EditPlant", {plant,plantChanged})}>*/}
+            {/*    <BigEditSvg/>*/}
+            {/*</Pressable>*/}
             
             
             
@@ -107,13 +141,12 @@ const styles = StyleSheet.create({
         backgroundColor: "#F4F7F8",
         //backgroundColor: 'yellow',
     },
-    
-    imageTitleContainer: {
-        //flex: 1,
+
+    imageNameContainer: {
+        // flex: 1,
+        backgroundColor: "#fff",
         width: "100%",
-        height: "40%",
-        backgroundColor: "#F4F7F8",
-        //backgroundColor: 'green',
+        paddingBottom: 90,
     },
 
     imageContainer: {
@@ -123,37 +156,117 @@ const styles = StyleSheet.create({
     },
 
     image: {
-        flex: 1,
-        //width: "100%",
-        //height: "100%",
+        width: "100%",
+        height: "100%",
         borderBottomRightRadius: 80,
         borderBottomLeftRadius: 80,
-        //elevation: 10
+        backgroundColor: "#fff",
+        elevation: 10
     },
-    
     imageStyle: {
         width: "100%",
         height: "100%",
         borderBottomRightRadius: 80,
         borderBottomLeftRadius: 80,
     },
-    
+
+
     backButton: {
         position: "absolute",
-        //flex: 1,
         top: 15,
         left: 15,
-        //backgroundColor: 'white',
-        //padding: 5,
     },
-    
+
     editButton: {
         position: "absolute",
-        //flex: 1,
         top: 15,
         right: 15,
-        //padding: 5,
     },
+
+    nameDataContainer: {
+        width: "80%",
+        paddingHorizontal: "5%",
+        borderRadius: 23,
+
+        height: 98,
+        backgroundColor: "#fff",
+        position: "absolute",
+        bottom: -49,
+
+        alignSelf: 'center',
+        justifyContent: "center",
+        alignItems: "center",
+
+        elevation: 10,
+
+        gap: 5
+    },
+
+    diaryDateContainer: {
+        width: "80%",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        gap: 5
+        // backgroundColor: "green"
+    },
+
+    nameData: {
+        textAlign: "center",
+        fontSize: 48,
+        fontWeight: "bold",
+        lineHeight: 48,
+        color: "#20201D"
+    },
+
+    speciesData: {
+        textAlign: "center",
+        fontSize: 20,
+        textTransform: "uppercase",
+        lineHeight: 20,
+        color: "#20201D"
+    },
+    //
+    //
+    // imageTitleContainer: {
+    //     //flex: 1,
+    //     width: "100%",
+    //     height: "40%",
+    //     backgroundColor: "#F4F7F8",
+    //     //backgroundColor: 'green',
+    // },
+    //
+    // imageContainer: {
+    //     height: 216,
+    //     borderBottomRightRadius: 80,
+    //     borderBottomLeftRadius: 80,
+    // },
+    //
+    // image: {
+    //     flex: 1,
+    //     //width: "100%",
+    //     //height: "100%",
+    //     borderBottomRightRadius: 80,
+    //     borderBottomLeftRadius: 80,
+    //     //elevation: 10
+    // },
+    //
+    // backButton: {
+    //     position: "absolute",
+    //     //flex: 1,
+    //     top: 15,
+    //     left: 15,
+    //     //backgroundColor: 'white',
+    //     //padding: 5,
+    // },
+    
+    // editButton: {
+    //     position: "absolute",
+    //     //flex: 1,
+    //     top: 15,
+    //     right: 15,
+    //     //padding: 5,
+    // },
     
     headerContainer: {
         width: "80%",
@@ -174,24 +287,28 @@ const styles = StyleSheet.create({
         elevation: 10,
         //backgroundColor: 'pink',
     },
-    
-    dateContainer: {
-        //backgroundColor: 'green',
-    },
+
     
     diaryDateText: {
         fontSize: 20,
         fontWeight: "300",
         color: "#20201D",
-        lineHeight: 35,
-        
+        lineHeight: 20,
+    },
+
+    diaryDateMonthText: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: "#DDB790",
+        lineHeight: 20,
+        textTransform: "uppercase"
     },
 
     diaryTitleText: {
         textAlign: "center",
-        fontSize: 48,
+        fontSize: 24,
         fontWeight: "bold",
-        lineHeight: 48,
+        lineHeight: 24,
         color: "#20201D"
     },
     

@@ -76,6 +76,10 @@ const PlantScreen = ({route, navigation}) => {
         getRemaindersForToday(todayDateString);
     }, [])
 
+    // useEffect(() => {
+    //     getAllLocationForUser();
+    // }, [locations])
+
 
     const formatMarkedDots = () => {
         let remaindersForPlant = remainders.filter(rem => rem.plantId === plant.plantId);

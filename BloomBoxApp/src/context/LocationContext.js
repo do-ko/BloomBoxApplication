@@ -129,7 +129,14 @@ export const LocationProvider = ({children}) => {
         axios.delete(`${BASE_URL}/locations/${locationId}`)
             .then(res => {
                 console.log(res.data)
-                setLocations(locations.filter(location => location.locationId !== locationId))
+                if (locations.length === 1){
+                    console.log("Last location")
+                    setLocations([])
+                } else {
+                    console.log("not last location")
+                    setLocations(locations.filter(location => location.locationId !== locationId))
+                }
+
                 setIsLoading(false)
             }).catch(e => {
                 console.log(`location delete error - ${e}`)
