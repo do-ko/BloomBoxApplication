@@ -33,6 +33,7 @@ export const PlantProvider = ({children}) => {
     const addPlant = (locationId, plantName, species, light, water, frequency, image, imageUrl, firstRemainder) => {
         setIsLoading(true);
 
+        console.log(frequency);
         if (image !== "") {
             uploadImage(image, userInfo.userId, "plant");
             axios.post(`${BASE_URL}/plants`, {

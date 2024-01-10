@@ -97,6 +97,13 @@ const AddPlantScreen = ({navigation}) => {
             createAlert("Select a water value")
         } else {
             let frequency = 14 - waterValue - lightValue;
+            console.log("Name: " + plantName)
+            console.log("Species: " + species)
+            console.log("Location id: " + selectedLocation)
+            console.log("Light: " + lightValue)
+            console.log("Water: " + waterValue)
+            console.log("Frequency: " + frequency)
+            console.log("Image: " + image)
             addPlant(selectedLocation, plantName, species, lightValue, waterValue, frequency, image, image.split("/").pop(), true);
             navigation.goBack();
         }

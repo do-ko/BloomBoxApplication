@@ -227,7 +227,7 @@ const PlantScreen = ({route, navigation}) => {
                     }}/>
                     <View style={styles.diaryTitleContainer}>
                     {/*    TITLE AND BUTTON*/}
-                        <Text style={styles.diaryTitle}>Diary</Text>
+                        <Text style={styles.Title}>Diary</Text>
                         <Pressable style={styles.addDiaryButton} onPress={() => navigation.navigate("AddDiary", {plant})}>
                             <Text style={styles.addDiaryText}>ADD</Text>
                         </Pressable>
@@ -561,6 +561,10 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between"
+    },
+
+    diaryTitle: {
+
     },
 
     Title: {
