@@ -9,19 +9,26 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.crypto.Data;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @RestController
 @RequestMapping("/api/remainders")
 public class RemainderRestController {
     private RemainderService remainderService;
+    private PlantService plantService;
 
     @Autowired
-    public RemainderRestController(RemainderService remainderService) {
+    public RemainderRestController(RemainderService remainderService, PlantService plantService) {
         this.remainderService = remainderService;
+        this.plantService = plantService;
     }
 
     @GetMapping("")
@@ -88,15 +95,123 @@ public class RemainderRestController {
         return "Deleted remainder with id: " + remainderId;
     }
 
-//    @Scheduled(fixedDelay = 5000)
-//    public void ReviewRemaindersAtMidnight(){
-//        System.out.println("hello");
-//        Date today = new Date();
-////        LocalDate today = new LocalDate;
-//        List<Remainder> remainders = remainderService.findAllRemainders();
-//        System.out.println(today.toString().split(" "));
-//        remainders.forEach(remainder -> {
-//            System.out.println(remainder.getRemainderDay().toString());
-//        });
-//    }
+    @Scheduled(fixedDelay = 5000)
+//    @Scheduled(cron = "0 0 0 * * *")
+    public void ReviewRemaindersAtMidnight(){
+        List<Remainder> remainders = remainderService.findAllRemainders();
+        List<Remainder> completedTasks = new ArrayList<>();
+        Date today = new Date();
+        Date yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+        LocalDate localDate = today.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate localDateYesterday = yesterday.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        String[] todayDateSplit = today.toString().split(" ");
+        String[] yesterdayDateSplit = yesterday.toString().split(" ");
+        String todayDateString = todayDateSplit[5] + "-" + (localDate.getMonthValue() < 10 ? "0" + localDate.getMonthValue() : localDate.getMonthValue())  + "-" + todayDateSplit[2];
+        String yesterdayDateString = yesterdayDateSplit[5] + "-" + (localDateYesterday.getMonthValue() < 10 ? "0" + localDateYesterday.getMonthValue() : localDateYesterday.getMonthValue())  + "-" + yesterdayDateSplit[2];
+
+
+//      THIS CODE WILL LOOK FOR REMAINDERS THAT ARE HAPPENING TODAY FOR EACH PLANT AND TYPE
+//       AND THEN SET ALL OVERDUE REMAINDERS WITH SAME TYPE FOR THAT PLANT AS FAILED
+        remainders.forEach(remainder -> {
+            String remainderDateString = remainder.getRemainderDay().toString().split(" ")[0];
+            String remainderDoneDateString = null;
+            if (remainder.getDoneDate() != null){
+                remainderDoneDateString = remainder.getDoneDate().toString().split(" ")[0];
+            }
+            if (Objects.equals(remainderDateString, todayDateString)){
+//                if remainder is set for today
+//                System.out.println("Caught");
+                List<Remainder> remaindersForPlant = remainders.stream().filter(rem -> {return Objects.equals(rem.getPlantId(), remainder.getPlantId()) && Objects.equals(rem.getRemainderType(), remainder.getRemainderType());
+                }).toList();
+                remaindersForPlant.forEach(remainder1 -> {
+                    String remainder1DateString = remainder1.getRemainderDay().toString().split(" ")[0];
+                    if (!remainder1.getDone() && compareDates(todayDateString, remainder1DateString)){
+                        System.out.println("Failed: " + remainder1.getRemainderId());
+                        remainder.setFailed(true);
+                        remainderService.save(remainder);
+                    }
+                });
+            }
+
+            if (Objects.equals(remainderDoneDateString, yesterdayDateString)){
+                completedTasks.add(remainder);
+            }
+
+        });
+
+
+//        COMPLETED TASKS -> MOVE UPCOMING TASKS
+        if (!completedTasks.isEmpty()){
+//            DIVIDING TASKS PER PLANTS
+            Map<Integer, List<Remainder>> tasksDividedByPlants = completedTasks.stream().collect(Collectors.groupingBy(Remainder::getPlantId));
+                for (Integer plantKey : tasksDividedByPlants.keySet()){
+//                    DIVIDING PLANTS PER TYPE OF REMAINDER
+                    Map<String, List<Remainder>> tasksDividedByRemainderType = tasksDividedByPlants.get(plantKey).stream().collect(Collectors.groupingBy(Remainder::getRemainderType));
+                    for (String remainderKey : tasksDividedByRemainderType.keySet()){
+//                        System.out.println(tasksDividedByRemainderType.get(remainderKey));
+                        List<Remainder> tasks = tasksDividedByRemainderType.get(remainderKey);
+
+//                        GETTING LATEST COMPLETED REMAINDER
+                        String latestCompletedRemainderDay = tasks.get(0).getRemainderDay().toString().split(" ")[0];
+                        Remainder latestCompletedTask = tasks.get(0);
+                        for (Remainder task : tasks) {
+                            if (compareDates(task.getRemainderDay().toString().split(" ")[0], latestCompletedRemainderDay)) {
+                                latestCompletedRemainderDay = task.getRemainderDay().toString().split(" ")[0];
+                                latestCompletedTask = task;
+                            }
+                        }
+                        System.out.println(latestCompletedRemainderDay);
+                        System.out.println(latestCompletedTask);
+
+//                        ADJUST FUTURE REMAINDERS
+//                        GETTING ALL NOT DONE AND NOT FAILED REMAINDERS FOR PLANT ID AND REMAINDER TYPE
+//                        List<Remainder> allNotDoneRemainders = remainders.stream().filter(remainder -> {return remainder.getPlantId() == latestCompletedTask.getPlantId()}).toList();
+                        List<Remainder> allNotDoneRemainders = new ArrayList<>();
+                        for (Remainder rem : remainders){
+                            if (Objects.equals(rem.getPlantId(), latestCompletedTask.getPlantId()) && Objects.equals(rem.getRemainderType(), latestCompletedTask.getRemainderType()) && !rem.getDone()){
+                                allNotDoneRemainders.add(rem);
+                            }
+                        }
+
+//                        GET PLANT TO GET
+                        Plant plant = plantService.findById(latestCompletedTask.getPlantId());
+
+                        System.out.println(allNotDoneRemainders);
+//                        PUSH REMAINDERS BY DIFFERENCE IN TIME BETWEEN LATEST COMPLETED TASK AND TASK ON THE LIST
+                        allNotDoneRemainders.forEach(task -> {
+//                            get individual difference here
+                            LocalDate date = LocalDate.parse(task.getRemainderDay().toString().split(" ")[0]);
+//                            System.out.println(date.toString());
+//                            System.out.println(localDateYesterday);
+//                            System.out.println(DAYS.between(localDateYesterday, date));
+                            long difference = plant.getFrequency() - DAYS.between(localDateYesterday, date);
+//                            System.out.println(date.plusDays(difference));
+                            Date newDate = Date.from(date.plusDays(difference).atStartOfDay(ZoneId.systemDefault()).toInstant());
+//                            System.out.println(newDate);
+                            task.setRemainderDay(newDate);
+                            remainderService.save(task);
+                        });
+                    }
+                }
+        }
+    }
+
+    public boolean compareDates(String today, String date2){
+        String[] todaySplit = today.split("-");
+        String[] date2Split = date2.split("-");
+        if (Integer.parseInt(todaySplit[0]) >  Integer.parseInt(date2Split[0])){
+            return true;
+        } else if (Integer.parseInt(todaySplit[0]) <  Integer.parseInt(date2Split[0])){
+            return false;
+        } else {
+            if (Integer.parseInt(todaySplit[1]) >  Integer.parseInt(date2Split[1])){
+                return true;
+            } else if (Integer.parseInt(todaySplit[1]) <  Integer.parseInt(date2Split[1])){
+                return false;
+            } else {
+                return Integer.parseInt(todaySplit[2]) > Integer.parseInt(date2Split[2]);
+            }
+        }
+    }
+
 }
