@@ -118,7 +118,7 @@ const DiaryScreen = ({route, navigation}) => {
             <View style={styles.diaryEntryContainer}>
                 <View style={styles.diaryEntry}>
                     <ScrollView style={styles.scrolledText}>
-                        <Text style={styles.diaryEntryText}>Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Hello nic to meet you, hello. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Hello nic to meet you, hello. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this.</Text>
+                        <Text style={styles.diaryEntryText}>{diary.diaryContent}</Text>
                     </ScrollView>
                 </View>
                 

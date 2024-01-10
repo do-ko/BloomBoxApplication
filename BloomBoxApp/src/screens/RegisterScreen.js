@@ -16,7 +16,7 @@ const RegisterScreen = ({navigation}) => {
                 <TextInput style={styles.input} placeholder={"login"} value={login} onChangeText={(text) => {setLogin(text)}}/>
                 <TextInput style={styles.input} placeholder={"password"} value={password} onChangeText={(text) => {setPassword(text)}} secureTextEntry={true}/>
 
-                <Button title={"Register"} onPress={() => {
+                <Button style={styles.registerButton} title={"Register"} onPress={() => {
                     register(login, password);
                 }}/>
 

@@ -49,6 +49,7 @@ const DiaryScreen = ({route, navigation}) => {
     const [title, setTitle] = useState(diary.title)
     const [date, setDate] = useState(new Date(Date.parse(diary.entryDate)))
     const [image, setImage] = useState(BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image)
+    const [description, setDescription] = useState("");
     
     const initImageName = diary.image;
     
@@ -124,12 +125,12 @@ const DiaryScreen = ({route, navigation}) => {
         
         <View style={styles.appContainer}>
             
-            <View style={styles.imageTitleContainer}>
+            <View style={styles.imageNameContainer}>
                 {/*    image and name/species*/}
 
                 <View style={styles.imageContainer}>
-                    <View style={{overflow: "hidden"}}>
-                        {image === "" ? <View style={styles.image}></View> : <View style={styles.image}><Image source={{uri: image}} style={styles.imageStyle} /></View>}
+                    <View style={styles.image}>
+                        <Image source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image}} style={styles.imageStyle} />
                     </View>
                     {/* <Image style={styles.image} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image}} /> */}
                 </View>
@@ -154,8 +155,29 @@ const DiaryScreen = ({route, navigation}) => {
                     <Text style={styles.diaryTitleText}>{diary.title}</Text>
                 </View> 
                 */}
-                
+                <View style={styles.menuContainer}>
+                    <MenuProvider style={styles.menuProvider}> 
+                        <Menu style={styles.menu}>
+                            <MenuTrigger customStyles={{triggerWrapper: styles.popup}}>
+                                <BigAdd/>
+                            </MenuTrigger>
+                            
+                            <MenuOptions style={styles.menuOptions}>
+                                <MenuOption onSelect={() => selectImage(false)} text="Take a photo" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                                <View style={styles.divider}/>
+                                <MenuOption onSelect={() => selectImage(true)} text="Open gallery" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                                <MenuOption onSelect={() => setImage(BASE_URL + "/images/download/" + userInfo.userId + "/plant/defaultPlant.jpg")} text="Default" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                            </MenuOptions>
+                        </Menu>
+                    </MenuProvider>
+                </View>
+            
             </View>
+            
+            
+            
+            
+            
             
             <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
                 <BackSvg/>
@@ -165,24 +187,6 @@ const DiaryScreen = ({route, navigation}) => {
             <Pressable style={styles.editButton} onPress={() => edit()}>
                 <SaveSvg/>
             </Pressable>
-            
-            
-            <View style={styles.menuContainer}>
-                <MenuProvider style={styles.menuProvider}> 
-                    <Menu style={styles.menu}>
-                        <MenuTrigger customStyles={{triggerWrapper: styles.popup}}>
-                            <BigAdd/>
-                        </MenuTrigger>
-                        
-                        <MenuOptions style={styles.menuOptions}>
-                            <MenuOption onSelect={() => selectImage(false)} text="Take a photo" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
-                            <View style={styles.divider}/>
-                            <MenuOption onSelect={() => selectImage(true)} text="Open gallery" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
-                        </MenuOptions>
-                    </Menu>
-                </MenuProvider>
-            </View>
-            
             
             {/* <View style={styles.addButton}>
                 <Pressable  onPress={() => selectImage(true)}>
@@ -200,7 +204,9 @@ const DiaryScreen = ({route, navigation}) => {
             <View style={styles.diaryEntryContainer}>
                 <View style={styles.diaryEntry}>
                     <ScrollView style={styles.scrolledText}>
-                        <Text style={styles.diaryEntryText}>Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Hello nic to meet you, hello. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Hello nic to meet you, hello. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this. Malcolm got a new pot! This is amazing. Wow, i neer expected this.</Text>
+                        {/* <Text style={styles.diaryEntryText}>{diary.diaryContent}</Text> */}
+                        <TextInput placeholder={diary.diaryContent} value={description} onChangeText={(text) => setDescription(text)} style={styles.descriptionInput} multiline={true}
+                        />               
                     </ScrollView>
                 </View>
                 
@@ -222,20 +228,20 @@ const styles = StyleSheet.create({
         backgroundColor: "#F4F7F8",
         //backgroundColor: 'yellow',
     },
-    
-    // IMAGE
-    imageTitleContainer: {
-        //flex: 1,
+
+    imageNameContainer: {
+        flex: 1,
+        backgroundColor: "#fff",
         width: "100%",
-        height: "40%",
-        backgroundColor: "#F4F7F8",
-        //backgroundColor: 'green',
+        paddingBottom: 90,
+        
     },
 
     imageContainer: {
-        height: 216,
+        height: 318,
         borderBottomRightRadius: 80,
         borderBottomLeftRadius: 80,
+        
     },
 
     image: {
@@ -244,35 +250,28 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 80,
         borderBottomLeftRadius: 80,
         backgroundColor: "#fff",
-        elevation: 10
+        elevation: 10,
+        //backgroundColor: 'yellow'
     },
-
+    
     imageStyle: {
         width: "100%",
         height: "100%",
         borderBottomRightRadius: 80,
         borderBottomLeftRadius: 80,
     },
-    
-    
-    // BACK PRESSABLE
+
+
     backButton: {
         position: "absolute",
-        //flex: 1,
         top: 15,
         left: 15,
-        //backgroundColor: 'white',
-        //padding: 5,
     },
-    
-    
-    // EDIT PRESSABLE
+
     editButton: {
         position: "absolute",
-        //flex: 1,
         top: 15,
         right: 15,
-        //padding: 5,
     },
     
     
@@ -321,7 +320,7 @@ const styles = StyleSheet.create({
         backgroundColor: "lightgrey",
         height: 0.2,
     },
-    
+
     
     
     headerContainer: {
@@ -333,7 +332,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         //position: "absolute",
         //bottom: -40,
-        top: -15,
+        top: -48,
         //marginBottom: 10,
 
         alignSelf: 'center',
@@ -357,6 +356,7 @@ const styles = StyleSheet.create({
     },
 
     diaryTitleText: {
+        
         textAlign: "center",
         fontSize: 48,
         fontWeight: "bold",
@@ -365,6 +365,7 @@ const styles = StyleSheet.create({
     },
     
     titleInput: {
+        marginTop: -8,
         textAlign: "center",
         fontSize: 36,
         // fontWeight: "bold"
@@ -378,7 +379,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         width: "100%",
-        //height: "60%",
+        //height: 800,
         //paddingTop: 40,
         justifyContent: 'center',
         alignItems: 'center',
@@ -400,6 +401,12 @@ const styles = StyleSheet.create({
         fontSize: 22,
         fontWeight: "300",
 
+    },
+    
+    descriptionInput: {
+        textAlign: 'justify',
+        fontSize: 22,
+        fontWeight: "300",
     },
     
         
