@@ -72,7 +72,7 @@ const DiaryScreen = ({route, navigation}) => {
                 quality: 0.75
             });
         }
-        // TEST COMMIT ON GIt322dDDSDc
+        // TEST COMMIT ON GIt322dDDSDcs
 
         // do something with the image here
         if (!result.canceled){
