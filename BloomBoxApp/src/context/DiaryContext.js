@@ -90,6 +90,7 @@ export const DiaryProvider = ({children}) => {
             // upload new image to server if different
             if (diary.image !== oldImageName){
                 uploadImage(image, userInfo.userId, "diary");
+                console.log("new image uploaded.")
             }
 
             axios.put(`${BASE_URL}/diaries`, {
@@ -97,7 +98,8 @@ export const DiaryProvider = ({children}) => {
                 plantId : diary.plantId,
                 title : diary.title,
                 entry_date : diary.entryDate,
-                image: image
+                image: image,
+                diaryContent: diary.diaryContent
             }).then(res => {
                 let newDiary = res.data;
                 //console.log("   This works!!!!!!!!!!   ");
@@ -123,10 +125,11 @@ export const DiaryProvider = ({children}) => {
             
             axios.put(`${BASE_URL}/diaries`, {
                 diaryId : diary.diaryId,
-                plantId : plant.plantId,
+                plantId : diary.plantId,
                 title : diary.title,
                 entry_date : diary.entryDate,
-                image: "defualtDiary.jpg"
+                image: "defaultDiary.jpg",
+                diaryContent: diary.diaryContent
             }).then(res => {
                 let newDiary = res.data;
                 console.log(newDiary);

@@ -72,6 +72,7 @@ const DiaryScreen = ({route, navigation}) => {
                 quality: 0.75
             });
         }
+        // TEST COMMIT ON GIt
 
         // do something with the image here
         if (!result.canceled){
@@ -99,19 +100,19 @@ const DiaryScreen = ({route, navigation}) => {
         } else {
             console.log("Title: " + title)
             console.log("Date: " + date)
-            console.log("Image: " + image)
+            console.log("Image: " + image.split("/").pop())
 
             // to delete from server
             console.log("OldImage: " + initImageName)
 
             // only change here in case of canceling
             diary.title = title;
-            diary.date = date;
+            diary.entryDate = date;
             diary.image = image.split("/").pop();
+            diary.diaryContent = description;
 
-
-            editDiary(title, image, initImageName);
-            console.log("HELLO  - - - - - - - - -")
+            editDiary(diary, image.split("/").pop(), initImageName);
+            // console.log("HELLO  - - - - - - - - -")
             diaryChanged(diary)
             navigation.goBack();
         }
@@ -119,7 +120,6 @@ const DiaryScreen = ({route, navigation}) => {
     
     
     const {getAllDiariesForPlant, diaries, addDiary, isLoadingDiary, editDiary} = useContext(DiaryContext);
-    //const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext)
 
     return(
         
