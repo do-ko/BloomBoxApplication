@@ -40,6 +40,8 @@ import {ExpandingDot} from "react-native-animated-pagination-dots";
 
 
 import { Menu, MenuProvider, MenuTrigger, MenuOptions, MenuOption} from "react-native-popup-menu";
+import EmptyListComponent from "../components/EmptyListComponent";
+import ReminderComponent from "../components/ReminderComponent";
 
 
 const PlantScreen = ({route, navigation}) => {
@@ -235,17 +237,19 @@ const PlantScreen = ({route, navigation}) => {
 
                     <View style={styles.diaryContainer}>
                         <Spinner visible={isLoadingDiary}/>
-                        <FlatList horizontal={true} data={diaries} refreshing={false} onRefresh={() => getAllDiariesForPlant(plant.plantId)} style={{flex:1}} keyExtractor={(item) => item.diaryId} renderItem={({item}) => {
-                            if (item.empty === true) {
-                                console.log("Empty")
-                                return <View style={styles.itemInvisible}/>
-                            }
-                            console.log(item)
-                            return(
-                                <DiaryComponent navigation={navigation} diary={item}/>
-                            );
-                        }}
-                        />
+                        {diaries.length === 0 ? <EmptyListComponent type={"diaries"}/>
+                            :
+                            <FlatList horizontal={true} data={diaries} refreshing={false} onRefresh={() => getAllDiariesForPlant(plant.plantId)} style={{flex:1}} keyExtractor={(item) => item.diaryId} renderItem={({item}) => {
+                                if (item.empty === true) {
+                                    console.log("Empty")
+                                    return <View style={styles.itemInvisible}/>
+                                }
+                                console.log(item)
+                                return(
+                                    <DiaryComponent navigation={navigation} diary={item}/>
+                                );
+                            }}
+                            />}
                     </View>
                 </View>
 

@@ -12,6 +12,8 @@ import Gradient from "../images/SVGs/Gradient";
 import filter from "lodash.filter"
 import {LocationContext} from "../context/LocationContext";
 import {RemainderContext} from "../context/RemainderContext";
+import EmptyListComponent from "../components/EmptyListComponent";
+import ReminderComponent from "../components/ReminderComponent";
 
 const formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
@@ -88,15 +90,17 @@ const GardenScreen = ({navigation}) => {
 
             <View style={styles.plantsContainer}>
                 <Spinner visible={isLoading}/>
-                <FlatList data={formatData(plants.filter((plant) => plant.plantName.toLocaleString().toLowerCase().includes(searchQuery.toLowerCase())), 2)} refreshing={false} onRefresh={() => getAllPlants()} style={{flex:1}} numColumns={2} keyExtractor={(item) => item.plantId} renderItem={({item}) => {
-                    if (item.empty === true) {
-                        return <View style={styles.itemInvisible}/>
-                    }
-                    return(
-                        <PlantComponent navigation={navigation} plant={item}/>
-                    );
-                }}
-                />
+                {plants.length === 0 ? <EmptyListComponent type={"plants"}/>
+                    :
+                    <FlatList data={formatData(plants.filter((plant) => plant.plantName.toLocaleString().toLowerCase().includes(searchQuery.toLowerCase())), 2)} refreshing={false} onRefresh={() => getAllPlants()} style={{flex:1}} numColumns={2} keyExtractor={(item) => item.plantId} renderItem={({item}) => {
+                        if (item.empty === true) {
+                            return <View style={styles.itemInvisible}/>
+                        }
+                        return(
+                            <PlantComponent navigation={navigation} plant={item}/>
+                        );
+                    }}
+                    />}
             </View>
 
             {/*<View style={styles.headerContainer}>*/}

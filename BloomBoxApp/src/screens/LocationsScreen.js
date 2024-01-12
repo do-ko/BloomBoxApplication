@@ -11,6 +11,7 @@ import {PlantContext} from "../context/PlantContext";
 import {LocationContext} from "../context/LocationContext";
 import plant2 from "../images/SVGs/Plant2";
 import LocationComponent from "../components/LocationComponent";
+import EmptyListComponent from "../components/EmptyListComponent";
 
 const LocationsScreen = ({ navigation }) => {
     const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
@@ -66,15 +67,17 @@ const LocationsScreen = ({ navigation }) => {
 
             <View style={styles.plantsContainer}>
                 <Spinner visible={isLoading}/>
-                <FlatList data={locations.filter((location) => location.locationName.toLocaleString().toLowerCase().includes(searchQuery.toLowerCase()))} refreshing={false} onRefresh={() => getAllLocationForUser()} style={{flex:1}} numColumns={1} keyExtractor={(item) => item.locationId} renderItem={({item}) => {
-                    if (item.empty === true) {
-                        return <View style={styles.itemInvisible}/>
-                    }
-                    return(
-                        <LocationComponent navigation={navigation} location={item}/>
-                    );
-                }}
-                />
+                {locations.length === 0 ? <EmptyListComponent type={"locations"}/>
+                    :
+                    <FlatList data={locations.filter((location) => location.locationName.toLocaleString().toLowerCase().includes(searchQuery.toLowerCase()))} refreshing={false} onRefresh={() => getAllLocationForUser()} style={{flex:1}} numColumns={1} keyExtractor={(item) => item.locationId} renderItem={({item}) => {
+                        if (item.empty === true) {
+                            return <View style={styles.itemInvisible}/>
+                        }
+                        return(
+                            <LocationComponent navigation={navigation} location={item}/>
+                        );
+                    }}
+                    />}
             </View>
 
             {/*<View style={styles.tempNavTesting}>*/}

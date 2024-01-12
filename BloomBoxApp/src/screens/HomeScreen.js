@@ -17,6 +17,7 @@ import ReminderComponent2 from "../components/ReminderComponent2";
 import ReminderComponent from "../components/ReminderComponent";
 import {RemainderContext} from "../context/RemainderContext";
 import {PlantContext} from "../context/PlantContext";
+import EmptyListComponent from "../components/EmptyListComponent";
 
 
 
@@ -57,7 +58,7 @@ const HomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     getRemaindersByUserId();
-  }, [userInfo.userId])
+  }, [userInfo.userInfo])
 
   useEffect(() => {
     console.log("reminders changed ",remainders)
@@ -87,15 +88,17 @@ const HomeScreen = ({ navigation }) => {
       <Spinner visible={isLoading} />
       <View style={styles.reminderListContainer}>
         <View style={styles.reminderListBackground}>
+          {formatDataForList().length === 0 ? <EmptyListComponent type={"remainders"}/>
+              :
+              <FlatList
+                  data={formatDataForList()}
+                  renderItem={({ item }) => (
+                      <ReminderComponent remainder={item} />
+                  )}
+                  keyExtractor={(item) => item.remainderId.toString()}
+                  extraData={remainders}
+              />}
 
-          <FlatList
-              data={formatDataForList()}
-              renderItem={({ item }) => (
-                  <ReminderComponent remainder={item} />
-              )}
-              keyExtractor={(item) => item.remainderId.toString()}
-              extraData={remainders}
-          />
         </View>
       </View>
     </View>
