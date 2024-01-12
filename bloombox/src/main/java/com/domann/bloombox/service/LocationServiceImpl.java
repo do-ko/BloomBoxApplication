@@ -37,13 +37,7 @@ public class LocationServiceImpl implements LocationService{
 
     @Override
     public List<Location> findByUserId(int userId) {
-        List<Location> locations = locationDAO.findByUserId(userId);
-        if (locations.isEmpty()){
-            throw new RuntimeException("Did not find any locations with user id: " + userId);
-        } else {
-            return locations;
-        }
-
+        return locationDAO.findByUserId(userId);
     }
 
     @Transactional

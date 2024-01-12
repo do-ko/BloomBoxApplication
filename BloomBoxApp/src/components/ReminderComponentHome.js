@@ -35,7 +35,11 @@ const ReminderComponentHome = ({reminder, containerColor, textColor, lineDecorat
                     <WateringSvg color={textColor}/>
                     <View>
                         <Text style={styles.reminderTitle(textColor)}>{reminder.remainderType}</Text>
-                        <Text style={styles.reminderPlantName(textColor, lineDecoration)}>{reminder.plantName}</Text>
+                        {reminder.plantName.length <= 7 ?
+                            <Text style={styles.reminderPlantName(textColor, lineDecoration, 24)}>{reminder.plantName}</Text>
+                            :
+                            <Text style={styles.reminderPlantName(textColor, lineDecoration, 18)}>{reminder.plantName}</Text>}
+
                     </View>
                 </View>
                 <CheckButtonSvg color={textColor} />
@@ -77,11 +81,11 @@ const styles = StyleSheet.create({
         lineHeight: 14,
     }),
 
-    reminderPlantName: (color, line) => ({
-        fontSize: 24,
+    reminderPlantName: (color, line, fontSize) => ({
+        fontSize: fontSize,
         color: color,
         textTransform: "capitalize",
-        lineHeight: 24,
+        lineHeight: fontSize,
         textDecorationLine : line
     })
 });

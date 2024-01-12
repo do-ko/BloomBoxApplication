@@ -67,7 +67,8 @@ const DiaryScreen = ({route, navigation}) => {
                         </View>
 
                         <View  style={styles.diaryDateContainer} >
-                            <Text style={styles.diaryTitleText}>{diary.title}</Text>
+                            {diary.title.length <= 14 ? <Text style={styles.diaryTitleText(24)}>{diary.title}</Text> : <Text style={styles.diaryTitleText(20)}>{diary.title}</Text>}
+
                         </View>
                     </View>
 
@@ -304,13 +305,21 @@ const styles = StyleSheet.create({
         textTransform: "uppercase"
     },
 
-    diaryTitleText: {
+    // diaryTitleText: {
+    //     textAlign: "center",
+    //     fontSize: 24,
+    //     fontWeight: "bold",
+    //     lineHeight: 24,
+    //     color: "#20201D"
+    // },
+
+    diaryTitleText: (fontSize)=> ({
         textAlign: "center",
-        fontSize: 24,
+        fontSize: fontSize,
         fontWeight: "bold",
         lineHeight: 24,
         color: "#20201D"
-    },
+    }),
     
     scrolledText: {
         flex: 1,

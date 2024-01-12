@@ -17,7 +17,12 @@ const LocationComponent = ({location, navigation}) => {
             </View>
 
             <View style={styles.locationTextContainer}>
-                <Text style={styles.locationText}>{location.locationName}</Text>
+                {location.locationName.length <= 13 ?
+                    <Text style={styles.locationText(20)}>{location.locationName}</Text>
+                    :
+                    (location.locationName.length <= 18
+                        ? <Text style={styles.locationText(16)}>{location.locationName}</Text>
+                        : <Text style={styles.locationText(12)}>{location.locationName}</Text>)}
                 <Pressable style={styles.editButton} onPress={() => navigation.navigate("EditLocation", {location})}>
                     <WhiteEditSvg/>
                 </Pressable>
@@ -60,12 +65,19 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
 
-    locationText: {
-        fontSize: 20,
+    // locationText: {
+    //     fontSize: 20,
+    //     fontWeight: "bold",
+    //     letterSpacing: 1,
+    //     color: "#fff"
+    // },
+
+    locationText: (fontSize) => ({
+        fontSize: fontSize,
         fontWeight: "bold",
         letterSpacing: 1,
         color: "#fff"
-    },
+    }),
 
     locationImage: {
         width: "80%",

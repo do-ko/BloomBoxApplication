@@ -96,7 +96,7 @@ const HomeScreen = ({ navigation }) => {
       <Spinner visible={isLoading} />
       <View style={styles.reminderListContainer}>
         <View style={styles.reminderListBackground}>
-          {formatDataForList().length === 0 ? <EmptyListComponent type={"remainders"} color={"#DFDFD9"}/>
+          {formatDataForList().length === 0 ? <EmptyListComponent type={"reminders"} color={"#DFDFD9"}/>
               :
               <FlatList
                   data={formatDataForList()}

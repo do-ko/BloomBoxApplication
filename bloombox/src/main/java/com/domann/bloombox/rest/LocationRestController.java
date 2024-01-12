@@ -39,11 +39,7 @@ public class LocationRestController {
 
     @GetMapping("user/{userId}")
     public List<Location> findByUserId(@PathVariable int userId){
-        List<Location> locations = locationService.findByUserId(userId);
-        if (locations == null) {
-            throw  new LocationNotFoundException("No locations for user id were found: " + userId);
-        }
-        return locations;
+        return locationService.findByUserId(userId);
     }
 
     @PostMapping("")

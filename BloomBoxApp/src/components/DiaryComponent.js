@@ -18,7 +18,17 @@ const DiaryComponent = ({diary, navigation}) => {
             <View style={styles.diaryTextContainer}>
                 {/*{console.log(date.getUTCDay())}*/}
                 <Text style={styles.diaryDateText}>{date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}.{date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}.{date.getFullYear()}</Text>
-                <Text style={styles.diaryTitleText}>{diary.title}</Text>
+                {diary.title.length <= 8
+                    ? <Text style={styles.diaryTitleText(24)}>{diary.title}</Text>
+                    : (diary.title.length <= 10
+                        ? <Text style={styles.diaryTitleText(20)}>{diary.title}</Text>
+                        : (diary.title.length <= 12
+                            ? <Text style={styles.diaryTitleText(18)}>{diary.title}</Text>
+                            : (diary.title.length <= 13
+                                ? <Text style={styles.diaryTitleText(16)}>{diary.title}</Text>
+                                : <Text style={styles.diaryTitleText(14)}>{diary.title}</Text>
+                            )))}
+
             </View>
         </Pressable>
     );
@@ -65,12 +75,13 @@ const styles = StyleSheet.create({
         lineHeight: 20
     },
 
-    diaryTitleText: {
-        fontSize: 24,
+    diaryTitleText: (fontSize)=> ({
+        fontSize: fontSize,
         fontWeight: "bold",
         lineHeight: 24,
-        color: "#20201D"
-    },
+        color: "#20201D",
+        // justifyContent: "center"
+    }),
 
     diaryImage: {
         //backgroundColor: "red",

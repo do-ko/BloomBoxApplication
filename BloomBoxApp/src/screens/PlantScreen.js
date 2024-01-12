@@ -45,8 +45,6 @@ import ReminderHomeScreen from "../components/ReminderHomeScreen";
 
 
 const PlantScreen = ({route, navigation}) => {
-    // plant contains all parameters of current plant
-    // diaries contains all parameters belonging to this plant
     const {plant} = route.params;
     const {userInfo} = useContext(AuthContext);
     const {getAllDiariesForPlant, diaries, addDiary, isLoadingDiary} = useContext(DiaryContext);
@@ -61,12 +59,7 @@ const PlantScreen = ({route, navigation}) => {
     const [tasksForToday, setTasksForToday] = useState([])
     const scrollX = React.useRef(new Animated.Value(0)).current;
 
-    // const testDates = {
-    //     '2024-01-08': {selected: true, marked: true, selectedColor: 'blue'},
-    //     '2024-01-09': {marked: true},
-    //     '2024-01-10': {marked: true, dotColor: 'red', activeOpacity: 0},
-    //     '2024-01-11': {disabled: true, disableTouchEvent: true}
-    // };
+
 
     useEffect(() => {
         getAllDiariesForPlant(plant.plantId);
@@ -77,10 +70,6 @@ const PlantScreen = ({route, navigation}) => {
         let todayDateString = `${today.getFullYear()}-${today.getMonth()+1 < 10 ? "0" + (today.getMonth()+1) : today.getMonth()+1}-${today.getDate() < 10 ? "0" + today.getDate() : today.getDate()}`
         getRemaindersForToday(todayDateString);
     }, [])
-
-    // useEffect(() => {
-    //     getAllLocationForUser();
-    // }, [locations])
 
 
     const formatMarkedDots = () => {
@@ -95,41 +84,18 @@ const PlantScreen = ({route, navigation}) => {
         remaindersForPlant.forEach((remainder) => {
             let date = new Date(Date.parse(remainder.remainderDay));
             let dateString = `${date.getFullYear()}-${date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
-            // console.log(dateString);
-            // let markedTask;
-            // if (dateString === todayDateString){
-            //     markedTask = {[dateString]: {marked: true, dotColor: "#5B6E4E", customStyles: {
-            //                 container: {
-            //                     backgroundColor: 'green'
-            //                 },
-            //                 text: {
-            //                     color: 'black',
-            //                     fontWeight: 'bold'
-            //                 }
-            //             }}}
-            // } else {
-            //     markedTask = {[dateString]: {marked: true, dotColor: "#5B6E4E"}}
-            // }
-            // console.log(markedTask);
             if (dateString === todayDateString){
                 formattedTasks[dateString] = {marked: true, dotColor: "#FFFFFF", selected: true, selectedColor: '#5B6E4E'};
             } else {
                 formattedTasks[dateString] = {marked: true, dotColor: "#5B6E4E", selected: false, selectedColor: '#5B6E4E'};
             }
-            // formattedTasks[dateString] = {marked: true, dotColor: "#5B6E4E"};
-            // console.log(formattedTasks);
         });
 
-        // console.log("haha");
-        // console.log(formattedTasks['20-01-2014'])
         if (formattedTasks[todayDateString] === undefined){
-            // console.log("hehe")
             formattedTasks[todayDateString] = {selected: true, selectedColor: '#8AA578'};
         }
 
-        // console.log(formattedTasks);
         setMarkedDatesOnCal(formattedTasks);
-        // setTasks(formattedTasks);
     }
 
     const getRemaindersForToday = (dateStringInput) => {
@@ -142,9 +108,7 @@ const PlantScreen = ({route, navigation}) => {
                 remToday.push(remainder);
             }
         });
-        // console.log(remToday);
         setTasksForToday(remToday);
-        // return remToday;
     }
 
     const plantChanged = (plant)=>{
@@ -176,11 +140,20 @@ const PlantScreen = ({route, navigation}) => {
 
                         <View style={styles.nameDataContainer}>
                             <View  style={styles.nameSpeciesContainer} >
-                                <Text style={styles.nameData}>{plant.plantName}</Text>
+                                {plant.plantName.length <=7 ? <Text style={styles.nameData(48)}>{plant.plantName}</Text> : <Text style={styles.nameData(32)}>{plant.plantName}</Text>}
                             </View>
 
                             <View  style={styles.nameSpeciesContainer} >
-                                <Text style={styles.speciesData}>{plant.species}</Text>
+                                {plant.species.length <=15
+                                    ? <Text style={styles.speciesData(20)}>{plant.species}</Text>
+                                    : (plant.species.length <= 23
+                                        ? <Text style={styles.speciesData(16)}>{plant.species}</Text>
+                                        : (plant.species.length <= 30
+                                            ? <Text style={styles.speciesData(12)}>{plant.species}</Text>
+                                            : (plant.species.length <= 35
+                                                ? <Text style={styles.speciesData(10)}>{plant.species}</Text>
+                                                : <Text style={styles.speciesData(8)}>{plant.species}</Text>)))}
+
                             </View>
                         </View>
 
@@ -195,7 +168,26 @@ const PlantScreen = ({route, navigation}) => {
                         <LocationSvg />
                         <View>
                             <Text style={styles.dataTitle}>LOCATION</Text>
-                            <Text style={styles.dataText}>{plant.locationId == null ? "not specified" : (isLoading ? "loading" : locations.filter(location => location.locationId === plant.locationId)[0].locationName)}</Text>
+                            {/*{console.log("PLANT:")}*/}
+                            {/*{console.log(plant)}*/}
+                            {/*<Text style={styles.dataText}>{plant.locationId == null */}
+                            {/*    ? "not specified" */}
+                            {/*    : (isLoading ? "loading" : locations.filter(location => location.locationId === plant.locationId)[0].locationName)}</Text>*/}
+                            {plant.locationId === null
+                                ? <Text style={styles.dataText(32)}>not specified</Text>
+                                : (isLoading
+                                    ? <Text style={styles.dataText(32)}>loading</Text>
+                                    : (locations.filter(location => location.locationId === plant.locationId)[0].locationName.length <= 10
+                                        ? <Text style={styles.dataText(32)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>
+                                        : (locations.filter(location => location.locationId === plant.locationId)[0].locationName.length <= 13
+                                            ? <Text style={styles.dataText(24)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>
+                                            : (locations.filter(location => location.locationId === plant.locationId)[0].locationName.length <= 16)
+                                                ? <Text style={styles.dataText(20)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>
+                                                : (locations.filter(location => location.locationId === plant.locationId)[0].locationName.length <= 18
+                                                    ? <Text style={styles.dataText(18)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>
+                                                    : (locations.filter(location => location.locationId === plant.locationId)[0].locationName.length <= 20
+                                                        ? <Text style={styles.dataText(16)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>
+                                                        : <Text style={styles.dataText(14)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>)))))}
                         </View>
                     </View>
 
@@ -471,21 +463,29 @@ const styles = StyleSheet.create({
         // backgroundColor: "green"
     },
 
-    nameData: {
+    // nameData: {
+    //     textAlign: "center",
+    //     fontSize: 48,
+    //     fontWeight: "bold",
+    //     lineHeight: 48,
+    //     color: "#20201D"
+    // },
+
+    nameData: (fontSize) => ({
         textAlign: "center",
-        fontSize: 48,
+        fontSize: fontSize,
         fontWeight: "bold",
         lineHeight: 48,
         color: "#20201D"
-    },
+    }),
 
-    speciesData: {
+    speciesData: (fontSize) => ({
         textAlign: "center",
-        fontSize: 20,
+        fontSize: fontSize,
         textTransform: "uppercase",
         lineHeight: 20,
         color: "#20201D"
-    },
+    }),
 
     plantDataContainer: {
         width: "100%",
@@ -509,12 +509,19 @@ const styles = StyleSheet.create({
         color: "#20201D"
     },
 
-    dataText: {
-        fontSize: 32,
+    // dataText: {
+    //     fontSize: 32,
+    //     fontWeight: "bold",
+    //     lineHeight: 32,
+    //     color: "#20201D"
+    // },
+
+    dataText: (fontSize) => ({
+        fontSize: fontSize,
         fontWeight: "bold",
         lineHeight: 32,
         color: "#20201D"
-    },
+    }),
 
     waterLightContainer: {
         marginTop: 20,

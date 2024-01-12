@@ -161,7 +161,7 @@ const EditLocationScreen = ({ navigation, route }) => {
 
                     <View style={styles.nameInputContainer}>
                         <View style={styles.nameContainer} >
-                            <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} placeholderTextColor={"black"} value={locationName} onChangeText={(text) => setLocationName(text)}/>
+                            <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} maxLength={22} placeholder={"Enter Name"} placeholderTextColor={"black"} value={locationName} onChangeText={(text) => setLocationName(text)}/>
                         </View>
                     </View>
                 </View>

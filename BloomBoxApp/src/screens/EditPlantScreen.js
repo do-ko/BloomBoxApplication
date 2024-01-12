@@ -206,11 +206,11 @@ const EditPlantScreen = ({route, navigation}) => {
                     <View style={styles.nameInputContainer}>
                         {/*<Text>Name</Text>*/}
                         <View  style={styles.nameSpeciesContainer} >
-                            <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} placeholderTextColor={"black"} value={plantName} onChangeText={(text) => setPlantName(text)}/>
+                            <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} maxLength={10} placeholderTextColor={"black"} value={plantName} onChangeText={(text) => setPlantName(text)}/>
                         </View>
 
                         <View  style={styles.nameSpeciesContainer} >
-                            <TextInput style={styles.speciesInput} underlineColorAndroid={"transparent"} placeholder={"enter species"} placeholderTextColor={"black"} value={species} onChangeText={(text) => setSpecies(text)}/>
+                            <TextInput style={styles.speciesInput} underlineColorAndroid={"transparent"} placeholder={"enter species"} maxLength={39} placeholderTextColor={"black"} value={species} onChangeText={(text) => setSpecies(text)}/>
                         </View>
                     </View>
 
