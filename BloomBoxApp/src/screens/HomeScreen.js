@@ -18,6 +18,7 @@ import ReminderComponent from "../components/ReminderComponent";
 import {RemainderContext} from "../context/RemainderContext";
 import {PlantContext} from "../context/PlantContext";
 import EmptyListComponent from "../components/EmptyListComponent";
+import Gradient from "../images/SVGs/Gradient";
 
 
 
@@ -66,6 +67,13 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Gradient style={{
+        position: 'absolute',
+        // top: 0,
+        // left: 0,
+        // right: 0,
+        bottom: 0,
+      }} />
       <View style={styles.topBar}>
         <View style={styles.rightTopBarMargin} />
         <View style={styles.welcomeImageContainer}>
