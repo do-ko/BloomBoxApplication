@@ -13,7 +13,7 @@ import filter from "lodash.filter"
 import {LocationContext} from "../context/LocationContext";
 import {RemainderContext} from "../context/RemainderContext";
 import EmptyListComponent from "../components/EmptyListComponent";
-import ReminderComponent from "../components/ReminderComponent";
+import ReminderHomeScreen from "../components/ReminderHomeScreen";
 
 const formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);

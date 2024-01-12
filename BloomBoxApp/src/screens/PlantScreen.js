@@ -33,7 +33,7 @@ import DiaryComponent from "../components/DiaryComponent";
 import {red} from "react-native-reanimated/src";
 import {Agenda, Calendar} from "react-native-calendars";
 import {Card, Avatar} from 'react-native-paper';
-import ReminderComponent2 from "../components/ReminderComponent2";
+import ReminderPlantScreen from "../components/ReminderPlantScreen";
 import {RemainderContext} from "../context/RemainderContext";
 import {ExpandingDot} from "react-native-animated-pagination-dots";
 
@@ -41,7 +41,7 @@ import {ExpandingDot} from "react-native-animated-pagination-dots";
 
 import { Menu, MenuProvider, MenuTrigger, MenuOptions, MenuOption} from "react-native-popup-menu";
 import EmptyListComponent from "../components/EmptyListComponent";
-import ReminderComponent from "../components/ReminderComponent";
+import ReminderHomeScreen from "../components/ReminderHomeScreen";
 
 
 const PlantScreen = ({route, navigation}) => {
@@ -237,7 +237,7 @@ const PlantScreen = ({route, navigation}) => {
 
                     <View style={styles.diaryContainer}>
                         <Spinner visible={isLoadingDiary}/>
-                        {diaries.length === 0 ? <EmptyListComponent type={"diaries"} color={"#DFDFD9"}/>
+                        {diaries.length === 0 ? <EmptyListComponent type={"diaries"} color={"#5B6E4E"}/>
                             :
                             <FlatList horizontal={true} data={diaries} refreshing={false} onRefresh={() => getAllDiariesForPlant(plant.plantId)} style={{flex:1}} keyExtractor={(item) => item.diaryId} renderItem={({item}) => {
                                 if (item.empty === true) {
@@ -334,11 +334,11 @@ const PlantScreen = ({route, navigation}) => {
 
                         <View style={styles.remainderContainer}>
                             {/*<Text>Day: {day.day}</Text>*/}
-                            {/*<ReminderComponent2 />*/}
+                            {/*<ReminderPlantScreen />*/}
                             <FlatList
                                 data={tasksForToday}
                                 renderItem={({ item }) => (
-                                    <ReminderComponent2 remainder={item}/>
+                                    <ReminderPlantScreen reminder={item}/>
                                 )}
                                 keyExtractor={(item) => item.remainderId.toString()}
                                 horizontal={true}
