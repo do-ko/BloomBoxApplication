@@ -237,7 +237,7 @@ const PlantScreen = ({route, navigation}) => {
 
                     <View style={styles.diaryContainer}>
                         <Spinner visible={isLoadingDiary}/>
-                        {diaries.length === 0 ? <EmptyListComponent type={"diaries"}/>
+                        {diaries.length === 0 ? <EmptyListComponent type={"diaries"} color={"#DFDFD9"}/>
                             :
                             <FlatList horizontal={true} data={diaries} refreshing={false} onRefresh={() => getAllDiariesForPlant(plant.plantId)} style={{flex:1}} keyExtractor={(item) => item.diaryId} renderItem={({item}) => {
                                 if (item.empty === true) {

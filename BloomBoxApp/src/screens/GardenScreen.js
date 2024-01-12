@@ -90,7 +90,7 @@ const GardenScreen = ({navigation}) => {
 
             <View style={styles.plantsContainer}>
                 <Spinner visible={isLoading}/>
-                {plants.length === 0 ? <EmptyListComponent type={"plants"}/>
+                {plants.length === 0 ? <EmptyListComponent type={"plants"} color={"#5B6E4E"}/>
                     :
                     <FlatList data={formatData(plants.filter((plant) => plant.plantName.toLocaleString().toLowerCase().includes(searchQuery.toLowerCase())), 2)} refreshing={false} onRefresh={() => getAllPlants()} style={{flex:1}} numColumns={2} keyExtractor={(item) => item.plantId} renderItem={({item}) => {
                         if (item.empty === true) {

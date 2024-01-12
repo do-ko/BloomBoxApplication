@@ -67,7 +67,7 @@ const LocationsScreen = ({ navigation }) => {
 
             <View style={styles.plantsContainer}>
                 <Spinner visible={isLoading}/>
-                {locations.length === 0 ? <EmptyListComponent type={"locations"}/>
+                {locations.length === 0 ? <EmptyListComponent type={"locations"} color={"#5B6E4E"}/>
                     :
                     <FlatList data={locations.filter((location) => location.locationName.toLocaleString().toLowerCase().includes(searchQuery.toLowerCase()))} refreshing={false} onRefresh={() => getAllLocationForUser()} style={{flex:1}} numColumns={1} keyExtractor={(item) => item.locationId} renderItem={({item}) => {
                         if (item.empty === true) {
