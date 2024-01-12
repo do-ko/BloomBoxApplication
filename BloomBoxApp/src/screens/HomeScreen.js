@@ -56,6 +56,10 @@ const HomeScreen = ({ navigation }) => {
   }, [])
 
   useEffect(() => {
+    getRemaindersByUserId();
+  }, [userInfo.userId])
+
+  useEffect(() => {
     console.log("reminders changed ",remainders)
   }, [remainders])
 

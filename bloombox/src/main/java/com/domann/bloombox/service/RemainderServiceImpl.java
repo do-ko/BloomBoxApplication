@@ -46,12 +46,7 @@ public class RemainderServiceImpl implements RemainderService{
 
     @Override
     public List<Remainder> findByUserId(int userId) {
-        List<Remainder> remainders = remainderDAO.findByUserId(userId);
-        if (remainders.isEmpty()){
-            throw new RuntimeException("Did not find any remainders with user id: " + userId);
-        } else {
-            return remainders;
-        }
+        return remainderDAO.findByUserId(userId);
     }
 
     @Transactional

@@ -47,11 +47,7 @@ public class RemainderRestController {
 
     @GetMapping("user/{userId}")
     public List<Remainder> findByUserId(@PathVariable int userId){
-        List<Remainder> remainders = remainderService.findByUserId(userId);
-        if (remainders == null){
-            throw new LocationNotFoundException("Remainders with userId not found - " + userId);
-        }
-        return remainders;
+        return remainderService.findByUserId(userId);
     }
 
     @GetMapping("/{remainderId}")
