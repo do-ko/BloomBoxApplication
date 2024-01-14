@@ -184,27 +184,12 @@ const EditPlantScreen = ({route, navigation}) => {
                     <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
                         <BackSvg/>
                     </Pressable>
-                    
-                    
-                    {/* <View style={styles.addButton}>
-                        <Pressable  onPress={() => selectImage(true)}>
-                            <BigAdd/>
-                        </Pressable>
-                        <Pressable  onPress={() => selectImage(false)}>
-                            <BigAdd/>
-                        </Pressable>
-                        <Pressable  onPress={() => setImage(BASE_URL + "/images/download/" + userInfo.userId + "/plant/defaultPlant.jpg")}>
-                            <BigAdd/>
-                        </Pressable>
-                    </View> */}
-
 
                     <Pressable style={styles.saveButton} onPress={() => edit()}>
                         <SaveSvg/>
                     </Pressable>
 
                     <View style={styles.nameInputContainer}>
-                        {/*<Text>Name</Text>*/}
                         <View  style={styles.nameSpeciesContainer} >
                             <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} maxLength={10} placeholderTextColor={"black"} value={plantName} onChangeText={(text) => setPlantName(text)}/>
                         </View>

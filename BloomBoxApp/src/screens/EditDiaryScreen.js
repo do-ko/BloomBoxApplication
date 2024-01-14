@@ -111,7 +111,8 @@ const DiaryScreen = ({route, navigation}) => {
             diary.diaryContent = description;
 
             editDiary(diary, image.split("/").pop(), initImageName);
-            // console.log("HELLO  - - - - - - - - -")
+
+
             diaryChanged(diary)
             navigation.goBack();
         }
