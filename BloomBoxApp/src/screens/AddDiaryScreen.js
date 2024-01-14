@@ -53,12 +53,13 @@ const AddDiaryScreen = ({route, navigation}) => {
     const {addDiary} = useContext(DiaryContext);
     
     const {plant} = route.params;
+    const {userInfo} = useContext(AuthContext);
+
     
-    
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState("No Title");
     const [image, setImage] = useState("");
     const [date, setDate] = useState(new Date());
-    const [description, setDescription] = useState("");
+    const [description, setDescription] = useState("No Description");
     
     const [open, setOpen] = useState(false);
 
@@ -125,92 +126,63 @@ const AddDiaryScreen = ({route, navigation}) => {
 
     return(
         <ScrollView>
-        <View style={styles.appContainer}>
-            <View style={styles.imageNameContainer}>
-                {/*    image and name/species*/}
+            <View style={styles.appContainer}>
+                <View style={styles.imageNameContainer}>
 
-                <View style={styles.imageContainer}>
-                    <View style={{overflow: "hidden"}}>
-                        {image === "" ? <View style={styles.image}></View> : <View style={styles.image}><Image source={{uri: image}} style={styles.imageStyle} /></View>}
-                    </View>
-                    {/*menu*/}
-
-
-                    {/* <View style={styles.addButton}>
-                        <Pressable  onPress={() => selectImage(true)}>
-                            <BigAdd/>
-                        </Pressable>
-                        <Pressable  onPress={() => selectImage(false)}>
-                            <BigAdd/>
-                        </Pressable>
-                    </View> */}
-                    
-                    <View style={styles.menuContainer}>
-                        <MenuProvider style={styles.menuProvider}> 
-                            <Menu style={styles.menu}>
-                                <MenuTrigger customStyles={{triggerWrapper: styles.popup}}>
-                                    <BigAdd/>
-                                </MenuTrigger>
-                                
-                                <MenuOptions style={styles.menuOptions}>
-                                    <MenuOption onSelect={() => selectImage(false)} text="Take a photo" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
-                                    <View style={styles.divider}/>
-                                    <MenuOption onSelect={() => selectImage(true)} text="Open gallery" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
-                                </MenuOptions>
-                            </Menu>
-                        </MenuProvider>
-                    </View>
-
-
-                    <Pressable style={styles.saveButton} onPress={addNewDiary}>
-                        <SaveSvg/>
-                    </Pressable>
-
-                    <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-                        <BackSvg/>
-                    </Pressable>
-
-                    <View style={styles.nameInputContainer}>
-                        <View  style={styles.nameSpeciesContainer} >
-                            {/* <Button title="Select date" onPress={() => setOpen(true)} /> */}
-                            <DatePickerComponent
-                            />
-                            
-                            <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter title"} maxLength={15} placeholderTextColor={"black"} value={title} onChangeText={(text) => setTitle(text)}/>
+                    <View style={styles.imageContainer}>
+                        {/* image in the frame */}
+                        <View style={{overflow: "hidden"}}>
+                            {image === "" ? <View style={styles.image}></View> : <View style={styles.image}><Image source={{uri: image}} style={styles.imageStyle} /></View>}
                         </View>
+                        
+                        {/* pop-up menu for photo adding */}
+                        <View style={styles.menuContainer}>
+                            <MenuProvider style={styles.menuProvider}> 
+                                <Menu style={styles.menu}>
+                                    <MenuTrigger customStyles={{triggerWrapper: styles.popup}}>
+                                        <BigAdd/>
+                                    </MenuTrigger>
+                                    
+                                    <MenuOptions style={styles.menuOptions}>
+                                        <MenuOption onSelect={() => selectImage(false)} text="Take a photo" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                                        <View style={styles.divider}/>
+                                        <MenuOption onSelect={() => selectImage(true)} text="Open gallery" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                                        <MenuOption onSelect={() => setImage(BASE_URL + "/images/download/" + userInfo.userId + "/plant/defaultPlant.jpg")} text="Default" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                                    </MenuOptions>
+                                </Menu>
+                            </MenuProvider>
+                        </View>
+
+
+                        <Pressable style={styles.saveButton} onPress={addNewDiary}>
+                            <SaveSvg/>
+                        </Pressable>
+
+                        <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+                            <BackSvg/>
+                        </Pressable>
+
+                        <View style={styles.nameInputContainer}>
+                            <View  style={styles.nameSpeciesContainer} >
+                                <DatePickerComponent/>
+                                <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter title"} maxLength={18} placeholderTextColor={"black"} value={title} onChangeText={(text) => setTitle(text)}/>
+                            </View>
+                        </View>
+
+
                     </View>
 
-
                 </View>
 
-            </View>
 
-
-            {/*    DATA SECTION*/}
-            <View style={styles.descriptionContainer}>
-
-                <View style={styles.descriptionInputContainer}>
-                    
-                    <TextInput style={styles.descriptionInput} multiline={true} underlineColorAndroid={"transparent"} placeholder={"Enter description"} placeholderTextColor={"black"} value={description} onChangeText={(text) => setDescription(text)}/>
-                    
+                {/* Diary entry description */}
+                <View style={styles.descriptionContainer}>
+                    <View style={styles.descriptionInputContainer}>
+                        <TextInput style={styles.descriptionInput} multiline={true} underlineColorAndroid={"transparent"} placeholder={"Enter description"} maxLength={500} placeholderTextColor={"black"} value={description} onChangeText={(text) => setDescription(text)}/>
+                    </View>
                 </View>
-                {/*/!*    location light water*!/*/}
-                {/*/!*    light*!/*/}
-                {/*<View style={styles.dataContainer}>*/}
-                {/*    <Text style={styles.dataText}>Date</Text>*/}
-                {/*</View>*/}
-
-                {/*/!*    water*!/*/}
-                {/*<View style={styles.dataContainer}>*/}
-                {/*    <Text style={styles.dataText}>Description</Text>*/}
-                {/*    <View style={{backgroundColor: "yellow", height: "100%"}}>*/}
-                {/*        <TextInput multiline={true} placeholder={"Enter diary entry description..."} placeholderTextColor={"black"} value={description} onChangeText={(text) => setDescription(text)}/>*/}
-                {/*    </View>*/}
-                {/*</View>*/}
-
-
+            
             </View>
-        </View>
         </ScrollView>
     )
 }
@@ -232,7 +204,6 @@ const styles = StyleSheet.create({
     },
 
     
-
     imageContainer: {
         height: 318,
         borderBottomRightRadius: 80,
