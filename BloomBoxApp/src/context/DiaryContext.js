@@ -97,7 +97,7 @@ export const DiaryProvider = ({children}) => {
                 diaryId : diary.diaryId,
                 plantId : diary.plantId,
                 title : diary.title,
-                entry_date : diary.entryDate,
+                entryDate : diary.entryDate,
                 image: image,
                 diaryContent: diary.diaryContent
             }).then(res => {
@@ -127,7 +127,7 @@ export const DiaryProvider = ({children}) => {
                 diaryId : diary.diaryId,
                 plantId : diary.plantId,
                 title : diary.title,
-                entry_date : diary.entryDate,
+                entryDate : diary.entryDate,
                 image: "defaultDiary.jpg",
                 diaryContent: diary.diaryContent
             }).then(res => {
