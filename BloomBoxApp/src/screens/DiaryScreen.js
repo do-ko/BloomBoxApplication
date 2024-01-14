@@ -29,13 +29,16 @@ const DiaryScreen = ({route, navigation}) => {
     const {diary} = route.params;
     const {userInfo} = useContext(AuthContext);
     const [date, setDate] = useState(new Date(Date.parse(diary.entryDate)))
-    //const {getAllDiariesForPlant, diaries, addDiary, isLoadingDiary} = useContext(DiaryContext);
-    //const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext)
-    
-    
+
     const diaryChanged = (diary)=>{
         //   console.log("plant changed2: ",plant)
     }
+
+    // useEffect(() => {
+    //     // diary.title = diary.title
+    //     console.log("Diary has changed");
+    //     console.log(diary);
+    // }, [diary])
     
     return(
         

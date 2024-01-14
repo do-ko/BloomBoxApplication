@@ -107,13 +107,6 @@ const AddPlantScreen = ({navigation}) => {
             addPlant(selectedLocation, plantName, species, lightValue, waterValue, frequency, image, image.split("/").pop(), true);
             navigation.goBack();
         }
-
-        // console.log("Name: " + plantName)
-        // console.log("Species: " + species)
-        // console.log("Location id: " + selectedLocation)
-        // console.log("Light: " + lightValue)
-        // console.log("Water: " + waterValue)
-        // console.log("Image: " + image)
     }
 
     const createAlert = (msg) =>
@@ -159,16 +152,6 @@ const AddPlantScreen = ({navigation}) => {
                         <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
                             <BackSvg/>
                         </Pressable>
-                        
-                        {/* ORIGINAL ADD PICTURE */}
-                        {/* <View style={styles.addButton}>
-                            <Pressable  onPress={() => selectImage(true)}>
-                                <BigAdd/>
-                            </Pressable>
-                            <Pressable  onPress={() => selectImage(false)}>
-                                <BigAdd/>
-                            </Pressable>
-                        </View> */}
 
                         <Pressable style={styles.saveButton} onPress={() => addNewPlant()}>
                             <SaveSvg/>

@@ -38,22 +38,17 @@ const EditPlantScreen = ({route, navigation}) => {
     const {plant,plantChanged} = route.params;
     const {editPlant} = useContext(PlantContext);
     const {userInfo} = useContext(AuthContext);
-    const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
+    const {getAllLocationForUser, locations} = useContext(LocationContext);
 
     // setting initial data
     const [plantName, setPlantName] = useState(plant.plantName);
     const [species, setSpecies] = useState(plant.species)
-    //const [selectedLocationId, setSelectedLocationId] = useState(plant.locationId);
-
-    const [selectedLocation, setSelectedLocation] = useState();
-
-
+    const [selectedLocationId, setSelectedLocationId] = useState(plant.locationId);
+    const [selectedLocation, setSelectedLocation] = useState(plant.locationId === null ? locations.filter(loc => loc.locationId === plant.locationId) : {locationName: "none", locationId: null})
     const [image, setImage] = useState(BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.image)
     const [lightValue, setLightValue] = useState(plant.light)
     const [waterValue, setWaterValue] = useState(plant.water)
-
     const initImageName = plant.image
-    // const initLocationName = locations.filter(location =>location.locationId === plant.locationId)[0]
 
     const selectImage = async (useLibrary) => {
         let result;
@@ -99,7 +94,7 @@ const EditPlantScreen = ({route, navigation}) => {
     const edit = async () => {
         if (plantName === ""){
             createAlert("Add Name");
-        } else if (selectedLocation === ""){
+        } else if (selectedLocationId === ""){
             createAlert("Select a location")
         } else if (lightValue === 0){
             createAlert("Select a light value")
@@ -108,26 +103,23 @@ const EditPlantScreen = ({route, navigation}) => {
         } else {
             console.log("Name: " + plantName)
             console.log("Species: " + species)
-            console.log("Location id: " + selectedLocation.locationId)
+            console.log("Location id: " + selectedLocationId)
             console.log("Light: " + lightValue)
             console.log("Water: " + waterValue)
             console.log("Image: " + image)
-
-            // to delete from server
             console.log("OldImage: " + initImageName)
+            console.log("SelectedLocation: ")
+            console.log(selectedLocation)
 
             // only change here in case of canceling
-            plant.locationId = selectedLocation.locationId;
+            plant.locationId = selectedLocationId;
             plant.plantName = plantName;
             plant.light = lightValue;
             plant.water = waterValue;
             plant.species = species;
             plant.frequency = 14 - waterValue - lightValue;
             plant.image = image.split("/").pop();
-
-
             editPlant(plant, image, initImageName);
-
             plantChanged(plant)
             navigation.goBack();
         }
@@ -163,8 +155,8 @@ const EditPlantScreen = ({route, navigation}) => {
                     <View style={{overflow: "hidden"}}>
                         {image === "" ? <View style={styles.image}></View> : <View style={styles.image}><Image source={{uri: image}} style={styles.imageStyle} /></View>}
                     </View>
+
                     {/*menu*/}
-                    
                     <View style={styles.menuContainer}>
                         <MenuProvider style={styles.menuProvider}> 
                             <Menu style={styles.menu}>
@@ -215,15 +207,22 @@ const EditPlantScreen = ({route, navigation}) => {
 
                     <SelectDropdown
                         buttonStyle={{width: "100%"}}
-                        data={locations}
+                        data={locations.concat({locationName: "none", locationId: null})}
                         defaultButtonText={"select location..."}
                         defaultValue={selectedLocation}
                         onSelect={(selectedItem, index) => {
                             console.log(selectedItem, index)
+                            if (selectedItem.locationName !== "none"){
+                                setSelectedLocationId(selectedItem.locationId)
+                                setLightValue(selectedItem.light)
+                                setWaterValue(selectedItem.water)
+                            } else {
+                                setSelectedLocationId(null)
+                                setLightValue(3)
+                                setWaterValue(3)
+                            }
+
                             // let location = locations.filter(location =>location.locationName === selectedItem)
-                            setSelectedLocation(selectedItem)
-                            setLightValue(selectedItem.light)
-                            setWaterValue(selectedItem.water)
                         }}
                         buttonTextAfterSelection={(selectedItem, index) => {
                             // text represented after item is selected

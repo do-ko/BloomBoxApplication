@@ -105,7 +105,6 @@ export const DiaryProvider = ({children}) => {
             }).then(res => {
                 let newDiary = res.data;
                 console.log("Loaded edited diary entry to the database: ", newDiary.title, " | ", newDiary.diaryContent, " | ", newDiary.image);
-                //console.log(newDiary);
 
                 const editArray = diaries.map(diary => diary.diaryId === newDiary.diaryId ? newDiary : diary)
                 setDiaries(editArray)

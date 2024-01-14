@@ -37,8 +37,6 @@ import ReminderPlantScreen from "../components/ReminderPlantScreen";
 import {RemainderContext} from "../context/RemainderContext";
 import {ExpandingDot} from "react-native-animated-pagination-dots";
 
-
-
 import { Menu, MenuProvider, MenuTrigger, MenuOptions, MenuOption} from "react-native-popup-menu";
 import EmptyListComponent from "../components/EmptyListComponent";
 import ReminderHomeScreen from "../components/ReminderHomeScreen";
@@ -168,11 +166,6 @@ const PlantScreen = ({route, navigation}) => {
                         <LocationSvg />
                         <View>
                             <Text style={styles.dataTitle}>LOCATION</Text>
-                            {/*{console.log("PLANT:")}*/}
-                            {/*{console.log(plant)}*/}
-                            {/*<Text style={styles.dataText}>{plant.locationId == null */}
-                            {/*    ? "not specified" */}
-                            {/*    : (isLoading ? "loading" : locations.filter(location => location.locationId === plant.locationId)[0].locationName)}</Text>*/}
                             {plant.locationId === null
                                 ? <Text style={styles.dataText(32)}>not specified</Text>
                                 : (isLoading

@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {
+    Alert,
     Button,
     Dimensions,
     FlatList,
@@ -39,7 +40,7 @@ const ensureDirExists = async () => {
     }
 }
 
-const DiaryScreen = ({route, navigation}) => {
+const EditDiaryScreen = ({route, navigation}) => {
     
     const {diary, diaryChanged} = route.params;
     const {userInfo} = useContext(AuthContext);
@@ -48,10 +49,11 @@ const DiaryScreen = ({route, navigation}) => {
     const [title, setTitle] = useState(diary.title)
     const [date, setDate] = useState(new Date(Date.parse(diary.entryDate)))
     const [image, setImage] = useState(BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image)
-    const [description, setDescription] = useState("");
+    const [description, setDescription] = useState(diary.diaryContent);
     
     const initImageName = diary.image;
-    
+    const {editDiary} = useContext(DiaryContext);
+
     const selectImage = async (useLibrary) => {
         let result;
         if (useLibrary){
@@ -100,6 +102,7 @@ const DiaryScreen = ({route, navigation}) => {
             console.log("Title: " + title)
             console.log("Date: " + date)
             console.log("Image: " + image.split("/").pop())
+            console.log("Content: " + description)
 
             // to delete from server
             console.log("OldImage: " + initImageName)
@@ -112,14 +115,17 @@ const DiaryScreen = ({route, navigation}) => {
 
             editDiary(diary, image.split("/").pop(), initImageName);
 
-
             diaryChanged(diary)
             navigation.goBack();
         }
     }
+
+    const createAlert = (msg) =>
+        Alert.alert('Incomplete input', msg, [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ]);
     
-    
-    const {getAllDiariesForPlant, diaries, addDiary, isLoadingDiary, editDiary} = useContext(DiaryContext);
+
 
     return(
         <ScrollView>
@@ -335,4 +341,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default DiaryScreen;
+export default EditDiaryScreen;
