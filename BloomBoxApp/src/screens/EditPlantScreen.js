@@ -85,6 +85,7 @@ const EditPlantScreen = ({route, navigation}) => {
 
     const saveImage = async (imageUri) => {
         await ensureDirExists();
+        
         const filename = new Date().getTime() + ".jpg";
         const dest = imgDir + filename;
         await FileSystem.copyAsync({from: imageUri, to: dest});

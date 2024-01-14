@@ -37,7 +37,7 @@ export const DiaryProvider = ({children}) => {
 
         setIsLoading(true);
         if (image !== "") {
-            uploadImage(image, userInfo.userId, "diary");
+            uploadImage(image, userInfo.userId, "diaries");
             axios.post(`${BASE_URL}/diaries`, {
                 plantId: plantId,
                 title: title,
@@ -78,50 +78,51 @@ export const DiaryProvider = ({children}) => {
     const editDiary = (diary, image, oldImageName) => {
         setIsLoading(true);
         
-        
         if (diary.image !== "defaultDiary.jpg"){
             // if new image is not default
 
             // delete old image from server
             if (oldImageName !== "defaultDiary.jpg" && diary.image !== oldImageName){
+                console.log("Trying to delete old image (non-default image)...");
                 deleteImage(oldImageName, userInfo.userId, "diary");
             }
 
             // upload new image to server if different
             if (diary.image !== oldImageName){
+                console.log("Trying to upload new image...")
                 uploadImage(image, userInfo.userId, "diary");
-                console.log("new image uploaded.")
             }
+            
+            console.log("Newly changed diary data: ", diary.diaryId, ", plantId: ", diary.plantId, ", title: ", diary.title, ", entryDate: ", diary.entryDate, ", newImage: ", diary.image, ", newContent: ", diary.diaryContent);
 
             axios.put(`${BASE_URL}/diaries`, {
                 diaryId : diary.diaryId,
                 plantId : diary.plantId,
                 title : diary.title,
                 entry_date : diary.entryDate,
-                image: image,
+                image: diary.image,
                 diaryContent: diary.diaryContent
             }).then(res => {
                 let newDiary = res.data;
-                //console.log("   This works!!!!!!!!!!   ");
-                console.log(newDiary);
+                console.log("Loaded edited diary entry to the database: ", newDiary.title, " | ", newDiary.diaryContent, " | ", newDiary.image);
+                //console.log(newDiary);
 
                 const editArray = diaries.map(diary => diary.diaryId === newDiary.diaryId ? newDiary : diary)
                 setDiaries(editArray)
 
                 setIsLoading(false);
             }).catch(e => {
-                console.log(`1rst diary editing error ${e}`);
+                console.log(`!!!  Diary editing error ${e}  !!!`);
                 setIsLoading(false);
             })
 
-        } else {
+        } else { // if old image is default
 
             // delete old image from server
             if (oldImageName !== "defaultDiary.jpg"){
+                console.log("Trying to delete old image (non-default image) (2 option)...")
                 deleteImage(oldImageName, userInfo.userId, "diary");
             }
-
-            
             
             axios.put(`${BASE_URL}/diaries`, {
                 diaryId : diary.diaryId,
@@ -132,14 +133,16 @@ export const DiaryProvider = ({children}) => {
                 diaryContent: diary.diaryContent
             }).then(res => {
                 let newDiary = res.data;
-                console.log(newDiary);
+                
+                console.log("Loaded edited diary entry to the database: ", newDiary.title, " | ", newDiary.diaryContent, " | ", newDiary.image);
+                //console.log(newDiary);
 
                 const editArray = diaries.map(diary => diary.diaryId === newDiary.diaryId ? newDiary : diary)
                 setDiaries(editArray)
 
                 setIsLoading(false);
             }).catch(e => {
-                console.log(`2nd diary editing error ${e}`);
+                console.log(`diary editing error ${e}`);
                 setIsLoading(false);
 
             })

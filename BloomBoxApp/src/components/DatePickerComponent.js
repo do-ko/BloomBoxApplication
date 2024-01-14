@@ -41,11 +41,13 @@ const DatePickerComponent = () => {
   
     return (
       <SafeAreaView style={styles.datePickerContainer}>
-        {/* <Text>{date.toLocaleString()}</Text>
-        <Button onPress={showDatepicker} title="Select date" /> */}
-        {/* <Button onPress={showTimepicker} title="Show time picker!" /> */}
         <Pressable onPress={showDatepicker}>
-            <Text style={styles.dateText}>{date.toLocaleString()}</Text>
+            {/* <Text style={styles.dateText}>{date.toLocaleString()}</Text> */}
+            <View  style={styles.diaryDateContainer} >
+                <Text style={styles.diaryDateText}>{date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}</Text>
+                <Text style={styles.diaryDateMonthText}>{date.toLocaleString('default', { month: 'long' })}</Text>
+                <Text style={styles.diaryDateText}>{date.getFullYear()}</Text>
+            </View>
         </Pressable>
       </SafeAreaView>
     );
@@ -53,11 +55,41 @@ const DatePickerComponent = () => {
   
 const styles = StyleSheet.create({
     datePickerContainer: {
-        
+      width: "100%",
+      justifyContent: "center",
+      alignItems: "center",
     },
     
-    dateText: {
-        fontSize: 16,
+    showDatepicker: {
+      flex: 1,
+    },
+    
+    // dateText: {
+    //     fontSize: 16,
+    // },
+    
+    diaryDateContainer: {
+        width: "80%",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        gap: 5
+        // backgroundColor: "green"
+    },
+    
+    diaryDateText: {
+        fontSize: 20,
+        fontWeight: "300",
+        color: "#20201D",
+        lineHeight: 20,
+    },
+
+    diaryDateMonthText: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: "#DDB790",
+        lineHeight: 20,
+        textTransform: "uppercase"
     },
 })
   
