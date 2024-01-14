@@ -32,7 +32,6 @@ import * as FileSystem from 'expo-file-system';
 
 const imgDir = FileSystem.documentDirectory + "images/"
 
-
 const ensureDirExists = async () => {
     const dirInfo = await FileSystem.getInfoAsync(imgDir);
     if (!dirInfo.exists){
@@ -113,10 +112,10 @@ const EditDiaryScreen = ({route, navigation}) => {
             diary.image = image.split("/").pop();
             diary.diaryContent = description;
 
-            editDiary(diary, image.split("/").pop(), initImageName);
-
+            editDiary(diary, image, image.split("/").pop(), initImageName);
+            // console.log("HELLO  - - - - - - - - -")
             diaryChanged(diary)
-            navigation.goBack();
+            navigation.navigate("DiaryScreen", {diary});
         }
     }
 
@@ -124,7 +123,7 @@ const EditDiaryScreen = ({route, navigation}) => {
         Alert.alert('Incomplete input', msg, [
             {text: 'OK', onPress: () => console.log('OK Pressed')},
         ]);
-    
+
 
 
     return(

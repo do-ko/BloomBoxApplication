@@ -7,8 +7,10 @@ import {ImageContext} from "./ImageContext";
 export const DiaryContext = createContext();
 
 export const DiaryProvider = ({children}) => {
+    
     const [isLoadingDiary, setIsLoading] = useState(false);
     const [diaries, setDiaries] = useState([]);
+    
     const {uploadImage, deleteImage} = useContext(ImageContext);
     const {userInfo} = useContext(AuthContext);
 
@@ -28,6 +30,7 @@ export const DiaryProvider = ({children}) => {
             })
     }
 
+    
     const addDiary = (plantId, title, entryDate, image, imageUrl, diaryContent) => {
         console.log(plantId)
         console.log(title)
@@ -37,7 +40,7 @@ export const DiaryProvider = ({children}) => {
 
         setIsLoading(true);
         if (image !== "") {
-            uploadImage(image, userInfo.userId, "diaries");
+            uploadImage(image, userInfo.userId, "diary");
             axios.post(`${BASE_URL}/diaries`, {
                 plantId: plantId,
                 title: title,
@@ -75,7 +78,7 @@ export const DiaryProvider = ({children}) => {
     }
     
     
-    const editDiary = (diary, image, oldImageName) => {
+    const editDiary = (diary, image, imageURL, oldImageName) => {
         setIsLoading(true);
         
         if (diary.image !== "defaultDiary.jpg"){
@@ -100,10 +103,11 @@ export const DiaryProvider = ({children}) => {
                 plantId : diary.plantId,
                 title : diary.title,
                 entryDate : diary.entryDate,
-                image: image,
+                image: imageURL,
                 diaryContent: diary.diaryContent
             }).then(res => {
                 let newDiary = res.data;
+                
                 console.log("Loaded edited diary entry to the database: ", newDiary.title, " | ", newDiary.diaryContent, " | ", newDiary.image);
 
                 const editArray = diaries.map(diary => diary.diaryId === newDiary.diaryId ? newDiary : diary)
@@ -115,9 +119,9 @@ export const DiaryProvider = ({children}) => {
                 setIsLoading(false);
             })
 
-        } else { // if old image is default
+        } else { // if new image is default
 
-            // delete old image from server
+            // delete old image from server if it's not default
             if (oldImageName !== "defaultDiary.jpg"){
                 console.log("Trying to delete old image (non-default image) (2 option)...")
                 deleteImage(oldImageName, userInfo.userId, "diary");
