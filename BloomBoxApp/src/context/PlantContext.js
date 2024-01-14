@@ -30,6 +30,7 @@ export const PlantProvider = ({children}) => {
             })
     }
 
+    
     const addPlant = (locationId, plantName, species, light, water, frequency, image, imageUrl, firstRemainder) => {
         setIsLoading(true);
 

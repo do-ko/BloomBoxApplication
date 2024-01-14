@@ -31,7 +31,6 @@ import * as FileSystem from 'expo-file-system';
 
 const imgDir = FileSystem.documentDirectory + "images/"
 
-
 const ensureDirExists = async () => {
     const dirInfo = await FileSystem.getInfoAsync(imgDir);
     if (!dirInfo.exists){
@@ -48,7 +47,7 @@ const DiaryScreen = ({route, navigation}) => {
     const [title, setTitle] = useState(diary.title)
     const [date, setDate] = useState(new Date(Date.parse(diary.entryDate)))
     const [image, setImage] = useState(BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image)
-    const [description, setDescription] = useState("");
+    const [description, setDescription] = useState(diary.diaryContent);
     
     const initImageName = diary.image;
     
@@ -85,9 +84,7 @@ const DiaryScreen = ({route, navigation}) => {
         const filename = new Date().getTime() + ".jpg";
         const dest = imgDir + filename;
         await FileSystem.copyAsync({from: imageUri, to: dest});
-
         setImage(dest);
-
         console.log("dest coming:")
         console.log(dest);
     }
@@ -96,7 +93,8 @@ const DiaryScreen = ({route, navigation}) => {
     const edit = async () => {
         if (title === ""){
             createAlert("Title cannot be empty!");
-        } else {
+        } 
+        else {
             console.log("Title: " + title)
             console.log("Date: " + date)
             console.log("Image: " + image.split("/").pop())
@@ -110,10 +108,10 @@ const DiaryScreen = ({route, navigation}) => {
             diary.image = image.split("/").pop();
             diary.diaryContent = description;
 
-            editDiary(diary, image.split("/").pop(), initImageName);
+            editDiary(diary, image, image.split("/").pop(), initImageName);
             // console.log("HELLO  - - - - - - - - -")
             diaryChanged(diary)
-            navigation.goBack();
+            navigation.navigate("DiaryScreen", {diary});
         }
     }
     
