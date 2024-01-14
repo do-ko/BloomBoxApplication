@@ -32,10 +32,12 @@ export const DiaryProvider = ({children}) => {
 
     
     const addDiary = (plantId, title, entryDate, image, imageUrl, diaryContent) => {
+        console.log("====ADD DIARY====")
         console.log(plantId)
         console.log(title)
         console.log(entryDate)
         console.log(image)
+        console.log(imageUrl)
         console.log(diaryContent)
 
         setIsLoading(true);
