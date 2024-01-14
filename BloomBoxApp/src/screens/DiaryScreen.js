@@ -326,23 +326,19 @@ const styles = StyleSheet.create({
     },
     
     diaryEntryContainer: {
-        flex: 1,
-        flexDirection: "column",
+        flex: 2,
+        flexDirection: 'column',
+        backgroundColor: '#DFDFD9',
         width: "100%",
-        //height: "60%",
-        //paddingTop: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: "#DFDFD9",
+        height: 500,
+        paddingTop: 20,
+        paddingBottom: 20,
+        alignItems: "center",
     },
     
     diaryEntry: {
-        paddingTop: "8%",
-        paddingBottom: "5%",
-        paddingLeft: "13%",
-        paddingRight: "13%",
-        justifyContent: 'center',
-        alignItems: 'center',
+        flex: 1,
+        width: "80%",
     },
     
     diaryEntryText: {
