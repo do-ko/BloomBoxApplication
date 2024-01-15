@@ -164,7 +164,7 @@ const AddDiaryScreen = ({route, navigation}) => {
 
                         <View style={styles.nameInputContainer}>
                             <View  style={styles.nameSpeciesContainer} >
-                                <DatePickerComponent/>
+                                <DatePickerComponent date={date} setDate={setDate}/>
                                 <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter title"} maxLength={18} placeholderTextColor={"black"} value={title} onChangeText={(text) => setTitle(text)}/>
                             </View>
                         </View>

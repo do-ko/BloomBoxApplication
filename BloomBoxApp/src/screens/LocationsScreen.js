@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     },
 
     headerText: {
-        fontSize: 32,
+        fontSize: 40,
         fontWeight: "bold",
         textTransform: "uppercase",
     },
@@ -146,12 +146,18 @@ const styles = StyleSheet.create({
         height: "50%",
         backgroundColor: "white",
         borderRadius: 23,
-        width: "80%",
+        width: "85%",
         justifyContent: "flex-start",
         paddingHorizontal: 10,
         flexDirection: "row",
         // alignItems
         alignItems: "center"
+    },
+    
+    searchInput: {
+        flex: 1,
+        paddingHorizontal: 10,
+        fontSize: 22,
     },
 
     searchButton: {

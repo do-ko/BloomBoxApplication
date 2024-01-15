@@ -25,6 +25,7 @@
     "expo-image-picker": "~14.3.2",
     "expo-status-bar": "~1.6.0",
     "lodash.filter": "^4.6.0",
+    "mui": "^0.0.1",
     "react": "18.2.0",
     "react-native": "0.72.6",
     "react-native-animated-pagination-dots": "^0.1.73",

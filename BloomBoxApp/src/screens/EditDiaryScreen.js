@@ -113,7 +113,6 @@ const EditDiaryScreen = ({route, navigation}) => {
             diary.diaryContent = description;
 
             editDiary(diary, image, image.split("/").pop(), initImageName);
-            // console.log("HELLO  - - - - - - - - -")
             diaryChanged(diary)
             navigation.navigate("DiaryScreen", {diary});
         }
@@ -167,7 +166,7 @@ const EditDiaryScreen = ({route, navigation}) => {
                         
                         <View style={styles.nameInputContainer}>
                             <View style={styles.nameSpeciesContainer}>
-                                <DatePickerComponent/>
+                                <DatePickerComponent date={date} setDate={setDate}/>
                                 <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} maxLength={18} placeholderTextColor={"black"} value={title} onChangeText={(text) => setTitle(text)}/>
                             </View>
                         </View>

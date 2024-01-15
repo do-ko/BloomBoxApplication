@@ -14,8 +14,8 @@ import {
 } from "react-native";
 
 
-const DatePickerComponent = () => {
-    const [date, setDate] = useState(new Date());
+const DatePickerComponent = ({date, setDate}) => {
+    //const [date, setDate] = useState(date);
   
     const onChange = (event, selectedDate) => {
       const currentDate = selectedDate;

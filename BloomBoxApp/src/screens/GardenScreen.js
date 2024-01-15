@@ -75,17 +75,17 @@ const GardenScreen = ({navigation}) => {
                 <View style={styles.searchBar}>
                     {/*{isFocused ? <></> : <SearchSvg />}*/}
                     <SearchSvg/>
-                    <TextInput style={styles.searchInput} onFocus={() => setIsFocused(true)}
+                    <TextInput style={styles.searchInput} onFocus={() => setIsFocused(true)} maxLength={30}
                                onBlur={() => setIsFocused(false)} value={searchQuery} onChangeText={(query) => {
                         setSearchQuery(query)
                     }}/>
                 </View>
 
 
-                <Pressable style={styles.searchButton} onPress={() => {
+                {/* <Pressable style={styles.searchButton} onPress={() => {
                     console.log(Dimensions.get('window').width);
                 }}>
-                </Pressable>
+                </Pressable> */}
 
                 <Pressable style={styles.searchButton} onPress={() => navigation.navigate("AddPlant")}>
                     <AddSvg/>
@@ -219,6 +219,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontWeight: "bold",
         textTransform: "uppercase",
+        lineHeight: 38,
     },
 
     plantImage: {
@@ -244,7 +245,7 @@ const styles = StyleSheet.create({
         height: "50%",
         backgroundColor: "white",
         borderRadius: 23,
-        width: "65%",
+        width: "85%",
         justifyContent: "flex-start",
         paddingHorizontal: 10,
         flexDirection: "row",
@@ -253,7 +254,9 @@ const styles = StyleSheet.create({
     },
 
     searchInput: {
-        flex: 1
+        flex: 1,
+        paddingHorizontal: 10,
+        fontSize: 22,
     },
 
     searchButton: {
