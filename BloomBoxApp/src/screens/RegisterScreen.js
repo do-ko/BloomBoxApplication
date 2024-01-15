@@ -2,6 +2,7 @@ import React, {useContext, useState} from "react";
 import {Button, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {AuthContext} from "../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
+import BloomBoxLogoLoginRegisterSvg from "../images/SVGs/BloomBoxLogoLoginRegister";
 
 const RegisterScreen = ({navigation}) => {
     const [login, setLogin] = useState(null);
@@ -12,13 +13,18 @@ const RegisterScreen = ({navigation}) => {
     return(
         <View style={styles.container}>
             <Spinner visible={isLoading} />
+            <BloomBoxLogoLoginRegisterSvg />
             <View style={styles.wrapper}>
                 <TextInput style={styles.input} placeholder={"login"} value={login} onChangeText={(text) => {setLogin(text)}}/>
                 <TextInput style={styles.input} placeholder={"password"} value={password} onChangeText={(text) => {setPassword(text)}} secureTextEntry={true}/>
 
-                <Button style={styles.registerButton} title={"Register"} onPress={() => {
-                    register(login, password);
-                }}/>
+                {/*<Button style={styles.registerButton} title={"Register"} onPress={() => {*/}
+                {/*    register(login, password);*/}
+                {/*}}/>*/}
+
+                <TouchableOpacity style={styles.register} onPress={() => register(login, password)}>
+                    <Text style={styles.registerText}>register</Text>
+                </TouchableOpacity>
 
                 <View style={{flexDirection: "row", marginTop: 20}}>
                     <Text>Already have an account? </Text>
@@ -33,7 +39,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        gap: 50
         // backgroundColor: '#20201D'
     },
     wrapper: {
@@ -48,6 +55,16 @@ const styles = StyleSheet.create({
     },
     link: {
         color: '#5B6E4E'
+    },
+    register: {
+        backgroundColor: "#5B6E4E",
+        padding: 10,
+        borderRadius: 10
+    },
+    registerText: {
+        textAlign: "center",
+        color: "#fff",
+        textTransform: "uppercase"
     }
 })
 
