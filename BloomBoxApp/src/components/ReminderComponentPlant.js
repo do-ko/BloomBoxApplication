@@ -3,6 +3,8 @@ import WateringSvg from "../images/SVGs/Watering";
 import CheckButtonSvg from "../images/SVGs/CheckButton";
 import React, {useContext, useState} from "react";
 import {RemainderContext} from "../context/RemainderContext";
+import EmptyBoxSvg from "../images/SVGs/EmptyBox";
+import FailedSvg from "../images/SVGs/Failed";
 
 
 
@@ -34,9 +36,7 @@ const ReminderComponentPlant = ({reminder, containerColor, textColor, lineDecora
                 <WateringSvg color={textColor}/>
                 <Text style={styles.reminderTitle(textColor,lineDecoration)}>{reminder.remainderType}</Text>
             </View>
-
-            <CheckButtonSvg color={textColor}/>
-
+            {reminder.failed ? <FailedSvg color={textColor}/> : (done ? <CheckButtonSvg color={textColor}/> : <EmptyBoxSvg color={textColor}/>)}
         </Pressable>
     );
 }
