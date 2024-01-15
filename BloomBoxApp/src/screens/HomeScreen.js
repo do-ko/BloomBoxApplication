@@ -19,6 +19,8 @@ import {RemainderContext} from "../context/RemainderContext";
 import {PlantContext} from "../context/PlantContext";
 import EmptyListComponent from "../components/EmptyListComponent";
 import Gradient from "../images/SVGs/Gradient";
+// import LocalFloristIcon from "@mui/icons-material/LocalFlorist";
+
 
 
 
@@ -92,6 +94,7 @@ const HomeScreen = ({ navigation }) => {
       >
         <BarsSvg />
       </Pressable>
+
 
       <Spinner visible={isLoading} />
       <View style={styles.reminderListContainer}>
