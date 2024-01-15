@@ -56,10 +56,10 @@ const AddDiaryScreen = ({route, navigation}) => {
     const {userInfo} = useContext(AuthContext);
 
     
-    const [title, setTitle] = useState("No Title");
+    const [title, setTitle] = useState("");
     const [image, setImage] = useState("");
     const [date, setDate] = useState(new Date());
-    const [description, setDescription] = useState("No Description");
+    const [description, setDescription] = useState("");
     
     const [open, setOpen] = useState(false);
 
