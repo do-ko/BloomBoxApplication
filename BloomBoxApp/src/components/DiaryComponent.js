@@ -4,17 +4,16 @@ import {ImageContext} from "../context/ImageContext";
 import {BASE_URL} from "../config";
 import {AuthContext} from "../context/AuthContext";
 
-const DiaryComponent = ({diary, navigation}) => {
+const DiaryComponent = ({plant, diary, navigation}) => {
     const {userInfo} = useContext(AuthContext);
     const [date, setDate] = useState(new Date(Date.parse(diary.entryDate)));
 
     useEffect(() => {
-        console.log("TEST UPDATE!!!!")
         setDate(new Date(Date.parse(diary.entryDate)));
     }, [diary])
 
     return(
-        <Pressable style={styles.diaryItem} onPress={() => {navigation.navigate("DiaryScreen", {diary})}}>
+        <Pressable style={styles.diaryItem} onPress={() => {navigation.navigate("DiaryScreen", {diary, plant})}}>
 
             <View style={styles.diaryImageContainer}>
                 <Image style={styles.diaryImage} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image}} />

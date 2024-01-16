@@ -41,7 +41,7 @@ const ensureDirExists = async () => {
 
 const EditDiaryScreen = ({route, navigation}) => {
     
-    const {diary, diaryChanged} = route.params;
+    const {diary, plant} = route.params;
     const {userInfo} = useContext(AuthContext);
     
     // initial data
@@ -51,7 +51,7 @@ const EditDiaryScreen = ({route, navigation}) => {
     const [description, setDescription] = useState(diary.diaryContent);
     
     const initImageName = diary.image;
-    const {editDiary} = useContext(DiaryContext);
+    const {editDiary, deleteDiary} = useContext(DiaryContext);
 
     const selectImage = async (useLibrary) => {
         let result;
@@ -113,9 +113,14 @@ const EditDiaryScreen = ({route, navigation}) => {
             diary.diaryContent = description;
 
             editDiary(diary, image, image.split("/").pop(), initImageName);
-            diaryChanged(diary)
+            // diaryChanged(diary)
             navigation.navigate("DiaryScreen", {diary});
         }
+    }
+
+    const deleteDi = () => {
+        deleteDiary(diary.diaryId, diary.image)
+        navigation.navigate("PlantScreen", {plant})
     }
 
     const createAlert = (msg) =>
@@ -180,7 +185,12 @@ const EditDiaryScreen = ({route, navigation}) => {
                     <View style={styles.descriptionInputContainer}>
                         <TextInput placeholder={diary.diaryContent} value={description} onChangeText={(text) => setDescription(text)} style={styles.descriptionInput} multiline={true}/>               
                     </View>
+
+                    <Pressable style={styles.deleteButton} onPress={() => deleteDi()}>
+                        <Text style={styles.deleteText}>DELETE</Text>
+                    </Pressable>
                 </View>
+
                 
             </View>
         </ScrollView>
@@ -337,6 +347,23 @@ const styles = StyleSheet.create({
         fontSize: 22,
         fontWeight: "300",
     },
+    deleteButton: {
+        backgroundColor: "#5B6E4E",
+        borderRadius: 23,
+        paddingHorizontal: 25,
+        paddingVertical: 5,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 20
+    },
+
+    deleteText: {
+        fontSize: 24,
+        fontWeight: "bold",
+        color: "#fff",
+        letterSpacing: 3,
+        textAlign: "center"
+    }
 })
 
 export default EditDiaryScreen;

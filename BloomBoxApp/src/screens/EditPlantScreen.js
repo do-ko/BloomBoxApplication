@@ -120,7 +120,7 @@ const EditPlantScreen = ({route, navigation}) => {
             plant.frequency = 14 - waterValue - lightValue;
             plant.image = image.split("/").pop();
             editPlant(plant, image, initImageName);
-            plantChanged(plant)
+            // plantChanged(plant)
             navigation.goBack();
         }
 
