@@ -14,6 +14,7 @@ import {LocationContext} from "../context/LocationContext";
 import {RemainderContext} from "../context/RemainderContext";
 import EmptyListComponent from "../components/EmptyListComponent";
 import ReminderHomeScreen from "../components/ReminderHomeScreen";
+import {DiaryContext} from "../context/DiaryContext";
 
 const formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
@@ -30,6 +31,7 @@ const GardenScreen = ({navigation}) => {
     const {getAllPlants, plants, isLoading} = useContext(PlantContext);
     const {getAllLocationForUser, locations} = useContext(LocationContext)
     const {getRemaindersByUserId} = useContext(RemainderContext);
+    const {diaries} = useContext(DiaryContext);
 
 
     const [isFocused, setIsFocused] = useState(false);
@@ -41,8 +43,12 @@ const GardenScreen = ({navigation}) => {
     }, [])
 
     useEffect(() => {
+        console.log("locations changed!")
         getAllPlants();
+        console.log(diaries)
     }, [locations])
+
+
 
     return (
         <View style={styles.appContainer}>

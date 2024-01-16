@@ -192,7 +192,6 @@ const EditLocationScreen = ({ navigation, route }) => {
                     </View>
                 </View>
 
-                {/*DELETE BUTTON REMOVED DUE TO BUGS*/}
                 <Pressable style={styles.deleteButton} onPress={() => deleteLoc()}>
                     <Text style={styles.deleteText}>DELETE</Text>
                 </Pressable>

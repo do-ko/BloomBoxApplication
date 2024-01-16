@@ -239,8 +239,27 @@ export const PlantProvider = ({children}) => {
             }
     }
 
+    const deletePlant = (plantId, image) => {
+        setIsLoading(true)
+        deleteImage(image, userInfo.userId, "plant");
+        axios.delete(`${BASE_URL}/plants/${plantId}`)
+            .then(res => {
+                console.log(res.data)
+                if (plants.length === 1){
+                    setPlants([])
+                } else {
+                    setPlants(plants.filter(plant => plant.plantId !== plantId))
+                }
+
+                setIsLoading(false)
+            }).catch(e => {
+            console.log(`plant delete error - ${e}`)
+            setIsLoading(false)
+        })
+    }
+
     return(
-        <PlantContext.Provider value={{isLoading, plants, getAllPlants, addPlant, editPlant}}>
+        <PlantContext.Provider value={{isLoading, plants, getAllPlants, addPlant, editPlant, deletePlant}}>
             {children}
         </PlantContext.Provider>
     );
