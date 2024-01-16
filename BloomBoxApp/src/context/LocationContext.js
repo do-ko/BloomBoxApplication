@@ -1,9 +1,7 @@
-import React, {createContext, useContext, useEffect, useState} from "react";
+import React, {createContext, useContext, useState} from "react";
 import axios from "axios";
 import {BASE_URL} from "../config";
-import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
 import {AuthContext} from "./AuthContext";
-import {PlantContext} from "./PlantContext";
 import {ImageContext} from "./ImageContext";
 
 export const LocationContext = createContext();
@@ -130,10 +128,8 @@ export const LocationProvider = ({children}) => {
             .then(res => {
                 console.log(res.data)
                 if (locations.length === 1){
-                    console.log("Last location")
                     setLocations([])
                 } else {
-                    console.log("not last location")
                     setLocations(locations.filter(location => location.locationId !== locationId))
                 }
 

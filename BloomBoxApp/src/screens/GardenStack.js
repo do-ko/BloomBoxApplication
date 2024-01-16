@@ -15,8 +15,8 @@ import {RemainderProvider} from "../context/RemainderContext";
 const Stack = createNativeStackNavigator();
 const GardenStack = () => {
     return(
-        <PlantProvider>
-            <LocationProvider>
+        // <PlantProvider>
+        //     <LocationProvider>
                 <DiaryProvider>
                     <Stack.Navigator>
                         <Stack.Screen name={"GardenScreen"} component={GardenScreen} options={{headerShown:false}}/>
@@ -28,8 +28,8 @@ const GardenStack = () => {
                         <Stack.Screen name={"AddDiary"} component={AddDiaryScreen} options={{headerShown:false}}/>
                     </Stack.Navigator>
                 </DiaryProvider>
-            </LocationProvider>
-        </PlantProvider>
+        //     </LocationProvider>
+        // </PlantProvider>
     );
 }
 

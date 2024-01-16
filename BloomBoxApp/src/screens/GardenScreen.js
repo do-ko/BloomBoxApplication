@@ -41,9 +41,7 @@ const GardenScreen = ({navigation}) => {
     }, [])
 
     useEffect(() => {
-        console.log("Locations changed!")
         getAllPlants();
-        // getAllLocationForUser();
     }, [locations])
 
     return (
@@ -93,13 +91,13 @@ const GardenScreen = ({navigation}) => {
 
             </View>
             {/*<FlatList data={locations} renderItem={(item) => <Text>item.locationName</Text>} />*/}
-            {console.log(locations)}
+
 
             <View style={styles.plantsContainer}>
                 <Spinner visible={isLoading}/>
                 {plants.length === 0 ? <EmptyListComponent type={"plants"} color={"#5B6E4E"}/>
                     :
-                    <FlatList data={formatData(plants.filter((plant) => plant.plantName.toLocaleString().toLowerCase().includes(searchQuery.toLowerCase())), 2)} extraData={locations} refreshing={false} onRefresh={() => getAllPlants()} style={{flex:1}} numColumns={2} keyExtractor={(item) => item.plantId} renderItem={({item}) => {
+                    <FlatList data={formatData(plants.filter((plant) => plant.plantName.toLocaleString().toLowerCase().includes(searchQuery.toLowerCase())), 2)} extraData={plants} refreshing={false} onRefresh={() => getAllPlants()} style={{flex:1}} numColumns={2} keyExtractor={(item) => item.plantId} renderItem={({item}) => {
                         if (item.empty === true) {
                             return <View style={styles.itemInvisible}/>
                         }

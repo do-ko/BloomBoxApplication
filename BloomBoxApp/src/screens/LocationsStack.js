@@ -12,13 +12,15 @@ import EditLocationScreen from "./EditLocationScreen";
 const Stack = createNativeStackNavigator();
 const LocationsStack = () => {
     return(
-        <LocationProvider>
-            <Stack.Navigator>
-                <Stack.Screen name={"Locations"} component={LocationsScreen} options={{headerShown:false}}/>
-                <Stack.Screen name={"AddLocation"} component={AddLocationScreen} options={{headerShown:false}}/>
-                <Stack.Screen name={"EditLocation"} component={EditLocationScreen} options={{headerShown:false}}/>
-            </Stack.Navigator>
-        </LocationProvider>
+        // <PlantProvider>
+        //     <LocationProvider>
+                <Stack.Navigator>
+                    <Stack.Screen name={"Locations"} component={LocationsScreen} options={{headerShown:false}}/>
+                    <Stack.Screen name={"AddLocation"} component={AddLocationScreen} options={{headerShown:false}}/>
+                    <Stack.Screen name={"EditLocation"} component={EditLocationScreen} options={{headerShown:false}}/>
+                </Stack.Navigator>
+        //     </LocationProvider>
+        // </PlantProvider>
     );
 }
 
