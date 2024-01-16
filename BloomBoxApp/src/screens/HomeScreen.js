@@ -35,12 +35,12 @@ const HomeScreen = ({ navigation }) => {
   const formatDataForList = () => {
     let tempData = remainders;
 
-    tempData.sort((rem1, rem2) => {
-      return new Date(Date.parse(rem1.remainderDay)) - new Date(Date.parse(rem2.remainderDay));
-    })
+    // tempData.sort((rem1, rem2) => {
+    //   return new Date(Date.parse(rem1.remainderDay)) - new Date(Date.parse(rem2.remainderDay));
+    // })
 
     tempData.sort((rem1, rem2) => {
-      return rem1.done - rem2.done;
+      return rem1.done - rem2.done || new Date(Date.parse(rem1.remainderDay)) - new Date(Date.parse(rem2.remainderDay));
     })
 
     return tempData.filter(rem => new Date(Date.parse(rem.remainderDay)) - new Date() <= 0 && !rem.failed);
