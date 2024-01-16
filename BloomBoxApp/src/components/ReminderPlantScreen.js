@@ -37,7 +37,7 @@ const ReminderPlantScreen = ({reminder}) => {
     return (
         <>
             {reminder.failed ?
-                <ReminderComponentPlant reminder={reminder} containerColor={"red"} textColor={"#A9A9A7"} lineDecoration={"line-through"}/>
+                <ReminderComponentPlant reminder={reminder} containerColor={"#994758"} textColor={"#4D1C25"} lineDecoration={"line-through"}/>
                 :
                 (reminder.done ?
                     <ReminderComponentPlant reminder={reminder} containerColor={"#DFDFD9"} textColor={"#A9A9A7"} lineDecoration={"line-through"}/>
