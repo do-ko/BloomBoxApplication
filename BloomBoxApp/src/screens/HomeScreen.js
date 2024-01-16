@@ -39,6 +39,10 @@ const HomeScreen = ({ navigation }) => {
       return new Date(Date.parse(rem1.remainderDay)) - new Date(Date.parse(rem2.remainderDay));
     })
 
+    tempData.sort((rem1, rem2) => {
+      return rem1.done - rem2.done;
+    })
+
     return tempData.filter(rem => new Date(Date.parse(rem.remainderDay)) - new Date() <= 0 && !rem.failed);
   }
 
