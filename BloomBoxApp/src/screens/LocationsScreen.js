@@ -22,6 +22,8 @@ const LocationsScreen = ({ navigation }) => {
         getAllLocationForUser();
     }, [])
 
+
+
     return (
         <View style={styles.appContainer}>
             <Gradient style={{

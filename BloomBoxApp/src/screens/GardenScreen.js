@@ -14,6 +14,7 @@ import {LocationContext} from "../context/LocationContext";
 import {RemainderContext} from "../context/RemainderContext";
 import EmptyListComponent from "../components/EmptyListComponent";
 import ReminderHomeScreen from "../components/ReminderHomeScreen";
+import {DiaryContext} from "../context/DiaryContext";
 
 const formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
@@ -30,6 +31,7 @@ const GardenScreen = ({navigation}) => {
     const {getAllPlants, plants, isLoading} = useContext(PlantContext);
     const {getAllLocationForUser, locations} = useContext(LocationContext)
     const {getRemaindersByUserId} = useContext(RemainderContext);
+    const {diaries} = useContext(DiaryContext);
 
 
     const [isFocused, setIsFocused] = useState(false);
@@ -41,10 +43,12 @@ const GardenScreen = ({navigation}) => {
     }, [])
 
     useEffect(() => {
-        console.log("Locations changed!")
+        console.log("locations changed!")
         getAllPlants();
-        // getAllLocationForUser();
+        console.log(diaries)
     }, [locations])
+
+
 
     return (
         <View style={styles.appContainer}>
@@ -93,13 +97,13 @@ const GardenScreen = ({navigation}) => {
 
             </View>
             {/*<FlatList data={locations} renderItem={(item) => <Text>item.locationName</Text>} />*/}
-            {console.log(locations)}
+
 
             <View style={styles.plantsContainer}>
                 <Spinner visible={isLoading}/>
                 {plants.length === 0 ? <EmptyListComponent type={"plants"} color={"#5B6E4E"}/>
                     :
-                    <FlatList data={formatData(plants.filter((plant) => plant.plantName.toLocaleString().toLowerCase().includes(searchQuery.toLowerCase())), 2)} extraData={locations} refreshing={false} onRefresh={() => getAllPlants()} style={{flex:1}} numColumns={2} keyExtractor={(item) => item.plantId} renderItem={({item}) => {
+                    <FlatList data={formatData(plants.filter((plant) => plant.plantName.toLocaleString().toLowerCase().includes(searchQuery.toLowerCase())), 2)} extraData={plants} refreshing={false} onRefresh={() => getAllPlants()} style={{flex:1}} numColumns={2} keyExtractor={(item) => item.plantId} renderItem={({item}) => {
                         if (item.empty === true) {
                             return <View style={styles.itemInvisible}/>
                         }

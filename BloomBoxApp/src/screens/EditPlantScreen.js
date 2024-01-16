@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {Alert, Button, Dimensions, Image, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {Alert, Button, Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
 import {PlantContext} from "../context/PlantContext";
 import {LocationContext} from "../context/LocationContext";
 import {SelectList} from "react-native-dropdown-select-list/index";
@@ -36,7 +36,7 @@ const ensureDirExists = async () => {
 
 const EditPlantScreen = ({route, navigation}) => {
     const {plant,plantChanged} = route.params;
-    const {editPlant} = useContext(PlantContext);
+    const {editPlant, deletePlant} = useContext(PlantContext);
     const {userInfo} = useContext(AuthContext);
     const {getAllLocationForUser, locations} = useContext(LocationContext);
 
@@ -120,11 +120,16 @@ const EditPlantScreen = ({route, navigation}) => {
             plant.frequency = 14 - waterValue - lightValue;
             plant.image = image.split("/").pop();
             editPlant(plant, image, initImageName);
-            plantChanged(plant)
+            // plantChanged(plant)
             navigation.goBack();
         }
 
 
+    }
+
+    const deletePl = () => {
+        deletePlant(plant.plantId, plant.image)
+        navigation.navigate("GardenScreen")
     }
 
     const createAlert = (msg) =>
@@ -147,122 +152,129 @@ const EditPlantScreen = ({route, navigation}) => {
     }, [locations])
 
     return(
-        <View style={styles.appContainer}>
-            <View style={styles.imageNameContainer}>
-                {/*    image and name/species*/}
+        <ScrollView>
+            <View style={styles.appContainer}>
+                <View style={styles.imageNameContainer}>
+                    {/*    image and name/species*/}
 
-                <View style={styles.imageContainer}>
-                    <View style={{overflow: "hidden"}}>
-                        {image === "" ? <View style={styles.image}></View> : <View style={styles.image}><Image source={{uri: image}} style={styles.imageStyle} /></View>}
-                    </View>
-
-                    {/*menu*/}
-                    <View style={styles.menuContainer}>
-                        <MenuProvider style={styles.menuProvider}> 
-                            <Menu style={styles.menu}>
-                                <MenuTrigger customStyles={{triggerWrapper: styles.popup}}>
-                                    <BigAdd/>
-                                </MenuTrigger>
-                                
-                                <MenuOptions style={styles.menuOptions}>
-                                    <MenuOption onSelect={() => selectImage(false)} text="Take a photo" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
-                                    <View style={styles.divider}/>
-                                    <MenuOption onSelect={() => selectImage(true)} text="Open gallery" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
-                                    <MenuOption onSelect={() => setImage(BASE_URL + "/images/download/" + userInfo.userId + "/plant/defaultPlant.jpg")} text="Default" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
-                                </MenuOptions>
-                            </Menu>
-                        </MenuProvider>
-                    </View>
-
-                    <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-                        <BackSvg/>
-                    </Pressable>
-
-                    <Pressable style={styles.saveButton} onPress={() => edit()}>
-                        <SaveSvg/>
-                    </Pressable>
-
-                    <View style={styles.nameInputContainer}>
-                        <View  style={styles.nameSpeciesContainer} >
-                            <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} maxLength={10} placeholderTextColor={"black"} value={plantName} onChangeText={(text) => setPlantName(text)}/>
+                    <View style={styles.imageContainer}>
+                        <View style={{overflow: "hidden"}}>
+                            {image === "" ? <View style={styles.image}></View> : <View style={styles.image}><Image source={{uri: image}} style={styles.imageStyle} /></View>}
                         </View>
 
-                        <View  style={styles.nameSpeciesContainer} >
-                            <TextInput style={styles.speciesInput} underlineColorAndroid={"transparent"} placeholder={"enter species"} maxLength={39} placeholderTextColor={"black"} value={species} onChangeText={(text) => setSpecies(text)}/>
-                        </View>
-                    </View>
+                        {/*menu*/}
+                        <View style={styles.menuContainer}>
+                            <MenuProvider style={styles.menuProvider}>
+                                <Menu style={styles.menu}>
+                                    <MenuTrigger customStyles={{triggerWrapper: styles.popup}}>
+                                        <BigAdd/>
+                                    </MenuTrigger>
 
+                                    <MenuOptions style={styles.menuOptions}>
+                                        <MenuOption onSelect={() => selectImage(false)} text="Take a photo" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                                        <View style={styles.divider}/>
+                                        <MenuOption onSelect={() => selectImage(true)} text="Open gallery" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                                        <MenuOption onSelect={() => setImage(BASE_URL + "/images/download/" + userInfo.userId + "/plant/defaultPlant.jpg")} text="Default" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                                    </MenuOptions>
+                                </Menu>
+                            </MenuProvider>
+                        </View>
+
+                        <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+                            <BackSvg/>
+                        </Pressable>
+
+                        <Pressable style={styles.saveButton} onPress={() => edit()}>
+                            <SaveSvg/>
+                        </Pressable>
+
+                        <View style={styles.nameInputContainer}>
+                            <View  style={styles.nameSpeciesContainer} >
+                                <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} placeholder={"Enter Name"} maxLength={10} placeholderTextColor={"black"} value={plantName} onChangeText={(text) => setPlantName(text)}/>
+                            </View>
+
+                            <View  style={styles.nameSpeciesContainer} >
+                                <TextInput style={styles.speciesInput} underlineColorAndroid={"transparent"} placeholder={"enter species"} maxLength={39} placeholderTextColor={"black"} value={species} onChangeText={(text) => setSpecies(text)}/>
+                            </View>
+                        </View>
+
+
+                    </View>
 
                 </View>
 
-            </View>
 
+                {/*    DATA SECTION*/}
+                <View style={styles.locationWaterLightContainer}>
+                    {/*    location light water*/}
 
-            {/*    DATA SECTION*/}
-            <View style={styles.locationWaterLightContainer}>
-                {/*    location light water*/}
+                    <View style={styles.dataContainer}>
+                        {/*    location*/}
 
-                <View style={styles.dataContainer}>
-                    {/*    location*/}
+                        <SelectDropdown
+                            buttonStyle={{width: "100%"}}
+                            data={locations.concat({locationName: "none", locationId: null})}
+                            defaultButtonText={"select location..."}
+                            defaultValue={selectedLocation}
+                            onSelect={(selectedItem, index) => {
+                                console.log(selectedItem, index)
+                                if (selectedItem.locationName !== "none"){
+                                    setSelectedLocationId(selectedItem.locationId)
+                                    setLightValue(selectedItem.light)
+                                    setWaterValue(selectedItem.water)
+                                } else {
+                                    setSelectedLocationId(null)
+                                    setLightValue(3)
+                                    setWaterValue(3)
+                                }
 
-                    <SelectDropdown
-                        buttonStyle={{width: "100%"}}
-                        data={locations.concat({locationName: "none", locationId: null})}
-                        defaultButtonText={"select location..."}
-                        defaultValue={selectedLocation}
-                        onSelect={(selectedItem, index) => {
-                            console.log(selectedItem, index)
-                            if (selectedItem.locationName !== "none"){
-                                setSelectedLocationId(selectedItem.locationId)
-                                setLightValue(selectedItem.light)
-                                setWaterValue(selectedItem.water)
-                            } else {
-                                setSelectedLocationId(null)
-                                setLightValue(3)
-                                setWaterValue(3)
+                                // let location = locations.filter(location =>location.locationName === selectedItem)
+                            }}
+                            buttonTextAfterSelection={(selectedItem, index) => {
+                                // text represented after item is selected
+                                // if data array is an array of objects then return selectedItem.property to render after item is selected
+                                return selectedItem.locationName
+                            }}
+                            rowTextForSelection={(item, index) => {
+                                // text represented for each item in dropdown
+                                // if data array is an array of objects then return item.property to represent item in dropdown
+                                return item.locationName
+                            }} />
+                    </View>
+
+                    {/*    light*/}
+                    <View style={styles.dataContainer}>
+                        <Text style={styles.dataText}>Light</Text>
+                        <View style={styles.lightWaterIconContainer}>
+                            {
+                                [...Array(5).keys()].map( i =><Pressable onPress={() => setLightValue(i+1)}>
+                                    {i < lightValue ? <SunFilledSvg/> : <SunEmptySvg/>}
+                                </Pressable>)
                             }
-
-                            // let location = locations.filter(location =>location.locationName === selectedItem)
-                        }}
-                        buttonTextAfterSelection={(selectedItem, index) => {
-                            // text represented after item is selected
-                            // if data array is an array of objects then return selectedItem.property to render after item is selected
-                            return selectedItem.locationName
-                        }}
-                        rowTextForSelection={(item, index) => {
-                            // text represented for each item in dropdown
-                            // if data array is an array of objects then return item.property to represent item in dropdown
-                            return item.locationName
-                        }} />
-                </View>
-
-                {/*    light*/}
-                <View style={styles.dataContainer}>
-                    <Text style={styles.dataText}>Light</Text>
-                    <View style={styles.lightWaterIconContainer}>
-                        {
-                            [...Array(5).keys()].map( i =><Pressable onPress={() => setLightValue(i+1)}>
-                                {i < lightValue ? <SunFilledSvg/> : <SunEmptySvg/>}
-                            </Pressable>)
-                        }
+                        </View>
                     </View>
-                </View>
 
-                {/*    water*/}
-                <View style={styles.dataContainer}>
-                    <Text style={styles.dataText}>Water</Text>
-                    <View style={styles.lightWaterIconContainer}>
-                        {
-                            [...Array(5).keys()].map( i =><Pressable onPress={() => setWaterValue(i+1)}>
-                                {i < waterValue ? <DropletFilledSvg/> : <DropletEmptySvg/>}
-                            </Pressable>)
-                        }
+                    {/*    water*/}
+                    <View style={styles.dataContainer}>
+                        <Text style={styles.dataText}>Water</Text>
+                        <View style={styles.lightWaterIconContainer}>
+                            {
+                                [...Array(5).keys()].map( i =><Pressable onPress={() => setWaterValue(i+1)}>
+                                    {i < waterValue ? <DropletFilledSvg/> : <DropletEmptySvg/>}
+                                </Pressable>)
+                            }
+                        </View>
                     </View>
+
+                    <Pressable style={styles.deleteButton} onPress={() => deletePl()}>
+                        <Text style={styles.deleteText}>DELETE</Text>
+                    </Pressable>
+
                 </View>
-
-
             </View>
-        </View>
+
+        </ScrollView>
+
     )
 }
 
@@ -439,6 +451,24 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between"
+    },
+
+    deleteButton: {
+        backgroundColor: "#5B6E4E",
+        borderRadius: 23,
+        paddingHorizontal: 25,
+        paddingVertical: 5,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 20
+    },
+
+    deleteText: {
+        fontSize: 24,
+        fontWeight: "bold",
+        color: "#fff",
+        letterSpacing: 3,
+        textAlign: "center"
     }
 })
 

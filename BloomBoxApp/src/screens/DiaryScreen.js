@@ -16,25 +16,16 @@ import AddSvg from "../images/SVGs/Add";
 import BackSvg from "../images/SVGs/BackButton";
 import BigAdd from "../images/SVGs/BigAdd";
 import {BASE_URL} from "../config";
-import SaveSvg from "../images/SVGs/SaveButton";
 import {AuthContext} from "../context/AuthContext";
-
-import {LocationContext} from "../context/LocationContext";
-
 import BigEditSvg from "../images/SVGs/BigEdit";
 
 
 const DiaryScreen = ({route, navigation}) => {
     
-    const {diary} = route.params;
+    const {diary, plant} = route.params;
     const {userInfo} = useContext(AuthContext);
-    // const [date, setDate] = useState(new Date(Date.parse(diary.entryDate)))
 
-    const diaryChanged = (diary)=>{
-        //   console.log("plant changed2: ",plant)
-    }
 
-    
     return(
         
         <View style={styles.appContainer}>
@@ -53,7 +44,7 @@ const DiaryScreen = ({route, navigation}) => {
                     </Pressable>
 
 
-                    <Pressable style={styles.editButton} onPress={() => navigation.navigate("EditDiary", {diary,diaryChanged})}>
+                    <Pressable style={styles.editButton} onPress={() => navigation.navigate("EditDiary", {diary, plant})}>
                         <BigEditSvg/>
                     </Pressable>
 
@@ -73,47 +64,7 @@ const DiaryScreen = ({route, navigation}) => {
 
                 </View>
             </View>
-            
-            {/*<View style={styles.imageTitleContainer}>*/}
-            {/*    /!*    image and name/species*!/*/}
 
-            {/*    <View style={styles.imageContainer}>*/}
-            {/*        <Image style={styles.image} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image}} />*/}
-            {/*    </View>*/}
-            {/*    */}
-            {/*    <View style={styles.headerContainer}>*/}
-            {/*        <View  style={styles.dateContainer} >*/}
-            {/*            <Text style={styles.diaryDateText}>*/}
-            {/*                {date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}.{date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}.{date.getFullYear()}*/}
-            {/*            </Text>*/}
-            {/*        </View>*/}
-
-            {/*        <View>*/}
-            {/*            <Text style={styles.diaryTitleText}>{diary.title}</Text>*/}
-            {/*        </View>*/}
-            {/*    </View>*/}
-                
-
-                {/* <View style={styles.diaryTextContainer}>
-                    {/*{console.log(date.getUTCDay())}*/}
-                    {/* <Text style={styles.diaryDateText}>{date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}.{date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}.{date.getFullYear()}</Text>
-                    <Text style={styles.diaryTitleText}>{diary.title}</Text>
-                </View> 
-                */}
-                
-            {/*</View>*/}
-            
-            {/*<Pressable style={styles.backButton} onPress={() => navigation.goBack()}>*/}
-            {/*    <BackSvg/>*/}
-            {/*</Pressable>*/}
-            
-            {/*/!* TODO: navigate to edit diary page *!/*/}
-            {/*<Pressable style={styles.editButton} onPress={() => navigation.navigate("EditPlant", {plant,plantChanged})}>*/}
-            {/*    <BigEditSvg/>*/}
-            {/*</Pressable>*/}
-            
-            
-            
             <View style={styles.diaryEntryContainer}>
                 <View style={styles.diaryEntry}>
                     <ScrollView style={styles.scrolledText}>

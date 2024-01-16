@@ -152,10 +152,28 @@ export const DiaryProvider = ({children}) => {
 
             })
         }
-}
+    }
+
+    const deleteDiary = (diaryId, image) => {
+        setIsLoading(true)
+        deleteImage(image, userInfo.userId, "diary");
+        axios.delete(`${BASE_URL}/diaries/${diaryId}`)
+            .then(res => {
+                console.log(res.data)
+                if (diaries.length === 1){
+                    setDiaries([])
+                } else {
+                    setDiaries(diaries.filter(diary => diary.diaryId !== diaryId))
+                }
+                setIsLoading(false)
+            }).catch(e => {
+            console.log(`diary delete error - ${e}`)
+            setIsLoading(false)
+        })
+    }
 
     return(
-        <DiaryContext.Provider value={{getAllDiariesForPlant, diaries, isLoadingDiary, addDiary, editDiary}}>
+        <DiaryContext.Provider value={{getAllDiariesForPlant, diaries, isLoadingDiary, addDiary, editDiary, deleteDiary}}>
             {children}
         </DiaryContext.Provider>
     );

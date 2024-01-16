@@ -109,9 +109,6 @@ const PlantScreen = ({route, navigation}) => {
         setTasksForToday(remToday);
     }
 
-    const plantChanged = (plant)=>{
-     //   console.log("plant changed2: ",plant)
-    }
 
 
     return(
@@ -132,7 +129,7 @@ const PlantScreen = ({route, navigation}) => {
                         </Pressable>
 
 
-                        <Pressable style={styles.saveButton} onPress={() => navigation.navigate("EditPlant", {plant,plantChanged})}>
+                        <Pressable style={styles.saveButton} onPress={() => navigation.navigate("EditPlant", {plant})}>
                             <BigEditSvg/>
                         </Pressable>
 
@@ -224,14 +221,14 @@ const PlantScreen = ({route, navigation}) => {
                         <Spinner visible={isLoadingDiary}/>
                         {diaries.length === 0 ? <EmptyListComponent type={"diaries"} color={"#5B6E4E"}/>
                             :
-                            <FlatList horizontal={true} data={diaries.sort((d1, d2) => {return new Date(Date.parse(d2.entryDate)) - new Date(Date.parse(d1.entryDate));})} refreshing={false} style={{flex:1}} keyExtractor={(item) => item.diaryId} renderItem={({item}) => {
+                            <FlatList horizontal={true} data={diaries.sort((d1, d2) => {return new Date(Date.parse(d2.entryDate)) - new Date(Date.parse(d1.entryDate));})} extraData={diaries} refreshing={false} style={{flex:1}} keyExtractor={(item) => item.diaryId} renderItem={({item}) => {
                                 if (item.empty === true) {
                                     console.log("Empty")
                                     return <View style={styles.itemInvisible}/>
                                 }
                                 console.log(item)
                                 return(
-                                    <DiaryComponent navigation={navigation} diary={item}/>
+                                    <DiaryComponent navigation={navigation} diary={item} plant={plant}/>
                                 );
                             }}
                             />}

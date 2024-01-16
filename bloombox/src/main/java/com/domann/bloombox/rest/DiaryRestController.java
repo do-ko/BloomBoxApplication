@@ -61,6 +61,6 @@ public class DiaryRestController {
 
         diaryService.deleteById(diaryId);
 
-        return "Deleted plant with id: " + diaryId;
+        return "Deleted diary with id: " + diaryId;
     }
 }
