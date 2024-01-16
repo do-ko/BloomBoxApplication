@@ -6,7 +6,12 @@ import {AuthContext} from "../context/AuthContext";
 
 const DiaryComponent = ({diary, navigation}) => {
     const {userInfo} = useContext(AuthContext);
-    const [date, setDate] = useState(new Date(Date.parse(diary.entryDate)))
+    const [date, setDate] = useState(new Date(Date.parse(diary.entryDate)));
+
+    useEffect(() => {
+        console.log("TEST UPDATE!!!!")
+        setDate(new Date(Date.parse(diary.entryDate)));
+    }, [diary])
 
     return(
         <Pressable style={styles.diaryItem} onPress={() => {navigation.navigate("DiaryScreen", {diary})}}>

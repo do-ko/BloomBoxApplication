@@ -28,17 +28,12 @@ const DiaryScreen = ({route, navigation}) => {
     
     const {diary} = route.params;
     const {userInfo} = useContext(AuthContext);
-    const [date, setDate] = useState(new Date(Date.parse(diary.entryDate)))
+    // const [date, setDate] = useState(new Date(Date.parse(diary.entryDate)))
 
     const diaryChanged = (diary)=>{
         //   console.log("plant changed2: ",plant)
     }
 
-    // useEffect(() => {
-    //     // diary.title = diary.title
-    //     console.log("Diary has changed");
-    //     console.log(diary);
-    // }, [diary])
     
     return(
         
@@ -64,9 +59,9 @@ const DiaryScreen = ({route, navigation}) => {
 
                     <View style={styles.nameDataContainer}>
                         <View  style={styles.diaryDateContainer} >
-                            <Text style={styles.diaryDateText}>{date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}</Text>
-                            <Text style={styles.diaryDateMonthText}>{date.toLocaleString('default', { month: 'long' })}</Text>
-                            <Text style={styles.diaryDateText}>{date.getFullYear()}</Text>
+                            <Text style={styles.diaryDateText}>{new Date(Date.parse(diary.entryDate)).getDate() < 10 ? "0" + new Date(Date.parse(diary.entryDate)).getDate() : new Date(Date.parse(diary.entryDate)).getDate()}</Text>
+                            <Text style={styles.diaryDateMonthText}>{new Date(Date.parse(diary.entryDate)).toLocaleString('default', { month: 'long' })}</Text>
+                            <Text style={styles.diaryDateText}>{new Date(Date.parse(diary.entryDate)).getFullYear()}</Text>
                         </View>
 
                         <View  style={styles.diaryDateContainer} >
