@@ -30,7 +30,15 @@ const ReminderComponentHome = ({reminder, containerColor, textColor, lineDecorat
 
 
     return (
-        <Pressable onPress={() => handleDonePress()} style={styles.reminderContainer(containerColor)}>
+        <Pressable onPress={() => handleDonePress()} style={({ pressed }) => [
+            {
+                opacity: pressed
+                    ? 0.5
+                    : 1,
+                backgroundColor: '#2277ee'
+            },
+            styles.reminderContainer(containerColor)
+        ]}>
             <View style={styles.remainderDataContainer}>
                 <View style={styles.remainderTitleContainer}>
                     <WateringSvg color={textColor}/>

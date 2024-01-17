@@ -31,7 +31,15 @@ const ReminderComponentPlant = ({reminder, containerColor, textColor, lineDecora
 
 
     return (
-        <Pressable onPress={() => handleDonePress()} style={styles.reminderContainer(containerColor)}>
+        <Pressable onPress={() => handleDonePress()} style={({ pressed }) => [
+            {
+                opacity: pressed
+                    ? 0.5
+                    : 1,
+                backgroundColor: '#2277ee'
+            },
+            styles.reminderContainer(containerColor)
+        ]}>
             <View style={styles.reminderTitleContainer}>
                 <WateringSvg color={textColor}/>
                 <Text style={styles.reminderTitle(textColor,lineDecoration)}>{reminder.remainderType}</Text>
