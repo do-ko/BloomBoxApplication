@@ -91,7 +91,15 @@ const GardenScreen = ({navigation}) => {
                 }}>
                 </Pressable> */}
 
-                <Pressable style={styles.searchButton} onPress={() => navigation.navigate("AddPlant")}>
+                <Pressable style={({ pressed }) => [
+                    {
+                        opacity: pressed
+                            ? 0.5
+                            : 1,
+                        backgroundColor: '#5B6E4E'
+                    },
+                    styles.searchButton
+                ]} onPress={() => navigation.navigate("AddPlant")}>
                     <AddSvg/>
                 </Pressable>
 
@@ -242,14 +250,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         flexDirection: "row",
         alignItems: "center",
-        flexWrap: "nowrap"
+        flexWrap: "nowrap",
     },
 
     searchBar: {
         height: "50%",
         backgroundColor: "white",
         borderRadius: 23,
-        width: "85%",
+        width: "80%",
         justifyContent: "flex-start",
         paddingHorizontal: 10,
         flexDirection: "row",

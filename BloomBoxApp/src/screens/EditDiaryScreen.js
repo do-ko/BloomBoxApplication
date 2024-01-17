@@ -186,7 +186,15 @@ const EditDiaryScreen = ({route, navigation}) => {
                         <TextInput placeholder={diary.diaryContent} value={description} onChangeText={(text) => setDescription(text)} style={styles.descriptionInput} multiline={true}/>               
                     </View>
 
-                    <Pressable style={styles.deleteButton} onPress={() => deleteDi()}>
+                    <Pressable style={({ pressed }) => [
+                        {
+                            opacity: pressed
+                                ? 0.5
+                                : 1,
+                            backgroundColor: '#5B6E4E'
+                        },
+                        styles.deleteButton
+                    ]} onPress={() => deleteDi()}>
                         <Text style={styles.deleteText}>DELETE</Text>
                     </Pressable>
                 </View>

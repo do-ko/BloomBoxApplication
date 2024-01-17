@@ -212,7 +212,15 @@ const PlantScreen = ({route, navigation}) => {
                     <View style={styles.diaryTitleContainer}>
                     {/*    TITLE AND BUTTON*/}
                         <Text style={styles.Title}>Diary</Text>
-                        <Pressable style={styles.addDiaryButton} onPress={() => navigation.navigate("AddDiary", {plant})}>
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed
+                                    ? 0.5
+                                    : 1,
+                                backgroundColor: '#5B6E4E'
+                            },
+                            styles.addDiaryButton
+                            ]} onPress={() => navigation.navigate("AddDiary", {plant})}>
                             <Text style={styles.addDiaryText}>ADD</Text>
                         </Pressable>
                     </View>

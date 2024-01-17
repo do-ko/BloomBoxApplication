@@ -192,7 +192,15 @@ const EditLocationScreen = ({ navigation, route }) => {
                     </View>
                 </View>
 
-                <Pressable style={styles.deleteButton} onPress={() => deleteLoc()}>
+                <Pressable style={({ pressed }) => [
+                    {
+                        opacity: pressed
+                            ? 0.5
+                            : 1,
+                        backgroundColor: '#5B6E4E'
+                    },
+                    styles.deleteButton
+                ]} onPress={() => deleteLoc()}>
                     <Text style={styles.deleteText}>DELETE</Text>
                 </Pressable>
 

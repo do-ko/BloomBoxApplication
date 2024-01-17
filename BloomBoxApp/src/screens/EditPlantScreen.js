@@ -266,7 +266,15 @@ const EditPlantScreen = ({route, navigation}) => {
                         </View>
                     </View>
 
-                    <Pressable style={styles.deleteButton} onPress={() => deletePl()}>
+                    <Pressable style={({ pressed }) => [
+                        {
+                            opacity: pressed
+                                ? 0.5
+                                : 1,
+                            backgroundColor: '#5B6E4E'
+                        },
+                        styles.deleteButton
+                    ]} onPress={() => deletePl()}>
                         <Text style={styles.deleteText}>DELETE</Text>
                     </Pressable>
 
