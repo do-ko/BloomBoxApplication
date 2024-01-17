@@ -60,13 +60,7 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Gradient style={{
-        position: 'absolute',
-        // top: 0,
-        // left: 0,
-        // right: 0,
-        bottom: 0,
-      }} />
+
       <View style={styles.topBar}>
         <View style={styles.rightTopBarMargin} />
         <View style={styles.welcomeImageContainer}>
@@ -77,6 +71,14 @@ const HomeScreen = ({ navigation }) => {
         </View>
         <View style={styles.rightTopBarMargin}></View>
       </View>
+
+      <Gradient style={{
+        position: 'absolute',
+        // top: 0,
+        // left: 0,
+        // right: 0,
+        bottom: 0,
+      }} />
 
       {/*NOTE: DRAWER NEEDS TO BE BELOW TOP BAR CONTAINER TO APPEAR ABOVE THAT VIEW ON PHONE*/}
       <Pressable
