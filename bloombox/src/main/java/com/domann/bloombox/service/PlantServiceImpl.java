@@ -36,11 +36,12 @@ public class PlantServiceImpl implements PlantService {
     @Override
     public List<Plant> findByUserId(int userId) {
         List<Plant> plants = plantDAO.findByUserId(userId);
-        if (plants.isEmpty()){
-            throw new RuntimeException("Did not find any plants with user id: " + userId);
-        } else {
-            return plants;
-        }
+//        if (plants.isEmpty()){
+//            throw new RuntimeException("Did not find any plants with user id: " + userId);
+//        } else {
+//            return plants;
+//        }
+        return plants;
     }
 
     @Transactional

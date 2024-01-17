@@ -28,9 +28,9 @@ public class PlantRestController {
     @GetMapping("user/{userId}")
     public List<Plant> findByLogin(@PathVariable int userId){
         List<Plant> plants = plantService.findByUserId(userId);
-        if (plants == null){
-            throw new LocationNotFoundException("Plant with userId not found - " + userId);
-        }
+//        if (plants == null){
+//            throw new LocationNotFoundException("Plant with userId not found - " + userId);
+//        }
         return plants;
     }
 

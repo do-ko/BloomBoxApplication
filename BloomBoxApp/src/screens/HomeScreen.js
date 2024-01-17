@@ -27,6 +27,7 @@ import Gradient from "../images/SVGs/Gradient";
 const HomeScreen = ({ navigation }) => {
   const { isLoading, logout, userInfo } = useContext(AuthContext);
   const { remainders, getRemaindersByUserId, wasEdited } = useContext(RemainderContext);
+  const { getAllPlants, plants } = useContext(PlantContext);
 
   const formatDateToString = (date) => {
     return `${date.getFullYear()}-${date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
@@ -52,11 +53,16 @@ const HomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     getRemaindersByUserId();
+    getAllPlants();
   }, [userInfo.userInfo])
 
   useEffect(() => {
     console.log("reminders changed ",remainders)
   }, [remainders])
+
+  useEffect(() => {
+    console.log("plants changed ",plants)
+  }, [plants])
 
   return (
     <View style={styles.container}>

@@ -9,7 +9,9 @@ import {RemainderProvider} from "./src/context/RemainderContext";
 import PlantComponent from "./src/components/PlantComponent";
 import {PlantContext, PlantProvider} from "./src/context/PlantContext";
 import {LocationProvider} from "./src/context/LocationContext";
-
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 
 export default function App() {
