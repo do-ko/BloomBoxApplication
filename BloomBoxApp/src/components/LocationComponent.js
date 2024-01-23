@@ -13,7 +13,7 @@ const LocationComponent = ({location, navigation}) => {
         <View style={styles.locationItem}>
 
             <View style={styles.locationImageContainer}>
-                <Image style={styles.locationImage} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/location/" + location.locationImage}} />
+                <Image testID="locationImage" style={styles.locationImage} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/location/" + location.locationImage}} />
             </View>
 
             <View style={styles.locationTextContainer}>
@@ -23,7 +23,7 @@ const LocationComponent = ({location, navigation}) => {
                     (location.locationName.length <= 18
                         ? <Text style={styles.locationText(16)}>{location.locationName}</Text>
                         : <Text style={styles.locationText(12)}>{location.locationName}</Text>)}
-                <Pressable style={styles.editButton} onPress={() => navigation.navigate("EditLocation", {location})}>
+                <Pressable testID="editButton" style={styles.editButton} onPress={() => navigation.navigate("EditLocation", {location})}>
                     <WhiteEditSvg/>
                 </Pressable>
             </View>

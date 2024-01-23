@@ -1,17 +1,13 @@
 import React, {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Alert, Button, Dimensions, Image, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 
-
 import {PlantContext} from "../context/PlantContext";
 import {LocationContext} from "../context/LocationContext";
-import {SelectList} from "react-native-dropdown-select-list/index";
 import SelectDropdown from 'react-native-select-dropdown'
 import { Menu, MenuProvider, MenuTrigger, MenuOptions, MenuOption} from "react-native-popup-menu";
 
 // SVG imports
-import Gradient from "../images/SVGs/Gradient";
-import GradientSvg from "../images/SVGs/Gradient";
-import BarsSvg from "../images/SVGs/Bars";
+
 import BackSvg from "../images/SVGs/BackButton";
 import SaveSvg from "../images/SVGs/SaveButton";
 import AddSvg from "../images/SVGs/Add";
@@ -20,13 +16,10 @@ import BigAdd from "../images/SVGs/BigAdd";
 // IMAGE IMPORTS
 import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
-import {BASE_URL} from "../config";
-import {AuthContext} from "../context/AuthContext";
 import SunFilledSvg from "../images/SVGs/SunFilled";
 import SunEmptySvg from "../images/SVGs/SunEmpty";
 import DropletFilledSvg from "../images/SVGs/DropletFilled";
 import DropletEmptySvg from "../images/SVGs/DropletEmpty";
-import {RemainderContext} from "../context/RemainderContext";
 
 const imgDir = FileSystem.documentDirectory + "images/"
 

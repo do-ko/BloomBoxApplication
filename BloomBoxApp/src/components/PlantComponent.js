@@ -8,7 +8,7 @@ const PlantComponent = ({plant, navigation}) => {
     const {userInfo} = useContext(AuthContext);
 
     return(
-        <Pressable style={styles.plantItem} onPress={() => {navigation.navigate("PlantScreen", {plant})}}>
+        <Pressable testID="plantItemPressable" style={styles.plantItem} onPress={() => {navigation.navigate("PlantScreen", {plant})}}>
 
             <View style={styles.plantImageContainer}>
                 <Image style={styles.plantImage} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.image}} />

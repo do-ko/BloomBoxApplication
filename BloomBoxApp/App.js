@@ -14,17 +14,8 @@ LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs();//Ignore all log notifications
 
 
+
 export default function App() {
-    // const customTextProps = {
-    //     style: {
-    //         fontFamily: "Inter",
-    //         color: "black"
-    //     }
-    // };
-    //
-    // setCustomText(customTextProps);
-
-
   return (
       <AuthProvider>
           <RemainderProvider>

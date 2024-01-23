@@ -11,9 +11,6 @@ import {
 import Spinner from "react-native-loading-spinner-overlay";
 import { AuthContext } from "../context/AuthContext";
 import BarsSvg from "../images/SVGs/Bars";
-import HangingLampSvg from "../images/SVGs/HangingLamp";
-import Plant2 from "../images/SVGs/Plant2";
-import ReminderPlantScreen from "../components/ReminderPlantScreen";
 import ReminderHomeScreen from "../components/ReminderHomeScreen";
 import {RemainderContext} from "../context/RemainderContext";
 import {PlantContext} from "../context/PlantContext";

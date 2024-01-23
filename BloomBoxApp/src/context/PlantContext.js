@@ -1,7 +1,7 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import axios from "axios";
 import {BASE_URL} from "../config";
-import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import {AuthContext} from "./AuthContext";
 import {ImageContext} from "./ImageContext";
 import {RemainderContext} from "./RemainderContext";
