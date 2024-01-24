@@ -24,14 +24,6 @@ public class UserRestController {
         return userService.findAllUsers();
     }
 
-//    @GetMapping("/{userID}")
-//    public User findById(@PathVariable int userID){
-//        User user = userService.findById(userID);
-//        if (user==null){
-//            throw new LocationNotFoundException("Location id not found - " + userID);
-//        }
-//        return user;
-//    }
 
     @GetMapping("/{userLogin}")
     public User findByLogin(@PathVariable String userLogin){

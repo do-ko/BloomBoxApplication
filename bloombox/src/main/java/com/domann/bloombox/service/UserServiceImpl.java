@@ -32,13 +32,6 @@ public class UserServiceImpl implements UserService{
         } else {
             return user;
         }
-//        User user = null;
-//        if (result.isPresent()){
-//            user = result.get();
-//        } else {
-//            throw new RuntimeException("Did not find location with id: " + id);
-//        }
-//        return user;
     }
 
     @Override
