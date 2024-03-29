@@ -40,39 +40,32 @@ export const RemainderProvider = ({children}) => {
     }
 
     const addRemainder = (plantId, plantName, remainderType, remainderDay, done, doneDate, failed) => {
-        console.log("remainders:");
-        console.log(remainders);
         setIsLoading(true);
         axios.post(`${BASE_URL}/remainders`, {
-                userId: userInfo.userId,
-                plantId: plantId,
-                plantName: plantName,
-                remainderType: remainderType,
-                remainderDay: remainderDay,
-                done: done,
-                doneDate: doneDate,
-                failed: failed
-            }).then(res => {
-                let newRemainder = res.data;
-                console.log(newRemainder);
-                setRemainders([...remainders, newRemainder]);
-                setIsLoading(false);
-            }).catch(e => {
-                console.log(`remainder adding error ${e}`);
-                setIsLoading(false);
+            userId: userInfo.userId,
+            plantId: plantId,
+            plantName: plantName,
+            remainderType: remainderType,
+            remainderDay: remainderDay,
+            done: done,
+            doneDate: doneDate,
+            failed: failed
+        }).then(res => {
+            let newRemainder = res.data;
+            setRemainders([...remainders, newRemainder]);
+            setIsLoading(false);
+        }).catch(e => {
+            console.log(`remainder adding error ${e}`);
+            setIsLoading(false);
 
-            })
+        })
     }
 
     const addRemainders = (remaindersToAdd) => {
-        // console.log("remainders:");
-        // console.log(remainders);
         setIsLoading(true);
         axios.post(`${BASE_URL}/remainders/many`, remaindersToAdd
         ).then(res => {
             let newRemainders = res.data;
-            console.log(newRemainders);
-
             let tempArray = remainders;
             newRemainders.forEach(rem => tempArray.push(rem));
 
@@ -89,7 +82,7 @@ export const RemainderProvider = ({children}) => {
     const editRemainder = (remainder) => {
         setIsLoading(true);
         axios.put(`${BASE_URL}/remainders`, {
-            remainderId : remainder.remainderId,
+            remainderId: remainder.remainderId,
             userId: userInfo.userId,
             plantId: remainder.plantId,
             plantName: remainder.plantName,
@@ -113,8 +106,17 @@ export const RemainderProvider = ({children}) => {
         })
     }
 
-    return(
-        <RemainderContext.Provider value={{isLoading, remainders, getRemaindersByUserId, getRemaindersByPlantId, addRemainder, addRemainders, editRemainder, wasEdited}}>
+    return (
+        <RemainderContext.Provider value={{
+            isLoading,
+            remainders,
+            getRemaindersByUserId,
+            getRemaindersByPlantId,
+            addRemainder,
+            addRemainders,
+            editRemainder,
+            wasEdited
+        }}>
             {children}
         </RemainderContext.Provider>
     );

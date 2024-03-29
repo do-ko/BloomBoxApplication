@@ -21,15 +21,15 @@ export const LocationProvider = ({children}) => {
                 setLocations(data);
                 setIsLoading(false);
             }).catch(e => {
-                console.log(`location fetch error ${e}`);
-                setIsLoading(false);
+            console.log(`location fetch error ${e}`);
+            setIsLoading(false);
         })
     }
 
     const addLocation = (locationName, light, water, imageName, image) => {
         setIsLoading(true);
 
-        if (image !== ""){
+        if (image !== "") {
             uploadImage(image, userInfo.userId, "location")
             axios.post(`${BASE_URL}/locations`, {
                 userId: userInfo.userId,
@@ -39,7 +39,6 @@ export const LocationProvider = ({children}) => {
                 locationImage: imageName
             }).then(res => {
                 let newLocation = res.data;
-                console.log(newLocation);
                 setLocations([...locations, newLocation]);
                 setIsLoading(false);
             }).catch(e => {
@@ -55,7 +54,6 @@ export const LocationProvider = ({children}) => {
                 locationImage: "defaultLocation.jpg"
             }).then(res => {
                 let newLocation = res.data;
-                console.log(newLocation);
                 setLocations([...locations, newLocation]);
                 setIsLoading(false);
             }).catch(e => {
@@ -69,12 +67,12 @@ export const LocationProvider = ({children}) => {
     const editLocation = (location, image, oldImageName) => {
         setIsLoading(true);
 
-        if (location.locationImage !== "defaultLocation.jpg"){
-            if (oldImageName !== "defaultLocation.jpg" && location.locationImage !== oldImageName){
+        if (location.locationImage !== "defaultLocation.jpg") {
+            if (oldImageName !== "defaultLocation.jpg" && location.locationImage !== oldImageName) {
                 deleteImage(oldImageName, userInfo.userId, "location");
             }
 
-            if (location.locationImage !== oldImageName){
+            if (location.locationImage !== oldImageName) {
                 uploadImage(image, userInfo.userId, "location");
             }
 
@@ -87,7 +85,6 @@ export const LocationProvider = ({children}) => {
                 locationImage: location.locationImage
             }).then(res => {
                 let newLocation = res.data;
-                console.log(newLocation);
                 const editArray = locations.map(location => location.locationId === newLocation.plantId ? newLocation : location)
                 setLocations(editArray)
                 setIsLoading(false);
@@ -97,7 +94,7 @@ export const LocationProvider = ({children}) => {
             })
 
         } else {
-            if (oldImageName !== "defaultLocation.jpg"){
+            if (oldImageName !== "defaultLocation.jpg") {
                 deleteImage(oldImageName, userInfo.userId, "location");
             }
 
@@ -110,7 +107,6 @@ export const LocationProvider = ({children}) => {
                 locationImage: "defaultLocation.jpg"
             }).then(res => {
                 let newLocation = res.data;
-                console.log(newLocation);
                 const editArray = locations.map(location => location.locationId === newLocation.plantId ? newLocation : location)
                 setLocations(editArray)
                 setIsLoading(false);
@@ -126,8 +122,7 @@ export const LocationProvider = ({children}) => {
         deleteImage(image, userInfo.userId, "location");
         axios.delete(`${BASE_URL}/locations/${locationId}`)
             .then(res => {
-                console.log(res.data)
-                if (locations.length === 1){
+                if (locations.length === 1) {
                     setLocations([])
                 } else {
                     setLocations(locations.filter(location => location.locationId !== locationId))
@@ -135,13 +130,14 @@ export const LocationProvider = ({children}) => {
 
                 setIsLoading(false)
             }).catch(e => {
-                console.log(`location delete error - ${e}`)
-                setIsLoading(false)
+            console.log(`location delete error - ${e}`)
+            setIsLoading(false)
         })
     }
 
-    return(
-        <LocationContext.Provider value={{isLoading, locations, getAllLocationForUser, addLocation, editLocation, deleteLocation}}>
+    return (
+        <LocationContext.Provider
+            value={{isLoading, locations, getAllLocationForUser, addLocation, editLocation, deleteLocation}}>
             {children}
         </LocationContext.Provider>
     );

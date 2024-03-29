@@ -1,19 +1,18 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext} from "react";
 import {Dimensions, Image, Pressable, StyleSheet, Text, View} from "react-native";
-import {ImageContext} from "../context/ImageContext";
 import {BASE_URL} from "../config";
 import {AuthContext} from "../context/AuthContext";
-import EditSvg from "../images/SVGs/Edit";
 import WhiteEditSvg from "../images/SVGs/EditWhite";
 
 const LocationComponent = ({location, navigation}) => {
     const {userInfo} = useContext(AuthContext);
 
-    return(
+    return (
         <View style={styles.locationItem}>
 
             <View style={styles.locationImageContainer}>
-                <Image style={styles.locationImage} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/location/" + location.locationImage}} />
+                <Image style={styles.locationImage}
+                       source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/location/" + location.locationImage}}/>
             </View>
 
             <View style={styles.locationTextContainer}>
@@ -34,7 +33,6 @@ const LocationComponent = ({location, navigation}) => {
 const styles = StyleSheet.create({
     locationItem: {
         height: (Dimensions.get('window').width / 2) - 30,
-        // marginHorizontal: 10,
         margin: 10,
         flex: 1,
         backgroundColor: "#F4F7F8",
@@ -50,27 +48,17 @@ const styles = StyleSheet.create({
         flex: 7,
         alignItems: "center",
         justifyContent: "flex-end"
-        // backgroundColor: "red"
     },
 
     locationTextContainer: {
         flex: 3,
         backgroundColor: "#20201D",
-        // borderBottomEndRadius: 23,
-        // borderEndEndRadius: 23
         borderBottomRightRadius: 23,
         borderBottomLeftRadius: 23,
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "row"
     },
-
-    // locationText: {
-    //     fontSize: 20,
-    //     fontWeight: "bold",
-    //     letterSpacing: 1,
-    //     color: "#fff"
-    // },
 
     locationText: (fontSize) => ({
         fontSize: fontSize,

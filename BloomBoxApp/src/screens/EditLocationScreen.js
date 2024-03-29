@@ -1,6 +1,4 @@
 import {Alert, Dimensions, Image, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
-import BarsSvg from "../images/SVGs/Bars";
-import AddSvg from "../images/SVGs/Add";
 import React, {useContext, useState} from "react";
 import BackSvg from "../images/SVGs/BackButton";
 import BigAdd from "../images/SVGs/BigAdd";
@@ -14,18 +12,18 @@ import {AuthContext} from "../context/AuthContext";
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
 import {LocationContext} from "../context/LocationContext";
-import { Menu, MenuProvider, MenuTrigger, MenuOptions, MenuOption} from "react-native-popup-menu";
+import {Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger} from "react-native-popup-menu";
 
 
 const imgDir = FileSystem.documentDirectory + "images/"
 const ensureDirExists = async () => {
     const dirInfo = await FileSystem.getInfoAsync(imgDir);
-    if (!dirInfo.exists){
+    if (!dirInfo.exists) {
         await FileSystem.makeDirectoryAsync(imgDir, {intermediates: true});
     }
 }
 
-const EditLocationScreen = ({ navigation, route }) => {
+const EditLocationScreen = ({navigation, route}) => {
     const {location} = route.params
 
     const {userInfo} = useContext(AuthContext);
@@ -41,11 +39,11 @@ const EditLocationScreen = ({ navigation, route }) => {
 
     const selectImage = async (useLibrary) => {
         let result;
-        if (useLibrary){
+        if (useLibrary) {
             result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
-                aspect: [1,1],
+                aspect: [1, 1],
                 quality: 0.75
             });
         } else {
@@ -53,14 +51,13 @@ const EditLocationScreen = ({ navigation, route }) => {
             result = await ImagePicker.launchCameraAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
-                aspect: [1,1],
+                aspect: [1, 1],
                 quality: 0.75
             });
         }
 
         // do something with the image here
-        if (!result.canceled){
-            console.log(result.assets[0].uri)
+        if (!result.canceled) {
             saveImage(result.assets[0].uri);
         }
     }
@@ -71,28 +68,20 @@ const EditLocationScreen = ({ navigation, route }) => {
         const dest = imgDir + filename;
         await FileSystem.copyAsync({from: imageUri, to: dest});
         setImage(dest);
-        // console.log("dest coming:")
-        // console.log(dest);
     }
 
     const edit = async () => {
-        if (locationName === ""){
+        if (locationName === "") {
             createAlert("Add Name");
-        } else if (lightValue === 0){
+        } else if (lightValue === 0) {
             createAlert("Select a light value")
-        } else if (waterValue === 0){
+        } else if (waterValue === 0) {
             createAlert("Select a water value")
         } else {
-            console.log("Name: " + locationName)
-            console.log("Light: " + lightValue)
-            console.log("Water: " + waterValue)
-            console.log("Image: " + image)
-
             location.locationName = locationName
             location.light = lightValue
             location.water = waterValue
             location.locationImage = image.split("/").pop()
-
             editLocation(location, image, initImageName)
             navigation.goBack();
         }
@@ -114,54 +103,53 @@ const EditLocationScreen = ({ navigation, route }) => {
                 <View style={styles.imageContainer}>
 
                     <View style={{overflow: "hidden"}}>
-                        <View style={styles.image}><Image source={{uri: image}} style={styles.imageStyle} /></View>
+                        <View style={styles.image}><Image source={{uri: image}} style={styles.imageStyle}/></View>
                     </View>
 
                     {/*menu*/}
-                    
-                    
-                    
+
+
                     <View style={styles.menuContainer}>
-                        <MenuProvider style={styles.menuProvider}> 
+                        <MenuProvider style={styles.menuProvider}>
                             <Menu style={styles.menu}>
                                 <MenuTrigger customStyles={{triggerWrapper: styles.popup}}>
                                     <BigAdd/>
                                 </MenuTrigger>
-                                
+
                                 <MenuOptions style={styles.menuOptions}>
-                                    <MenuOption onSelect={() => selectImage(false)} text="Take a photo" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                                    <MenuOption onSelect={() => selectImage(false)} text="Take a photo" customStyles={{
+                                        optionWrapper: styles.optionWrapper,
+                                        optionText: styles.optionWrapper
+                                    }}/>
                                     <View style={styles.divider}/>
-                                    <MenuOption onSelect={() => selectImage(true)} text="Open gallery" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
-                                    <MenuOption onSelect={() => setImage(BASE_URL + "/images/download/" + userInfo.userId + "/location/defaultLocation.jpg")} text="Default" customStyles={{optionWrapper: styles.optionWrapper, optionText: styles.optionWrapper}} />
+                                    <MenuOption onSelect={() => selectImage(true)} text="Open gallery" customStyles={{
+                                        optionWrapper: styles.optionWrapper,
+                                        optionText: styles.optionWrapper
+                                    }}/>
+                                    <MenuOption
+                                        onSelect={() => setImage(BASE_URL + "/images/download/" + userInfo.userId + "/location/defaultLocation.jpg")}
+                                        text="Default" customStyles={{
+                                        optionWrapper: styles.optionWrapper,
+                                        optionText: styles.optionWrapper
+                                    }}/>
                                 </MenuOptions>
                             </Menu>
                         </MenuProvider>
                     </View>
-                    
+
                     <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
                         <BackSvg/>
                     </Pressable>
-                    
-                    {/* <View style={styles.addButton}>
-                        <Pressable  onPress={() => selectImage(true)}>
-                            <BigAdd/>
-                        </Pressable>
-                        <Pressable  onPress={() => selectImage(false)}>
-                            <BigAdd/>
-                        </Pressable>
-                        <Pressable  onPress={() => setImage(BASE_URL + "/images/download/" + userInfo.userId + "/location/defaultLocation.jpg")}>
-                            <BigAdd/>
-                        </Pressable>
-                    </View> */}
-
 
                     <Pressable style={styles.saveButton} onPress={() => edit()}>
                         <SaveSvg/>
                     </Pressable>
 
                     <View style={styles.nameInputContainer}>
-                        <View style={styles.nameContainer} >
-                            <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} maxLength={22} placeholder={"Enter Name"} placeholderTextColor={"black"} value={locationName} onChangeText={(text) => setLocationName(text)}/>
+                        <View style={styles.nameContainer}>
+                            <TextInput style={styles.nameInput} underlineColorAndroid={"transparent"} maxLength={22}
+                                       placeholder={"Enter Name"} placeholderTextColor={"black"} value={locationName}
+                                       onChangeText={(text) => setLocationName(text)}/>
                         </View>
                     </View>
                 </View>
@@ -174,7 +162,7 @@ const EditLocationScreen = ({ navigation, route }) => {
                     <Text style={styles.dataText}>Light</Text>
                     <View style={styles.lightWaterIconContainer}>
                         {
-                            [...Array(5).keys()].map( i =><Pressable onPress={() => setLightValue(i+1)}>
+                            [...Array(5).keys()].map(i => <Pressable onPress={() => setLightValue(i + 1)}>
                                 {i < lightValue ? <SunFilledSvg/> : <SunEmptySvg/>}
                             </Pressable>)
                         }
@@ -185,14 +173,14 @@ const EditLocationScreen = ({ navigation, route }) => {
                     <Text style={styles.dataText}>Water</Text>
                     <View style={styles.lightWaterIconContainer}>
                         {
-                            [...Array(5).keys()].map( i =><Pressable onPress={() => setWaterValue(i+1)}>
+                            [...Array(5).keys()].map(i => <Pressable onPress={() => setWaterValue(i + 1)}>
                                 {i < waterValue ? <DropletFilledSvg/> : <DropletEmptySvg/>}
                             </Pressable>)
                         }
                     </View>
                 </View>
 
-                <Pressable style={({ pressed }) => [
+                <Pressable style={({pressed}) => [
                     {
                         opacity: pressed
                             ? 0.5
@@ -215,7 +203,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         alignItems: "center",
-        // padding: 15,
         backgroundColor: "#fff"
     },
 
@@ -275,47 +262,43 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         gap: 10
     },
-    
+
     menuContainer: {
-        //backgroundColor: "yellow",
         position: "absolute",
         width: "100%",
         height: "100%",
     },
-    
+
     menuProvider: {
-        //backgroundColor: "pink",
         width: "100%",
         height: "100%",
         borderBottomRightRadius: 80,
         borderBottomLeftRadius: 80,
     },
-    
+
     menu: {
-        //backgroundColor: "green",
-        width:"100%", 
+        width: "100%",
         height: "100%",
         alignItems: 'center',
         justifyContent: 'center',
         borderBottomRightRadius: 80,
         borderBottomLeftRadius: 80,
     },
-    
-    // clickable
+
     popup: {
         padding: 20,
     },
 
-    
+
     optionWrapper: {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        
+
         padding: 10,
         fontSize: 20,
     },
-    
+
     divider: {
         width: "100%",
         backgroundColor: "lightgrey",
@@ -328,9 +311,9 @@ const styles = StyleSheet.create({
         borderRadius: 23,
 
         height: 86,
-        backgroundColor:"#fff",
+        backgroundColor: "#fff",
         position: "absolute",
-        bottom: -43 ,
+        bottom: -43,
 
         alignSelf: 'center',
         justifyContent: "center",
@@ -343,18 +326,15 @@ const styles = StyleSheet.create({
         width: "80%",
         justifyContent: "center",
         alignItems: "center",
-        // backgroundColor: "green"
     },
 
     nameInput: {
         textAlign: "center",
         fontSize: 36,
-        // fontWeight: "bold"
     },
 
     dataContainer: {
         width: "80%",
-        // backgroundColor: "blue",
         marginBottom: 32
     },
 

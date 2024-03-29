@@ -1,17 +1,19 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext} from "react";
 import {Dimensions, Image, Pressable, StyleSheet, Text, View} from "react-native";
-import {ImageContext} from "../context/ImageContext";
 import {BASE_URL} from "../config";
 import {AuthContext} from "../context/AuthContext";
 
 const PlantComponent = ({plant, navigation}) => {
     const {userInfo} = useContext(AuthContext);
 
-    return(
-        <Pressable style={styles.plantItem} onPress={() => {navigation.navigate("PlantScreen", {plant})}}>
+    return (
+        <Pressable style={styles.plantItem} onPress={() => {
+            navigation.navigate("PlantScreen", {plant})
+        }}>
 
             <View style={styles.plantImageContainer}>
-                <Image style={styles.plantImage} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.image}} />
+                <Image style={styles.plantImage}
+                       source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.image}}/>
             </View>
 
             <View style={styles.plantTextContainer}>
@@ -24,7 +26,6 @@ const PlantComponent = ({plant, navigation}) => {
 const styles = StyleSheet.create({
     plantItem: {
         height: (Dimensions.get('window').width / 2) - 30,
-        // marginHorizontal: 10,
         margin: 10,
         flex: 1,
         backgroundColor: "#F4F7F8",
@@ -40,14 +41,11 @@ const styles = StyleSheet.create({
         flex: 7,
         alignItems: "center",
         justifyContent: "flex-end"
-        // backgroundColor: "red"
     },
 
     plantTextContainer: {
         flex: 3,
         backgroundColor: "#20201D",
-        // borderBottomEndRadius: 23,
-        // borderEndEndRadius: 23
         borderBottomRightRadius: 23,
         borderBottomLeftRadius: 23,
         justifyContent: "center",

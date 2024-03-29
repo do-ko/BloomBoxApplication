@@ -6,15 +6,14 @@ import {RemainderContext} from "../context/RemainderContext";
 import EmptyBoxSvg from "../images/SVGs/EmptyBox";
 
 
-
 const ReminderComponentHome = ({reminder, containerColor, textColor, lineDecoration}) => {
     const [done, setDone] = useState(reminder.done)
     const [doneDate, setDoneDate] = useState(reminder.doneDate)
     const {editRemainder} = useContext(RemainderContext);
 
     const handleDonePress = () => {
-        if (!reminder.failed){
-            if (done){
+        if (!reminder.failed) {
+            if (done) {
                 //     if was true before press -> now will be not done
                 setDoneDate(null);
                 reminder.doneDate = null;
@@ -30,7 +29,7 @@ const ReminderComponentHome = ({reminder, containerColor, textColor, lineDecorat
 
 
     return (
-        <Pressable onPress={() => handleDonePress()} style={({ pressed }) => [
+        <Pressable onPress={() => handleDonePress()} style={({pressed}) => [
             {
                 opacity: pressed
                     ? 0.5
@@ -45,14 +44,15 @@ const ReminderComponentHome = ({reminder, containerColor, textColor, lineDecorat
                     <View>
                         <Text style={styles.reminderTitle(textColor)}>{reminder.remainderType}</Text>
                         {reminder.plantName.length <= 7 ?
-                            <Text style={styles.reminderPlantName(textColor, lineDecoration, 24)}>{reminder.plantName}</Text>
+                            <Text
+                                style={styles.reminderPlantName(textColor, lineDecoration, 24)}>{reminder.plantName}</Text>
                             :
-                            <Text style={styles.reminderPlantName(textColor, lineDecoration, 18)}>{reminder.plantName}</Text>}
+                            <Text
+                                style={styles.reminderPlantName(textColor, lineDecoration, 18)}>{reminder.plantName}</Text>}
 
                     </View>
                 </View>
-                {/*<CheckButtonSvg color={textColor} />*/}
-                {done ? <CheckButtonSvg color={textColor} /> : <EmptyBoxSvg color={textColor} />}
+                {done ? <CheckButtonSvg color={textColor}/> : <EmptyBoxSvg color={textColor}/>}
 
             </View>
         </Pressable>
@@ -61,7 +61,7 @@ const ReminderComponentHome = ({reminder, containerColor, textColor, lineDecorat
 
 const styles = StyleSheet.create({
     reminderContainer: color => ({
-        backgroundColor : color,
+        backgroundColor: color,
         flex: 1,
         flexDirection: "row",
         paddingHorizontal: 10,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         color: color,
         textTransform: "capitalize",
         lineHeight: fontSize,
-        textDecorationLine : line
+        textDecorationLine: line
     })
 });
 

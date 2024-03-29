@@ -7,15 +7,14 @@ import EmptyBoxSvg from "../images/SVGs/EmptyBox";
 import FailedSvg from "../images/SVGs/Failed";
 
 
-
 const ReminderComponentPlant = ({reminder, containerColor, textColor, lineDecoration}) => {
     const [done, setDone] = useState(reminder.done)
     const [doneDate, setDoneDate] = useState(reminder.doneDate)
     const {editRemainder} = useContext(RemainderContext);
 
     const handleDonePress = () => {
-        if (!reminder.failed){
-            if (done){
+        if (!reminder.failed) {
+            if (done) {
                 //     if was true before press -> now will be not done
                 setDoneDate(null);
                 reminder.doneDate = null;
@@ -31,7 +30,7 @@ const ReminderComponentPlant = ({reminder, containerColor, textColor, lineDecora
 
 
     return (
-        <Pressable onPress={() => handleDonePress()} style={({ pressed }) => [
+        <Pressable onPress={() => handleDonePress()} style={({pressed}) => [
             {
                 opacity: pressed
                     ? 0.5
@@ -42,16 +41,17 @@ const ReminderComponentPlant = ({reminder, containerColor, textColor, lineDecora
         ]}>
             <View style={styles.reminderTitleContainer}>
                 <WateringSvg color={textColor}/>
-                <Text style={styles.reminderTitle(textColor,lineDecoration)}>{reminder.remainderType}</Text>
+                <Text style={styles.reminderTitle(textColor, lineDecoration)}>{reminder.remainderType}</Text>
             </View>
-            {reminder.failed ? <FailedSvg color={textColor}/> : (done ? <CheckButtonSvg color={textColor}/> : <EmptyBoxSvg color={textColor}/>)}
+            {reminder.failed ? <FailedSvg color={textColor}/> : (done ? <CheckButtonSvg color={textColor}/> :
+                <EmptyBoxSvg color={textColor}/>)}
         </Pressable>
     );
 }
 
 const styles = StyleSheet.create({
     reminderContainer: color => ({
-        backgroundColor : color,
+        backgroundColor: color,
         flex: 1,
         flexDirection: "row",
         padding: 20,
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: color,
         textTransform: "uppercase",
-        textDecorationLine : line
+        textDecorationLine: line
     })
 });
 

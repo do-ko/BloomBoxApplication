@@ -1,22 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
-import {
-    Dimensions,
-    Image,
-    Pressable,
-    StyleSheet,
-    Text,
-    View,
-} from "react-native";
-import WateringSvg from "../images/SVGs/Watering";
-import CheckButtonSvg from "../images/SVGs/CheckButton";
-import CheckedButtonDone from "../images/SVGs/CheckButtonDone";
-import CheckButtonDoneSvg from "../images/SVGs/CheckButtonDone";
-import WateringDone from "../images/SVGs/WateringDone";
-import WateringDoneSvg from "../images/SVGs/WateringDone";
-import {RemainderContext} from "../context/RemainderContext";
-import CheckButtonOverdueSvg from "../images/SVGs/CheckButtonOverdue";
-import WateringOverdueSvg from "../images/SVGs/WateringOverdue";
-import FailedSvg from "../images/SVGs/Failed";
+import React, {useEffect, useState} from "react";
 import ReminderComponentPlant from "./ReminderComponentPlant";
 
 const ReminderPlantScreen = ({reminder}) => {
@@ -37,18 +19,23 @@ const ReminderPlantScreen = ({reminder}) => {
     return (
         <>
             {reminder.failed ?
-                <ReminderComponentPlant reminder={reminder} containerColor={"#994758"} textColor={"#4D1C25"} lineDecoration={"line-through"}/>
+                <ReminderComponentPlant reminder={reminder} containerColor={"#994758"} textColor={"#4D1C25"}
+                                        lineDecoration={"line-through"}/>
                 :
                 (reminder.done ?
-                    <ReminderComponentPlant reminder={reminder} containerColor={"#DFDFD9"} textColor={"#A9A9A7"} lineDecoration={"line-through"}/>
+                    <ReminderComponentPlant reminder={reminder} containerColor={"#DFDFD9"} textColor={"#A9A9A7"}
+                                            lineDecoration={"line-through"}/>
                     :
                     (differenceInDays > 3 ?
-                            <ReminderComponentPlant reminder={reminder} containerColor={"#20201D"} textColor={"#FFFFFF"} lineDecoration={"none"}/>
+                            <ReminderComponentPlant reminder={reminder} containerColor={"#20201D"} textColor={"#FFFFFF"}
+                                                    lineDecoration={"none"}/>
                             :
                             (differenceInDays > 1 ?
-                                <ReminderComponentPlant reminder={reminder} containerColor={"#5B6E4E"} textColor={"#FFFFFF"} lineDecoration={"none"}/>
-                                :
-                                <ReminderComponentPlant reminder={reminder} containerColor={"#8AA578"} textColor={"#20201D"} lineDecoration={"none"}/>
+                                    <ReminderComponentPlant reminder={reminder} containerColor={"#5B6E4E"}
+                                                            textColor={"#FFFFFF"} lineDecoration={"none"}/>
+                                    :
+                                    <ReminderComponentPlant reminder={reminder} containerColor={"#8AA578"}
+                                                            textColor={"#20201D"} lineDecoration={"none"}/>
                             )
                     ))
             }

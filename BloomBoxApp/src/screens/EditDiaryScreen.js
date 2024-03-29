@@ -1,20 +1,7 @@
-import React, {useContext, useEffect, useState} from "react";
-import {
-    Alert,
-    Button,
-    Dimensions,
-    FlatList,
-    Image,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    View
-} from "react-native";
+import React, {useContext, useState} from "react";
+import {Alert, Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
 
 // SVGs
-import AddSvg from "../images/SVGs/Add";
 import BackSvg from "../images/SVGs/BackButton";
 import BigAdd from "../images/SVGs/BigAdd";
 import SaveSvg from "../images/SVGs/SaveButton";
@@ -25,7 +12,7 @@ import {AuthContext} from "../context/AuthContext";
 import {DiaryContext} from "../context/DiaryContext";
 
 // Components
-import { Menu, MenuProvider, MenuTrigger, MenuOptions, MenuOption} from "react-native-popup-menu";
+import {Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger} from "react-native-popup-menu";
 import DatePickerComponent from "../components/DatePickerComponent";
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
@@ -75,9 +62,7 @@ const EditDiaryScreen = ({route, navigation}) => {
 
         // do something with the image here
         if (!result.canceled){
-            console.log(result.assets[0].uri)
             saveImage(result.assets[0].uri);
-            //setImage(result.assets[0].uri);
         }
     };
 
@@ -86,11 +71,7 @@ const EditDiaryScreen = ({route, navigation}) => {
         const filename = new Date().getTime() + ".jpg";
         const dest = imgDir + filename;
         await FileSystem.copyAsync({from: imageUri, to: dest});
-
         setImage(dest);
-
-        console.log("dest coming:")
-        console.log(dest);
     }
 
     
@@ -98,22 +79,11 @@ const EditDiaryScreen = ({route, navigation}) => {
         if (title === ""){
             createAlert("Title cannot be empty!");
         } else {
-            console.log("Title: " + title)
-            console.log("Date: " + date)
-            console.log("Image: " + image.split("/").pop())
-            console.log("Content: " + description)
-
-            // to delete from server
-            console.log("OldImage: " + initImageName)
-
-            // only change here in case of canceling
             diary.title = title;
             diary.entryDate = date;
             diary.image = image.split("/").pop();
             diary.diaryContent = description;
-
             editDiary(diary, image, image.split("/").pop(), initImageName);
-            // diaryChanged(diary)
             navigation.navigate("DiaryScreen", {diary});
         }
     }
@@ -219,7 +189,6 @@ const styles = StyleSheet.create({
     // IMAGE AND TITLE CARD
     imageNameContainer: {
         flex: 2,
-        //backgroundColor: "red",
         width: "100%",
         paddingBottom: 90,
         

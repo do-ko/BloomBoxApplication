@@ -1,25 +1,8 @@
 import React, {useContext, useEffect, useState} from "react";
-import {
-    Animated,
-    Button,
-    Dimensions,
-    FlatList,
-    Image,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput, TouchableOpacity,
-    View, VirtualizedList
-} from "react-native";
-import {PlantContext} from "../context/PlantContext";
+import {Animated, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
 import {DiaryContext} from "../context/DiaryContext";
-import BarsSvg from "../images/SVGs/Bars";
-import AddSvg from "../images/SVGs/Add";
 import BackSvg from "../images/SVGs/BackButton";
-import BigAdd from "../images/SVGs/BigAdd";
 import {BASE_URL} from "../config";
-import SaveSvg from "../images/SVGs/SaveButton";
 import {AuthContext} from "../context/AuthContext";
 import LocationSvg from "../images/SVGs/Location";
 import {LocationContext} from "../context/LocationContext";
@@ -28,18 +11,12 @@ import SunFilledBig from "../images/SVGs/SunFilledBig";
 import BigEditSvg from "../images/SVGs/BigEdit";
 import ReverseGradientSvg from "../images/SVGs/ReverseGradient";
 import Spinner from "react-native-loading-spinner-overlay";
-import PlantComponent from "../components/PlantComponent";
 import DiaryComponent from "../components/DiaryComponent";
-import {red} from "react-native-reanimated/src";
-import {Agenda, Calendar} from "react-native-calendars";
-import {Card, Avatar} from 'react-native-paper';
+import {Calendar} from "react-native-calendars";
 import ReminderPlantScreen from "../components/ReminderPlantScreen";
 import {RemainderContext} from "../context/RemainderContext";
 import {ExpandingDot} from "react-native-animated-pagination-dots";
-
-import { Menu, MenuProvider, MenuTrigger, MenuOptions, MenuOption} from "react-native-popup-menu";
 import EmptyListComponent from "../components/EmptyListComponent";
-import ReminderHomeScreen from "../components/ReminderHomeScreen";
 
 
 const PlantScreen = ({route, navigation}) => {
@@ -58,14 +35,12 @@ const PlantScreen = ({route, navigation}) => {
     const scrollX = React.useRef(new Animated.Value(0)).current;
 
 
-
     useEffect(() => {
         getAllDiariesForPlant(plant.plantId);
         getAllLocationForUser();
-        // setTasks(remainders.filter(rem => rem.plantId === plant.plantId));
         formatMarkedDots();
         let today = new Date();
-        let todayDateString = `${today.getFullYear()}-${today.getMonth()+1 < 10 ? "0" + (today.getMonth()+1) : today.getMonth()+1}-${today.getDate() < 10 ? "0" + today.getDate() : today.getDate()}`
+        let todayDateString = `${today.getFullYear()}-${today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1}-${today.getDate() < 10 ? "0" + today.getDate() : today.getDate()}`
         getRemaindersForToday(todayDateString);
     }, [])
 
@@ -73,23 +48,31 @@ const PlantScreen = ({route, navigation}) => {
     const formatMarkedDots = () => {
         let remaindersForPlant = remainders.filter(rem => rem.plantId === plant.plantId);
         let today = new Date();
-        let todayDateString = `${today.getFullYear()}-${today.getMonth()+1 < 10 ? "0" + (today.getMonth()+1) : today.getMonth()+1}-${today.getDate() < 10 ? "0" + today.getDate() : today.getDate()}`
+        let todayDateString = `${today.getFullYear()}-${today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1}-${today.getDate() < 10 ? "0" + today.getDate() : today.getDate()}`
         setCurrentDay(todayDateString);
         setTodayDate(todayDateString);
-        console.log(todayDateString);
         let formattedTasks = {}
-        console.log(remaindersForPlant);
         remaindersForPlant.forEach((remainder) => {
             let date = new Date(Date.parse(remainder.remainderDay));
-            let dateString = `${date.getFullYear()}-${date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
-            if (dateString === todayDateString){
-                formattedTasks[dateString] = {marked: true, dotColor: "#FFFFFF", selected: true, selectedColor: '#5B6E4E'};
+            let dateString = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
+            if (dateString === todayDateString) {
+                formattedTasks[dateString] = {
+                    marked: true,
+                    dotColor: "#FFFFFF",
+                    selected: true,
+                    selectedColor: '#5B6E4E'
+                };
             } else {
-                formattedTasks[dateString] = {marked: true, dotColor: "#5B6E4E", selected: false, selectedColor: '#5B6E4E'};
+                formattedTasks[dateString] = {
+                    marked: true,
+                    dotColor: "#5B6E4E",
+                    selected: false,
+                    selectedColor: '#5B6E4E'
+                };
             }
         });
 
-        if (formattedTasks[todayDateString] === undefined){
+        if (formattedTasks[todayDateString] === undefined) {
             formattedTasks[todayDateString] = {selected: true, selectedColor: '#8AA578'};
         }
 
@@ -101,8 +84,8 @@ const PlantScreen = ({route, navigation}) => {
         let remToday = []
         remaindersForPlant.forEach((remainder) => {
             let date = new Date(Date.parse(remainder.remainderDay));
-            let dateString = `${date.getFullYear()}-${date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
-            if (dateString === dateStringInput){
+            let dateString = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
+            if (dateString === dateStringInput) {
                 remToday.push(remainder);
             }
         });
@@ -110,20 +93,18 @@ const PlantScreen = ({route, navigation}) => {
     }
 
 
-
-    return(
+    return (
         <ScrollView>
             <View style={styles.appContainer}>
                 <View style={styles.imageNameContainer}>
-                    {/*    image and name/species*/}
-
                     <View style={styles.imageContainer}>
                         <View style={{overflow: "hidden"}}>
                             <View style={styles.image}>
-                                <Image source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.image}} style={styles.imageStyle} />
+                                <Image
+                                    source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/plant/" + plant.image}}
+                                    style={styles.imageStyle}/>
                             </View>
                         </View>
-                        {/*menu*/}
                         <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
                             <BackSvg/>
                         </Pressable>
@@ -134,12 +115,14 @@ const PlantScreen = ({route, navigation}) => {
                         </Pressable>
 
                         <View style={styles.nameDataContainer}>
-                            <View  style={styles.nameSpeciesContainer} >
-                                {plant.plantName.length <=7 ? <Text style={styles.nameData(48)}>{plant.plantName}</Text> : <Text style={styles.nameData(32)}>{plant.plantName}</Text>}
+                            <View style={styles.nameSpeciesContainer}>
+                                {plant.plantName.length <= 7 ?
+                                    <Text style={styles.nameData(48)}>{plant.plantName}</Text> :
+                                    <Text style={styles.nameData(32)}>{plant.plantName}</Text>}
                             </View>
 
-                            <View  style={styles.nameSpeciesContainer} >
-                                {plant.species.length <=15
+                            <View style={styles.nameSpeciesContainer}>
+                                {plant.species.length <= 15
                                     ? <Text style={styles.speciesData(20)}>{plant.species}</Text>
                                     : (plant.species.length <= 23
                                         ? <Text style={styles.speciesData(16)}>{plant.species}</Text>
@@ -157,10 +140,8 @@ const PlantScreen = ({route, navigation}) => {
                 </View>
 
                 <View style={styles.plantDataContainer}>
-                    {/*    LOCATION, WATER, LIGHT DATA*/}
                     <View style={styles.locationContainer}>
-                        {/*    LOCATION*/}
-                        <LocationSvg />
+                        <LocationSvg/>
                         <View>
                             <Text style={styles.dataTitle}>LOCATION</Text>
                             {plant.locationId === null
@@ -168,23 +149,28 @@ const PlantScreen = ({route, navigation}) => {
                                 : (isLoading
                                     ? <Text style={styles.dataText(32)}>loading</Text>
                                     : (locations.filter(location => location.locationId === plant.locationId)[0].locationName.length <= 10
-                                        ? <Text style={styles.dataText(32)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>
+                                        ? <Text
+                                            style={styles.dataText(32)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>
                                         : (locations.filter(location => location.locationId === plant.locationId)[0].locationName.length <= 13
-                                            ? <Text style={styles.dataText(24)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>
+                                            ? <Text
+                                                style={styles.dataText(24)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>
                                             : (locations.filter(location => location.locationId === plant.locationId)[0].locationName.length <= 16)
-                                                ? <Text style={styles.dataText(20)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>
+                                                ? <Text
+                                                    style={styles.dataText(20)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>
                                                 : (locations.filter(location => location.locationId === plant.locationId)[0].locationName.length <= 18
-                                                    ? <Text style={styles.dataText(18)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>
+                                                    ? <Text
+                                                        style={styles.dataText(18)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>
                                                     : (locations.filter(location => location.locationId === plant.locationId)[0].locationName.length <= 20
-                                                        ? <Text style={styles.dataText(16)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>
-                                                        : <Text style={styles.dataText(14)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>)))))}
+                                                        ? <Text
+                                                            style={styles.dataText(16)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>
+                                                        : <Text
+                                                            style={styles.dataText(14)}>{locations.filter(location => location.locationId === plant.locationId)[0].locationName}</Text>)))))}
                         </View>
                     </View>
 
                     <View style={styles.waterLightContainer}>
                         <View style={styles.waterContainer}>
-                            {/*    WATER*/}
-                            <DropletFilledBigSvg />
+                            <DropletFilledBigSvg/>
                             <View>
                                 <Text style={styles.dataTitle}>WATER</Text>
                                 <Text style={styles.waterLightData}>{plant.water}/5</Text>
@@ -192,8 +178,7 @@ const PlantScreen = ({route, navigation}) => {
                         </View>
 
                         <View style={styles.lightContainer}>
-                            {/*    WATER*/}
-                            <SunFilledBig />
+                            <SunFilledBig/>
                             <View>
                                 <Text style={styles.dataTitle}>LIGHT</Text>
                                 <Text style={styles.waterLightData}>{plant.light}/5</Text>
@@ -204,15 +189,13 @@ const PlantScreen = ({route, navigation}) => {
                 </View>
 
 
-
                 <View style={styles.diarySectionContainer}>
                     <ReverseGradientSvg style={{
                         position: 'absolute',
                     }}/>
                     <View style={styles.diaryTitleContainer}>
-                    {/*    TITLE AND BUTTON*/}
                         <Text style={styles.Title}>Diary</Text>
-                        <Pressable style={({ pressed }) => [
+                        <Pressable style={({pressed}) => [
                             {
                                 opacity: pressed
                                     ? 0.5
@@ -220,7 +203,7 @@ const PlantScreen = ({route, navigation}) => {
                                 backgroundColor: '#5B6E4E'
                             },
                             styles.addDiaryButton
-                            ]} onPress={() => navigation.navigate("AddDiary", {plant})}>
+                        ]} onPress={() => navigation.navigate("AddDiary", {plant})}>
                             <Text style={styles.addDiaryText}>ADD</Text>
                         </Pressable>
                     </View>
@@ -229,13 +212,14 @@ const PlantScreen = ({route, navigation}) => {
                         <Spinner visible={isLoadingDiary}/>
                         {diaries.length === 0 ? <EmptyListComponent type={"diaries"} color={"#5B6E4E"}/>
                             :
-                            <FlatList horizontal={true} data={diaries.sort((d1, d2) => {return new Date(Date.parse(d2.entryDate)) - new Date(Date.parse(d1.entryDate));})} extraData={diaries} refreshing={false} style={{flex:1}} keyExtractor={(item) => item.diaryId} renderItem={({item}) => {
+                            <FlatList horizontal={true} data={diaries.sort((d1, d2) => {
+                                return new Date(Date.parse(d2.entryDate)) - new Date(Date.parse(d1.entryDate));
+                            })} extraData={diaries} refreshing={false} style={{flex: 1}}
+                                      keyExtractor={(item) => item.diaryId} renderItem={({item}) => {
                                 if (item.empty === true) {
-                                    console.log("Empty")
                                     return <View style={styles.itemInvisible}/>
                                 }
-                                console.log(item)
-                                return(
+                                return (
                                     <DiaryComponent navigation={navigation} diary={item} plant={plant}/>
                                 );
                             }}
@@ -246,88 +230,67 @@ const PlantScreen = ({route, navigation}) => {
 
                 <View style={styles.calendarSectionContainer}>
                     <View style={styles.calendarTitleContainer}>
-                        {/*    TITLE AND BUTTON*/}
                         <Text style={styles.Title}>Calendar</Text>
                     </View>
                     <View>
                         <Calendar
-                            // Handler which gets executed on day press. Default = undefined
                             onDayPress={day => {
                                 let tempArrayWithDates = markedDatesOnCal;
-
-                                // 1. handle old selected:
-                                if (currentDay !== todayDate){
-                                //     if old selected is not today's date
-                                    if (tempArrayWithDates[currentDay].marked === undefined){
-                                        //     if old selected was not marked:
+                                if (currentDay !== todayDate) {
+                                    if (tempArrayWithDates[currentDay].marked === undefined) {
                                         tempArrayWithDates[currentDay] = {selected: false};
                                     } else {
-                                        //     if old select was marked:
-                                        tempArrayWithDates[currentDay] = {selected: false, marked: true, dotColor: "#5B6E4E"}
+                                        tempArrayWithDates[currentDay] = {
+                                            selected: false,
+                                            marked: true,
+                                            dotColor: "#5B6E4E"
+                                        }
                                     }
                                 } else {
-                                    if (tempArrayWithDates[currentDay].marked === undefined){
-                                        //     if old selected was not marked:
+                                    if (tempArrayWithDates[currentDay].marked === undefined) {
                                         tempArrayWithDates[currentDay] = {selected: true, selectedColor: "#DFDFD9"};
                                     } else {
-                                        //     if old select was marked:
-                                        tempArrayWithDates[currentDay] = {selected: true, marked: true, dotColor: "#5B6E4E", selectedColor: "#DFDFD9"}
+                                        tempArrayWithDates[currentDay] = {
+                                            selected: true,
+                                            marked: true,
+                                            dotColor: "#5B6E4E",
+                                            selectedColor: "#DFDFD9"
+                                        }
                                     }
                                 }
 
-
-                                // 2. handle new selected:
-                                if (tempArrayWithDates[day.dateString] === undefined){
-                                //     if new selected not in markedDots yet (not a task day)
+                                if (tempArrayWithDates[day.dateString] === undefined) {
                                     tempArrayWithDates[day.dateString] = {selected: true, selectedColor: "#8AA578"};
                                 } else {
-                                    if (tempArrayWithDates[day.dateString].marked === undefined){
-                                            // if new selected is not marked
-                                            tempArrayWithDates[day.dateString] = {selected: true, selectedColor: "#8AA578"};
-                                        } else {
-                                            // if new selected is marked
-                                            tempArrayWithDates[day.dateString] = {selected: true, selectedColor: "#5B6E4E", marked: true, dotColor: "#fff"};
-                                        }
+                                    if (tempArrayWithDates[day.dateString].marked === undefined) {
+                                        tempArrayWithDates[day.dateString] = {selected: true, selectedColor: "#8AA578"};
+                                    } else {
+                                        tempArrayWithDates[day.dateString] = {
+                                            selected: true,
+                                            selectedColor: "#5B6E4E",
+                                            marked: true,
+                                            dotColor: "#fff"
+                                        };
+                                    }
                                 }
 
                                 setMarkedDatesOnCal(tempArrayWithDates);
-
-                                // change current day
                                 setCurrentDay(day.dateString)
-
                                 getRemaindersForToday(day.dateString);
 
                             }}
-                            // // Handler which gets executed on day long press. Default = undefined
-                            // onDayLongPress={day => {
-                            //     console.log('selected day', day);
-                            // }}
-                            // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
                             monthFormat={'yyyy MM'}
-                            // Handler which gets executed when visible month changes in calendar. Default = undefined
-                            onMonthChange={month => {
-                                console.log('month changed', month);
-                            }}
-
-                            // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday
                             firstDay={1}
-                            // Handler which gets executed when press arrow icon left. It receive a callback can go back month
                             onPressArrowLeft={subtractMonth => subtractMonth()}
-                            // Handler which gets executed when press arrow icon right. It receive a callback can go next month
                             onPressArrowRight={addMonth => addMonth()}
-
-                            // Enable the option to swipe between months. Default = false
                             enableSwipeMonths={true}
-
                             markedDates={markedDatesOnCal}
                         />
 
                         <View style={styles.remainderContainer}>
-                            {/*<Text>Day: {day.day}</Text>*/}
-                            {/*<ReminderPlantScreen />*/}
                             <FlatList
                                 data={tasksForToday}
-                                renderItem={({ item }) => (
+                                renderItem={({item}) => (
                                     <ReminderPlantScreen reminder={item}/>
                                 )}
                                 keyExtractor={(item) => item.remainderId.toString()}
@@ -337,7 +300,7 @@ const PlantScreen = ({route, navigation}) => {
                                 scrollEventThrottle={16}
                                 showsHorizontalScrollIndicator={false}
                                 onScroll={Animated.event(
-                                    [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                                    [{nativeEvent: {contentOffset: {x: scrollX}}}],
                                     {
                                         useNativeDriver: false,
                                     }
@@ -368,25 +331,10 @@ const PlantScreen = ({route, navigation}) => {
 
             </View>
         </ScrollView>
-
-
-
-
-        // <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-        //     <Button title={"GO BACK"} onPress={() => {navigation.goBack()}}/>
-        //     <Text>{plant.plantName}</Text>
-        //     <Text>{plant.plantId}</Text>
-        //     <Text>{plant.locationId}</Text>
-        //
-        //     {diaries.map(diary => <Text>{diary.title}</Text>)}
-        //     <Button title={"ADD DIARY TEST"} onPress={() => addDiary(plant.plantId, "test", Date.now(), null)}/>
-        //     <Button title={"EDIT PLANT"} onPress={() => navigation.navigate("EditPlant", {plant,plantChanged})}/>
-        // </View>
     );
 }
 
 const styles = StyleSheet.create({
-    // the whole app screen
     appContainer: {
         flex: 1,
         flexDirection: "column",
@@ -458,16 +406,7 @@ const styles = StyleSheet.create({
         width: "80%",
         justifyContent: "center",
         alignItems: "center",
-        // backgroundColor: "green"
     },
-
-    // nameData: {
-    //     textAlign: "center",
-    //     fontSize: 48,
-    //     fontWeight: "bold",
-    //     lineHeight: 48,
-    //     color: "#20201D"
-    // },
 
     nameData: (fontSize) => ({
         textAlign: "center",
@@ -506,13 +445,6 @@ const styles = StyleSheet.create({
         lineHeight: 16,
         color: "#20201D"
     },
-
-    // dataText: {
-    //     fontSize: 32,
-    //     fontWeight: "bold",
-    //     lineHeight: 32,
-    //     color: "#20201D"
-    // },
 
     dataText: (fontSize) => ({
         fontSize: fontSize,
@@ -559,22 +491,17 @@ const styles = StyleSheet.create({
 
     diarySectionContainer: {
         marginTop: 60,
-        // height: 392,
         width: "100%",
         padding: 20,
-        //backgroundColor: "red",
     },
 
     diaryTitleContainer: {
-        // backgroundColor: "red",
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between"
     },
 
-    diaryTitle: {
-
-    },
+    diaryTitle: {},
 
     Title: {
         fontSize: 48,
@@ -603,12 +530,8 @@ const styles = StyleSheet.create({
     },
 
     diaryContainer: {
-        // backgroundColor: "blue",
         height: 230,
         width: "100%",
-        // padding: 10,
-        // margin: 10,
-        // flex: 6,
         marginTop: 20
     },
 
@@ -624,7 +547,6 @@ const styles = StyleSheet.create({
 
     remainderContainer: {
         marginTop: 20,
-        // backgroundColor: "red",
         alignItems: "center"
     }
 

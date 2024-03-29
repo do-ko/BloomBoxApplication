@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Dimensions, Image, Pressable, StyleSheet, Text, View} from "react-native";
-import {ImageContext} from "../context/ImageContext";
 import {BASE_URL} from "../config";
 import {AuthContext} from "../context/AuthContext";
 
@@ -12,16 +11,20 @@ const DiaryComponent = ({plant, diary, navigation}) => {
         setDate(new Date(Date.parse(diary.entryDate)));
     }, [diary])
 
-    return(
-        <Pressable style={styles.diaryItem} onPress={() => {navigation.navigate("DiaryScreen", {diary, plant})}}>
+    return (
+        <Pressable style={styles.diaryItem} onPress={() => {
+            navigation.navigate("DiaryScreen", {diary, plant})
+        }}>
 
             <View style={styles.diaryImageContainer}>
-                <Image style={styles.diaryImage} source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image}} />
+                <Image style={styles.diaryImage}
+                       source={{uri: BASE_URL + "/images/download/" + userInfo.userId + "/diary/" + diary.image}}/>
             </View>
 
             <View style={styles.diaryTextContainer}>
                 {/*{console.log(date.getUTCDay())}*/}
-                <Text style={styles.diaryDateText}>{date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}.{date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1}.{date.getFullYear()}</Text>
+                <Text
+                    style={styles.diaryDateText}>{date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}.{date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1}.{date.getFullYear()}</Text>
                 {diary.title.length <= 8
                     ? <Text style={styles.diaryTitleText(24)}>{diary.title}</Text>
                     : (diary.title.length <= 10
@@ -29,8 +32,8 @@ const DiaryComponent = ({plant, diary, navigation}) => {
                         : (diary.title.length <= 12
                             ? <Text style={styles.diaryTitleText(18)}>{diary.title}</Text>
                             : (diary.title.length <= 13
-                                ? <Text style={styles.diaryTitleText(16)}>{diary.title}</Text>
-                                : <Text style={styles.diaryTitleText(14)}>{diary.title}</Text>
+                                    ? <Text style={styles.diaryTitleText(16)}>{diary.title}</Text>
+                                    : <Text style={styles.diaryTitleText(14)}>{diary.title}</Text>
                             )))}
 
             </View>
@@ -57,15 +60,10 @@ const styles = StyleSheet.create({
         flex: 7,
         alignItems: "center",
         justifyContent: "flex-end",
-        // backgroundColor: "red"
     },
 
     diaryTextContainer: {
         flex: 4,
-        // backgroundColor: "red",
-        // backgroundColor: "#20201D",
-        // borderBottomEndRadius: 23,
-        // borderEndEndRadius: 23
         borderBottomRightRadius: 23,
         borderBottomLeftRadius: 23,
         justifyContent: "center",
@@ -79,16 +77,14 @@ const styles = StyleSheet.create({
         lineHeight: 20
     },
 
-    diaryTitleText: (fontSize)=> ({
+    diaryTitleText: (fontSize) => ({
         fontSize: fontSize,
         fontWeight: "bold",
         lineHeight: 24,
         color: "#20201D",
-        // justifyContent: "center"
     }),
 
     diaryImage: {
-        //backgroundColor: "red",
         width: "80%",
         height: "80%",
         borderTopRightRadius: 23,

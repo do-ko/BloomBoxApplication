@@ -10,20 +10,17 @@ export const AuthProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [splashLoading, setSplashLoading] = useState(false);
 
-    console.log(userInfo);
     const login = (login, password) => {
         setIsLoading(true);
-        console.log(`${BASE_URL}/users/${login}/${password}`);
         axios.get(`${BASE_URL}/users/${login}/${password}`)
             .then(result => {
                 let userData = result.data;
                 setUserInfo(userData);
                 asyncStorage.setItem('userInfo', JSON.stringify(userData));
                 setIsLoading(false);
-                console.log(userData);
             }).catch(e => {
-                setIsLoading(false);
-                console.log(`login error ${e}`);
+            setIsLoading(false);
+            console.log(`login error ${e}`);
         })
     }
 
@@ -37,7 +34,6 @@ export const AuthProvider = ({children}) => {
             setUserInfo(userData);
             asyncStorage.setItem('userInfo', JSON.stringify(userData));
             setIsLoading(false);
-            console.log(userData);
         }).catch(e => {
             console.log(`registration error ${e}`);
             setIsLoading(false);
@@ -45,7 +41,6 @@ export const AuthProvider = ({children}) => {
     }
 
     const logout = () => {
-        console.log("logout");
         setIsLoading(true);
         setUserInfo({});
         asyncStorage.removeItem('userInfo');
@@ -53,16 +48,16 @@ export const AuthProvider = ({children}) => {
     }
 
     const isLoggedIn = async () => {
-        try{
+        try {
             setSplashLoading(true);
             let userInfo = await asyncStorage.getItem('userInfo');
             userInfo = JSON.parse(userInfo);
 
-            if (userInfo){
+            if (userInfo) {
                 setUserInfo(userInfo);
             }
             setSplashLoading(false);
-        } catch (e){
+        } catch (e) {
             console.log(`is logged in error ${e}`);
             setSplashLoading(false);
         }
@@ -72,9 +67,9 @@ export const AuthProvider = ({children}) => {
         isLoggedIn();
     }, [])
 
-    return(
+    return (
         <AuthContext.Provider value={{splashLoading, isLoading, userInfo, register, login, logout}}>
             {children}
         </AuthContext.Provider>
-        );
+    );
 }

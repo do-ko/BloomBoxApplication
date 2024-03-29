@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Dimensions, FlatList, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
-// import SVGImg from '../images/Maceta.svg';
 import MacetaSvg from "../images/SVGs/Maceta";
 import BarsSvg from "../images/SVGs/Bars";
 import AddSvg from "../images/SVGs/Add";
@@ -9,11 +8,9 @@ import {PlantContext} from "../context/PlantContext";
 import Spinner from "react-native-loading-spinner-overlay";
 import PlantComponent from "../components/PlantComponent";
 import Gradient from "../images/SVGs/Gradient";
-import filter from "lodash.filter"
 import {LocationContext} from "../context/LocationContext";
 import {RemainderContext} from "../context/RemainderContext";
 import EmptyListComponent from "../components/EmptyListComponent";
-import ReminderHomeScreen from "../components/ReminderHomeScreen";
 import {DiaryContext} from "../context/DiaryContext";
 
 const formatData = (data, numColumns) => {
@@ -43,22 +40,16 @@ const GardenScreen = ({navigation}) => {
     }, [])
 
     useEffect(() => {
-        console.log("locations changed!")
         getAllPlants();
-        console.log(diaries)
     }, [locations])
-
 
 
     return (
         <View style={styles.appContainer}>
             <Gradient style={{
                 position: 'absolute',
-                // top: 0,
-                // left: 0,
-                // right: 0,
                 bottom: 0,
-            }} />
+            }}/>
             <View style={styles.barsContainer}>
                 <Pressable onPress={() => navigation.openDrawer()}>
                     <BarsSvg/>
@@ -77,7 +68,6 @@ const GardenScreen = ({navigation}) => {
 
             <View style={styles.searchContainer}>
                 <View style={styles.searchBar}>
-                    {/*{isFocused ? <></> : <SearchSvg />}*/}
                     <SearchSvg/>
                     <TextInput style={styles.searchInput} onFocus={() => setIsFocused(true)} maxLength={30}
                                onBlur={() => setIsFocused(false)} value={searchQuery} onChangeText={(query) => {
@@ -85,13 +75,7 @@ const GardenScreen = ({navigation}) => {
                     }}/>
                 </View>
 
-
-                {/* <Pressable style={styles.searchButton} onPress={() => {
-                    console.log(Dimensions.get('window').width);
-                }}>
-                </Pressable> */}
-
-                <Pressable style={({ pressed }) => [
+                <Pressable style={({pressed}) => [
                     {
                         opacity: pressed
                             ? 0.5
@@ -104,96 +88,28 @@ const GardenScreen = ({navigation}) => {
                 </Pressable>
 
             </View>
-            {/*<FlatList data={locations} renderItem={(item) => <Text>item.locationName</Text>} />*/}
-
-
             <View style={styles.plantsContainer}>
                 <Spinner visible={isLoading}/>
                 {plants.length === 0 ? <EmptyListComponent type={"plants"} color={"#5B6E4E"}/>
                     :
-                    <FlatList data={formatData(plants.filter((plant) => plant.plantName.toLocaleString().toLowerCase().includes(searchQuery.toLowerCase())), 2)} extraData={plants} refreshing={false} onRefresh={() => getAllPlants()} style={{flex:1}} numColumns={2} keyExtractor={(item) => item.plantId} renderItem={({item}) => {
+                    <FlatList
+                        data={formatData(plants.filter((plant) => plant.plantName.toLocaleString().toLowerCase().includes(searchQuery.toLowerCase())), 2)}
+                        extraData={plants} refreshing={false} onRefresh={() => getAllPlants()} style={{flex: 1}}
+                        numColumns={2} keyExtractor={(item) => item.plantId} renderItem={({item}) => {
                         if (item.empty === true) {
                             return <View style={styles.itemInvisible}/>
                         }
-                        return(
+                        return (
                             <PlantComponent navigation={navigation} plant={item}/>
                         );
                     }}
                     />}
             </View>
-
-            {/*<View style={styles.headerContainer}>*/}
-            {/*    <Text style={styles.headerText1}>YOUR</Text>*/}
-            {/*    <Text style={styles.headerText2}>GARDEN</Text>*/}
-            {/*</View>*/}
-
-            {/*<View style={styles.barContainer}>*/}
-            {/*    <View style={styles.searchBarContainer}>*/}
-            {/*        <TextInput*/}
-            {/*            style={styles.searchBarInput}*/}
-            {/*            value={"Search plants"}*/}
-            {/*        ></TextInput>*/}
-
-            {/*        <Image*/}
-            {/*            style={styles.magnifyingGlassIcon}*/}
-            {/*            source={require("../images/magnifying_glass.png")}*/}
-            {/*        />*/}
-            {/*    </View>*/}
-
-            {/*    <Pressable*/}
-            {/*        onPress={() => navigation.navigate("AddPlant")}*/}
-            {/*        style={({ pressed }) => {*/}
-            {/*            return { opacity: pressed ? 0.5 : 1 };*/}
-            {/*        }}*/}
-            {/*    >*/}
-            {/*        <Image*/}
-            {/*            style={styles.addPlantButton}*/}
-            {/*            source={require("../images/add_plant_button.png")}*/}
-            {/*        />*/}
-            {/*    </Pressable>*/}
-            {/*</View>*/}
-
-            {/*<View style={styles.leftLine} />*/}
-            {/*<View style={styles.rightLine} />*/}
-
-            {/*<Image*/}
-            {/*    style={styles.plant1Image}*/}
-            {/*    source={require("../images/plant1.png")}*/}
-            {/*/>*/}
-
-            {/*<Image*/}
-            {/*    style={styles.drawerIcon}*/}
-            {/*    source={require("../images/drawer_icon.png")}*/}
-            {/*/>*/}
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    // container: {
-    //     flex: 1,
-    //     alignItems: "center",
-    //     justifyContent: "center"
-    //     // backgroundColor: '#20201D'
-    // },
-    //
-    // wrapper: {
-    //     width: "80%"
-    // },
-    //
-    // input: {
-    //     marginBottom: 12,
-    //     borderWidth: 1,
-    //     borderColor: '#20201D',
-    //     borderRadius: 5,
-    //     paddingHorizontal: 14
-    // },
-    //
-    // link: {
-    //     color: '#5B6E4E'
-    // },
-
-    // the whole app screen
     appContainer: {
         flex: 1,
         flexDirection: "column",
@@ -203,7 +119,6 @@ const styles = StyleSheet.create({
     },
 
     barsContainer: {
-        // backgroundColor: "blue",
         flex: 0,
         alignItems: "flex-start",
         width: "100%",
@@ -211,21 +126,15 @@ const styles = StyleSheet.create({
     },
 
     header: {
-        // backgroundColor: "red",
-        // height: "20%",
         width: "100%",
         flex: 0,
         flexDirection: "row",
         justifyContent: "space-evenly",
         alignItems: "flex-end",
         paddingHorizontal: 20
-        // gap: 20
     },
 
-    headerTextContainer: {
-        // backgroundColor: "yellow",
-        // width: "100%"
-    },
+    headerTextContainer: {},
 
     headerText: {
         fontSize: 40,
@@ -234,11 +143,7 @@ const styles = StyleSheet.create({
         lineHeight: 38,
     },
 
-    plantImage: {
-        // backgroundColor: "blue",
-        // marginRight: "10%",
-        // height: 87
-    },
+    plantImage: {},
 
     searchContainer: {
         backgroundColor: "#20201D",
@@ -281,7 +186,6 @@ const styles = StyleSheet.create({
     },
 
     plantsContainer: {
-        // backgroundColor: "blue",
         height: "100%",
         width: "100%",
         flex: 6,
@@ -294,97 +198,6 @@ const styles = StyleSheet.create({
         margin: 10,
         flex: 1,
     }
-
-    // // container for header texts and icons
-    // headerContainer: {
-    //     width: "60%",
-    //     //height: "30%",
-    //     textAlign: "left",
-    //     //fontFamily: "calibri",
-    // },
-    //
-    // headerText1: {
-    //     marginTop: 50,
-    //     fontSize: 32,
-    //     fontWeight: "700",
-    //     letterSpacing: 1,
-    // },
-    //
-    // headerText2: {
-    //     marginTop: -15,
-    //     fontSize: 32,
-    //     fontWeight: "700",
-    //     letterSpacing: 1,
-    // },
-    //
-    // barContainer: {
-    //     flexDirection: "row",
-    //     alignItems: "center",
-    //     width: "80%",
-    //     height: "7%",
-    //     backgroundColor: "#20201D",
-    //     borderRadius: 20,
-    //     gap: 5
-    // },
-    //
-    // searchBarContainer: {
-    //     flexDirection: "row",
-    //     flex: 1,
-    //     alignItems: "center",
-    // },
-    //
-    // searchBarInput: {
-    //     marginHorizontal: "5%",
-    //     padding: 5,
-    //     paddingLeft: 40,
-    //     width: "85%",
-    //     height: 32,
-    //     backgroundColor: "#ffffff",
-    //     borderRadius: 25,
-    //     fontSize: 16,
-    // },
-    //
-    // magnifyingGlassIcon: {
-    //     width: 20,
-    //     height: 20,
-    //     //position: "absolute",
-    //     left: -250,
-    // },
-    //
-    // pressableAddPlantButton: {},
-    //
-    // addPlantButton: {
-    //     left: -20,
-    // },
-    //
-    // leftLine: {
-    //     backgroundColor: "#DFDFD9",
-    //     width: 10,
-    //     height: "16.5%",
-    //     position: "absolute",
-    //     left: "15%",
-    // },
-    //
-    // rightLine: {
-    //     backgroundColor: "#DFDFD9",
-    //     width: 10,
-    //     height: "16.5%",
-    //     position: "absolute",
-    //     right: "15%",
-    // },
-    //
-    // plant1Image: {
-    //     position: "absolute",
-    //     width: 65,
-    //     top: "6%",
-    //     left: "64%",
-    // },
-    //
-    // drawerIcon: {
-    //     position: "absolute",
-    //     left: "3%",
-    //     top: "5%",
-    // },
 })
 
 export default GardenScreen;

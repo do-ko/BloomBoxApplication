@@ -1,4 +1,4 @@
-import {Dimensions, FlatList, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {FlatList, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 import BarsSvg from "../images/SVGs/Bars";
 import React, {useContext, useEffect, useState} from "react";
 import AddSvg from "../images/SVGs/Add";
@@ -6,14 +6,11 @@ import Gradient from "../images/SVGs/Gradient";
 import MacetaSvg from "../images/SVGs/Maceta";
 import SearchSvg from "../images/SVGs/Search";
 import Spinner from "react-native-loading-spinner-overlay";
-import PlantComponent from "../components/PlantComponent";
-import {PlantContext} from "../context/PlantContext";
 import {LocationContext} from "../context/LocationContext";
-import plant2 from "../images/SVGs/Plant2";
 import LocationComponent from "../components/LocationComponent";
 import EmptyListComponent from "../components/EmptyListComponent";
 
-const LocationsScreen = ({ navigation }) => {
+const LocationsScreen = ({navigation}) => {
     const {getAllLocationForUser, locations, isLoading} = useContext(LocationContext);
     const [isFocused, setIsFocused] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
@@ -23,16 +20,12 @@ const LocationsScreen = ({ navigation }) => {
     }, [])
 
 
-
     return (
         <View style={styles.appContainer}>
             <Gradient style={{
                 position: 'absolute',
-                // top: 0,
-                // left: 0,
-                // right: 0,
                 bottom: 0,
-            }} />
+            }}/>
 
             <View style={styles.barsContainer}>
                 <Pressable onPress={() => navigation.openDrawer()}>
@@ -42,7 +35,6 @@ const LocationsScreen = ({ navigation }) => {
 
             <View style={styles.header}>
                 <View style={styles.headerTextContainer}>
-                    {/*<Text style={styles.headerText}>Your</Text>*/}
                     <Text style={styles.headerText}>Locations</Text>
                 </View>
                 <View style={styles.plantImage}>
@@ -60,7 +52,7 @@ const LocationsScreen = ({ navigation }) => {
                     }}/>
                 </View>
 
-                <Pressable style={({ pressed }) => [
+                <Pressable style={({pressed}) => [
                     {
                         opacity: pressed
                             ? 0.5
@@ -78,27 +70,19 @@ const LocationsScreen = ({ navigation }) => {
                 <Spinner visible={isLoading}/>
                 {locations.length === 0 ? <EmptyListComponent type={"locations"} color={"#5B6E4E"}/>
                     :
-                    <FlatList data={locations.filter((location) => location.locationName.toLocaleString().toLowerCase().includes(searchQuery.toLowerCase()))} refreshing={false} onRefresh={() => getAllLocationForUser()} style={{flex:1}} numColumns={1} keyExtractor={(item) => item.locationId} renderItem={({item}) => {
+                    <FlatList
+                        data={locations.filter((location) => location.locationName.toLocaleString().toLowerCase().includes(searchQuery.toLowerCase()))}
+                        refreshing={false} onRefresh={() => getAllLocationForUser()} style={{flex: 1}} numColumns={1}
+                        keyExtractor={(item) => item.locationId} renderItem={({item}) => {
                         if (item.empty === true) {
                             return <View style={styles.itemInvisible}/>
                         }
-                        return(
+                        return (
                             <LocationComponent navigation={navigation} location={item}/>
                         );
                     }}
                     />}
             </View>
-
-            {/*<View style={styles.tempNavTesting}>*/}
-            {/*    <View style={{width: "100%", flexDirection:"row", justifyContent: "space-around"}}>*/}
-            {/*        <Pressable onPress={() => navigation.navigate("AddLocation")}>*/}
-            {/*            <AddSvg/>*/}
-            {/*        </Pressable>*/}
-            {/*        <Pressable onPress={() => navigation.navigate("EditLocation")}>*/}
-            {/*            <AddSvg/>*/}
-            {/*        </Pressable>*/}
-            {/*    </View>*/}
-            {/*</View>*/}
         </View>
     )
 }
@@ -114,7 +98,6 @@ const styles = StyleSheet.create({
     },
 
     barsContainer: {
-        // backgroundColor: "blue",
         flex: 0,
         alignItems: "flex-start",
         width: "100%",
@@ -122,15 +105,12 @@ const styles = StyleSheet.create({
     },
 
     header: {
-        // backgroundColor: "red",
-        // height: "20%",
         width: "100%",
         flex: 0,
         flexDirection: "row",
         justifyContent: "space-evenly",
         alignItems: "flex-end",
         paddingHorizontal: 20
-        // gap: 20
     },
 
     headerText: {
@@ -160,10 +140,9 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         paddingHorizontal: 10,
         flexDirection: "row",
-        // alignItems
         alignItems: "center"
     },
-    
+
     searchInput: {
         flex: 1,
         paddingHorizontal: 10,
@@ -180,7 +159,6 @@ const styles = StyleSheet.create({
     },
 
     plantsContainer: {
-        // backgroundColor: "blue",
         height: "100%",
         width: "90%",
         flex: 6,
