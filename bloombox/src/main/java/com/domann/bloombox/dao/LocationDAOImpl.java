@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class LocationDAOImpl implements LocationDAO{
+public class LocationDAOImpl implements LocationDAO {
 
     private EntityManager entityManager;
 
@@ -32,7 +32,7 @@ public class LocationDAOImpl implements LocationDAO{
     @Override
     public List<Location> findByUserId(int userId) {
         TypedQuery<Location> query = entityManager.createQuery("FROM Location WHERE userId=:id", Location.class);
-        query.setParameter("id",userId);
+        query.setParameter("id", userId);
         return query.getResultList();
     }
 

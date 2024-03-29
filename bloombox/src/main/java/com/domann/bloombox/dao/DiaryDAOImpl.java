@@ -1,7 +1,6 @@
 package com.domann.bloombox.dao;
 
 import com.domann.bloombox.entity.Diary;
-import com.domann.bloombox.entity.Location;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class DiaryDAOImpl implements DiaryDAO{
+public class DiaryDAOImpl implements DiaryDAO {
 
     private EntityManager entityManager;
 

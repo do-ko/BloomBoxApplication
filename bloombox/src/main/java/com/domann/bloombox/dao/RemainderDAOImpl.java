@@ -1,6 +1,5 @@
 package com.domann.bloombox.dao;
 
-import com.domann.bloombox.entity.Plant;
 import com.domann.bloombox.entity.Remainder;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -10,9 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class RemainderDAOImpl implements  RemainderDAO{
+public class RemainderDAOImpl implements RemainderDAO {
 
     private EntityManager entityManager;
+
     @Autowired
     public RemainderDAOImpl(EntityManager entityManager) {
         this.entityManager = entityManager;

@@ -1,8 +1,6 @@
 package com.domann.bloombox.service;
 
-import com.domann.bloombox.dao.PlantDAO;
 import com.domann.bloombox.dao.RemainderDAO;
-import com.domann.bloombox.entity.Plant;
 import com.domann.bloombox.entity.Remainder;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class RemainderServiceImpl implements RemainderService{
+public class RemainderServiceImpl implements RemainderService {
     private RemainderDAO remainderDAO;
 
     @Autowired
@@ -27,7 +25,7 @@ public class RemainderServiceImpl implements RemainderService{
     @Override
     public Remainder findById(int id) {
         Remainder remainder = remainderDAO.findById(id);
-        if (remainder == null){
+        if (remainder == null) {
             throw new RuntimeException("Did not find remainder with id: " + id);
         } else {
             return remainder;
@@ -37,7 +35,7 @@ public class RemainderServiceImpl implements RemainderService{
     @Override
     public List<Remainder> findByPlantId(int plantId) {
         List<Remainder> remainders = remainderDAO.findByPlantId(plantId);
-        if (remainders.isEmpty()){
+        if (remainders.isEmpty()) {
             throw new RuntimeException("Did not find any remainders with plant id: " + plantId);
         } else {
             return remainders;

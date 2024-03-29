@@ -1,7 +1,6 @@
 package com.domann.bloombox.rest;
 
 import com.domann.bloombox.entity.Diary;
-import com.domann.bloombox.entity.Plant;
 import com.domann.bloombox.service.DiaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,43 +18,43 @@ public class DiaryRestController {
     }
 
     @GetMapping("")
-    public List<Diary> findAll(){
+    public List<Diary> findAll() {
         return diaryService.findAllDiaries();
     }
 
     @GetMapping("/{diaryId}")
-    public Diary findById(@PathVariable int diaryId){
+    public Diary findById(@PathVariable int diaryId) {
         Diary diary = diaryService.findById(diaryId);
-        if (diary==null){
+        if (diary == null) {
             throw new LocationNotFoundException("Diary id not found - " + diaryId);
         }
         return diary;
     }
 
     @GetMapping("/plant/{plantId}")
-    public List<Diary> findByPlantId(@PathVariable int plantId){
+    public List<Diary> findByPlantId(@PathVariable int plantId) {
         List<Diary> diaries = diaryService.findByPlantId(plantId);
-        if (diaries == null){
+        if (diaries == null) {
             throw new LocationNotFoundException("Diaries with platId not found - " + plantId);
         }
         return diaries;
     }
 
     @PostMapping("")
-    public Diary addDiary(@RequestBody Diary diary){
+    public Diary addDiary(@RequestBody Diary diary) {
         diary.setDiaryId(0);
         return diaryService.save(diary);
     }
 
     @PutMapping("")
-    public Diary updateDiary(@RequestBody Diary diary){
+    public Diary updateDiary(@RequestBody Diary diary) {
         return diaryService.save(diary);
     }
 
     @DeleteMapping("/{diaryId}")
-    public String deleteDiary(@PathVariable int diaryId){
+    public String deleteDiary(@PathVariable int diaryId) {
         Diary diary = diaryService.findById(diaryId);
-        if (diary==null){
+        if (diary == null) {
             throw new LocationNotFoundException("Diary id not found - " + diaryId);
         }
 

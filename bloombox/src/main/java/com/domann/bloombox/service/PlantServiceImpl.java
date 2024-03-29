@@ -1,7 +1,6 @@
 package com.domann.bloombox.service;
 
 import com.domann.bloombox.dao.PlantDAO;
-import com.domann.bloombox.entity.Location;
 import com.domann.bloombox.entity.Plant;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class PlantServiceImpl implements PlantService {
     @Override
     public Plant findById(int id) {
         Plant plant = plantDAO.findById(id);
-        if (plant == null){
+        if (plant == null) {
             throw new RuntimeException("Did not find plant with id: " + id);
         } else {
             return plant;

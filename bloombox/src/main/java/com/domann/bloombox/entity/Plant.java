@@ -83,6 +83,7 @@ public class Plant {
     public String getSpecies() {
         return species;
     }
+
     public void setSpecies(String species) {
         this.species = species;
     }

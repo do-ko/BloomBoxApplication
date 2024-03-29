@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 @Table(name = "locations")
 public class LocationOutdated {
 
-//    FIELDS:
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "location_id")
@@ -16,17 +15,13 @@ public class LocationOutdated {
     @Column(name = "location_name")
     private String locationName;
 
-//    CONSTRUCTORS
-
-    public LocationOutdated(){
+    public LocationOutdated() {
 
     }
+
     public LocationOutdated(String locationName) {
         this.locationName = locationName;
     }
-
-//    GETTERS AND SETTERS
-
 
     public int getLocationId() {
         return locationId;
@@ -43,8 +38,6 @@ public class LocationOutdated {
     public void setLocationName(String locationName) {
         this.locationName = locationName;
     }
-
-//    TO STRING()
 
     @Override
     public String toString() {

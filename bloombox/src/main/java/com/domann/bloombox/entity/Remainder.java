@@ -114,6 +114,7 @@ public class Remainder {
     public void setFailed(Boolean failed) {
         this.failed = failed;
     }
+
     @Override
     public String toString() {
         return "Remainder{" +

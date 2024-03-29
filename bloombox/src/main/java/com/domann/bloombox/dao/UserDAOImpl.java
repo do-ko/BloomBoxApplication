@@ -1,7 +1,5 @@
 package com.domann.bloombox.dao;
 
-import com.domann.bloombox.entity.Location;
-import com.domann.bloombox.entity.LocationOutdated;
 import com.domann.bloombox.entity.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -11,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class UserDAOImpl implements UserDAO{
+public class UserDAOImpl implements UserDAO {
     private EntityManager entityManager;
 
     @Autowired

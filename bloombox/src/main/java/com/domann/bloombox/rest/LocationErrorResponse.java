@@ -1,6 +1,6 @@
 package com.domann.bloombox.rest;
 
-public class LocationErrorResponse{
+public class LocationErrorResponse {
     private int status;
     private String message;
     private long timestamp;

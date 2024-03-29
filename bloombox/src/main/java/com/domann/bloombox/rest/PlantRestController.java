@@ -1,8 +1,6 @@
 package com.domann.bloombox.rest;
 
-import com.domann.bloombox.entity.Location;
 import com.domann.bloombox.entity.Plant;
-import com.domann.bloombox.entity.User;
 import com.domann.bloombox.service.PlantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +26,6 @@ public class PlantRestController {
     @GetMapping("user/{userId}")
     public List<Plant> findByLogin(@PathVariable int userId){
         List<Plant> plants = plantService.findByUserId(userId);
-//        if (plants == null){
-//            throw new LocationNotFoundException("Plant with userId not found - " + userId);
-//        }
         return plants;
     }
 

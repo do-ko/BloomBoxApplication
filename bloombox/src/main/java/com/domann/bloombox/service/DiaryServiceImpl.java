@@ -2,7 +2,6 @@ package com.domann.bloombox.service;
 
 import com.domann.bloombox.dao.DiaryDAO;
 import com.domann.bloombox.entity.Diary;
-import com.domann.bloombox.entity.Location;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DiaryServiceImpl implements DiaryService{
+public class DiaryServiceImpl implements DiaryService {
     private DiaryDAO diaryDAO;
 
     @Autowired
@@ -26,7 +25,7 @@ public class DiaryServiceImpl implements DiaryService{
     @Override
     public Diary findById(int id) {
         Diary diary = diaryDAO.findById(id);
-        if (diary == null){
+        if (diary == null) {
             throw new RuntimeException("Did not find diary with id: " + id);
         } else {
             return diary;
@@ -36,7 +35,7 @@ public class DiaryServiceImpl implements DiaryService{
     @Override
     public List<Diary> findByPlantId(int plantId) {
         List<Diary> diaries = diaryDAO.findByPlantId(plantId);
-        if (diaries.isEmpty()){
+        if (diaries.isEmpty()) {
             throw new RuntimeException("Did not find any diaries with plant id: " + plantId);
         } else {
             return diaries;

@@ -74,6 +74,7 @@ public class Location {
     public void setWater(int water) {
         this.water = water;
     }
+
     public String getLocationImage() {
         return locationImage;
     }

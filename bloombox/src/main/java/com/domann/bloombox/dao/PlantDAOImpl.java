@@ -1,8 +1,6 @@
 package com.domann.bloombox.dao;
 
-import com.domann.bloombox.entity.Location;
 import com.domann.bloombox.entity.Plant;
-import com.domann.bloombox.entity.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class PlantDAOImpl implements PlantDAO{
+public class PlantDAOImpl implements PlantDAO {
 
     private EntityManager entityManager;
 

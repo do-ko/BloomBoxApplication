@@ -1,20 +1,16 @@
 package com.domann.bloombox.service;
 
 import com.domann.bloombox.dao.LocationDAO;
-import com.domann.bloombox.dao.LocationRepository;
 import com.domann.bloombox.entity.Location;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class LocationServiceImpl implements LocationService{
+public class LocationServiceImpl implements LocationService {
     private LocationDAO locationDAO;
-//    private LocationRepository locationRepository;
-
     @Autowired
     public LocationServiceImpl(LocationDAO locationDAO) {
         this.locationDAO = locationDAO;
@@ -28,7 +24,7 @@ public class LocationServiceImpl implements LocationService{
     @Override
     public Location findById(int id) {
         Location location = locationDAO.findById(id);
-        if (location == null){
+        if (location == null) {
             throw new RuntimeException("Did not find location with id: " + id);
         } else {
             return location;
