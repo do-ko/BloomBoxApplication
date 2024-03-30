@@ -29,6 +29,10 @@ const HomeScreen = ({navigation}) => {
 
     useEffect(() => {
         getRemaindersByUserId();
+    }, [plants])
+
+    useEffect(() => {
+        getRemaindersByUserId();
         getAllPlants();
     }, [userInfo.userInfo])
 

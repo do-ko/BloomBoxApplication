@@ -1,6 +1,9 @@
 package com.domann.bloombox.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "Plants")
@@ -33,11 +36,11 @@ public class Plant {
 
     @Column(name = "image")
     private String image;
-
     public Plant() {
     }
 
-    public Plant(Integer locationId, Integer userId, String plantName, String species, Integer light, Integer water, Integer frequency, String image) {
+    public Plant(Integer plantId, Integer locationId, String plantName, String species, Integer light, Integer water, Integer frequency, String image) {
+        this.plantId = plantId;
         this.locationId = locationId;
         this.userId = userId;
         this.plantName = plantName;
@@ -125,7 +128,7 @@ public class Plant {
         return "Plant{" +
                 "plantId=" + plantId +
                 ", locationId=" + locationId +
-                ", userId=" + userId +
+//                ", userId=" + userId +
                 ", plantName='" + plantName + '\'' +
                 ", species='" + species + '\'' +
                 ", light=" + light +
