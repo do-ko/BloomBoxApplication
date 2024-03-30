@@ -1,5 +1,5 @@
 # Description
-BloomBox is a mobile application for IOS and Android devices that provides support for
+BloomBox is a mobile application Android devices that provides support for
 plant caring. It will create reminders for user to let them know when is the right time to water
 their plants. Users will be able to access their garden page, where all their plants are stored.
 By navigating to the selected plant page, the user will access the diary section, where they
@@ -8,16 +8,6 @@ also create locations with common settings that will make plant creation a quick
 while still giving users the option to specify custom settings if needed.
 
 # Environmental Variables
-## Backend
-To connect to the database, create another .env file in /bloombox/src/main/resources following .env.example variable format and input variables.
-
-Example of .env file:
-```
-DATABASE_URL="jdbc:postgresql://{host}:{port}/{database_name}"
-DATABASE_LOGIN="postgres"
-DATABASE_PASSWORD="password"
-```
-
 ## Frontend
 To enable comunication between frontend and backend, in /BloomBoxApp/src/config.js replace existing BASE_URL with your own.
 
@@ -31,11 +21,24 @@ By default host is your localhost address. To change it add server.address in ap
  server.address = x.x.x.x
 ```
 
+## Backend
+To connect to the database, create another .env file in /bloombox/src/main/resources following .env.example variable format and input variables.
+
+Example of .env file:
+```
+DATABASE_URL="jdbc:postgresql://{host}:{port}/{database_name}"
+DATABASE_LOGIN="postgres"
+DATABASE_PASSWORD="password"
+```
+
 # How to run
+## Frontend
 to start frontend application navigate to **BloomBoxApp** directory and run following command:
 ```
 npm start
 ```
+
+## Backend
 to start backend navigate to **bloombox** directory and run following command:
 ```
 ./mvnw spring-boot:run
@@ -44,6 +47,8 @@ to run tests on backend:
 ```
 ./mvnw test
 ```
+## Database
+Before running the application, create tables using provided script in /Database/SQL_DDL.sql in your database.
 
 
 # Mockup designs
